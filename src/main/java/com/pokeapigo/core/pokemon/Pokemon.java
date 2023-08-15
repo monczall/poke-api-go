@@ -80,4 +80,18 @@ public class Pokemon {
     public PokemonAvailability getAvailability() {
         return availability;
     }
+
+    @Override
+    public String toString() {
+        return "Pokemon{" +
+                "id=" + id +
+                ", pokedexId=" + pokedexId +
+                ", generationId=" + generationId +
+                ", name='" + name + '\'' +
+                ", variant='" + variant + '\'' +
+                ", pokemonTypes=" + pokemonTypes +
+                ", rarity=" + rarity +
+                ", availability=" + availability +
+                '}';
+    }
 }

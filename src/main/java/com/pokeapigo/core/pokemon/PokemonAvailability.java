@@ -1,43 +1,40 @@
 package com.pokeapigo.core.pokemon;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
-class PokemonAvailability {
+public class PokemonAvailability {
 
+    @JsonProperty
     @Column(name = "is_wild")
     private boolean isWild;
 
+    @JsonProperty
     @Column(name = "is_raid")
     private boolean isRaid;
 
+    @JsonProperty
     @Column(name = "is_egg")
     private boolean isEgg;
 
+    @JsonProperty
     @Column(name = "is_shadow")
     private boolean isShadow;
 
+    @JsonProperty
     @Column(name = "is_mega")
     private boolean isMega;
 
-    public boolean isWild() {
-        return isWild;
-    }
-
-    public boolean isRaid() {
-        return isRaid;
-    }
-
-    public boolean isEgg() {
-        return isEgg;
-    }
-
-    public boolean isShadow() {
-        return isShadow;
-    }
-
-    public boolean isMega() {
-        return isMega;
+    @Override
+    public String toString() {
+        return "PokemonAvailability{" +
+                "isWild=" + isWild +
+                ", isRaid=" + isRaid +
+                ", isEgg=" + isEgg +
+                ", isShadow=" + isShadow +
+                ", isMega=" + isMega +
+                '}';
     }
 }
