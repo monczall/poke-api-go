@@ -29,6 +29,7 @@ public class Pokemon {
     private PokemonTypeDuo pokemonTypes;
 
     @Column(name = "rarity")
+    @Enumerated(EnumType.STRING)
     private PokemonRarity rarity;
 
     @Embedded

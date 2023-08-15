@@ -1,6 +1,7 @@
 package com.pokeapigo.core.pokemon.util.enums;
 
 public enum PokemonType {
+    NONE,
     BUG,
     DARK,
     DRAGON,
