@@ -1,7 +1,8 @@
 package com.pokeapigo.core.pokemon;
 
-import com.pokeapigo.core.pokemon.dto.request.CreatePokemonRequest;
+import com.pokeapigo.core.pokemon.dto.request.PokemonRequest;
+import com.pokeapigo.core.pokemon.dto.response.PokemonResponse;
 
 public interface PokemonService {
-    Pokemon createPokemon(CreatePokemonRequest createPokemonRequest);
+    PokemonResponse createPokemon(PokemonRequest pokemonRequest);
 }

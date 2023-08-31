@@ -2,7 +2,8 @@ package com.pokeapigo.core.pokemon.controller;
 
 import com.pokeapigo.core.pokemon.Pokemon;
 import com.pokeapigo.core.pokemon.PokemonService;
-import com.pokeapigo.core.pokemon.dto.request.CreatePokemonRequest;
+import com.pokeapigo.core.pokemon.dto.request.PokemonRequest;
+import com.pokeapigo.core.pokemon.dto.response.PokemonResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,11 +25,11 @@ public class PokemonController {
     }
 
     @PostMapping
-    ResponseEntity<Pokemon> createPokemon(@Valid @RequestBody CreatePokemonRequest createPokemonRequest) {
-        final Pokemon result = pokemonService.createPokemon(createPokemonRequest);
+    ResponseEntity<PokemonResponse> createPokemon(@Valid @RequestBody PokemonRequest pokemonRequest) {
+        final PokemonResponse result = pokemonService.createPokemon(pokemonRequest);
 
         return ResponseEntity
-                .status(HttpStatus.CREATED)
+                .status(HttpStatus.OK)
                 .body(result);
     }
 }
