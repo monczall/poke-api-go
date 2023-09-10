@@ -55,6 +55,16 @@ class PokemonServiceTest {
 
         }
 
+        @Test
+        @DisplayName("Should call findAll repository method when getting all Pokemons")
+        void getAllPokemons_whenGettingPokemons_thenCallCorrectRepositoryMethod() {
+            // given
+
+            // when
+
+            // then
+        }
+
         private static List<PokemonRequest> correctPokemonRequestProvider() {
             return List.of();
         }
@@ -63,7 +73,7 @@ class PokemonServiceTest {
     @Nested
     class UnhappyPaths {
         @Test
-        @DisplayName("Should throw PokemonAlreadyExistsException with correct message when visible pokemon with given name and id already exisits")
+        @DisplayName("Should throw PokemonAlreadyExistsException with correct message when visible pokemon with given name and id already exists")
         void createPokemon_whenPokemonNameAndIdWithStatusVisibleExists_throwPokemonAlreadyExistsException() {
             // given
 

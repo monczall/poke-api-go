@@ -91,7 +91,7 @@ Example response Body:
 
 ### Reading the data
 
-Here is the list of endpoints allowing to read data from the database.
+#### GET api/v1/pokemons/secured
 
 
 
