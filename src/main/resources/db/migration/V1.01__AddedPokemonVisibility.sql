@@ -1,0 +1,2 @@
+ALTER TABLE pokemons
+ADD COLUMN visible BOOLEAN;

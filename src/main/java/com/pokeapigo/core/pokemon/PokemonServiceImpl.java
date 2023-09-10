@@ -3,6 +3,7 @@ package com.pokeapigo.core.pokemon;
 import com.pokeapigo.core.pokemon.dto.request.PokemonRequest;
 import com.pokeapigo.core.pokemon.dto.response.PokemonResponse;
 import com.pokeapigo.core.pokemon.exception.exceptions.PokemonAlreadyExistsException;
+import com.pokeapigo.core.pokemon.mapper.PokemonMapper;
 import jakarta.validation.Validator;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
@@ -31,11 +32,17 @@ public class PokemonServiceImpl implements PokemonService {
         Integer pokedexId = pokemonRequest.pokedexId();
         String pokemonName = pokemonRequest.name();
 
-        Pokemon pokemon = pokemonRepository.findByPokedexIdAndNameIgnoreCase(pokedexId, pokemonName).orElseThrow(() -> {
-            String message = messageSource.getMessage("pokemon.alreadyExists", new Object[]{pokedexId, pokemonName}, Locale.getDefault());
-            throw new PokemonAlreadyExistsException(message);
-        });
+        boolean pokemonAlreadyExists = pokemonRepository
+                .findByPokedexIdAndNameIgnoreCaseAndVisibleTrue(pokedexId, pokemonName)
+                .isPresent();
 
+        if (pokemonAlreadyExists) {
+            String message = messageSource.getMessage(
+                    "pokemon.alreadyExists", new Object[]{pokedexId, pokemonName}, Locale.getDefault());
+            throw new PokemonAlreadyExistsException(message);
+        }
+
+        Pokemon pokemon = PokemonMapper.toEntity(pokemonRequest);
         Pokemon result = pokemonRepository.save(pokemon);
 
         return toPokemonResponse(result);

@@ -6,5 +6,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface PokemonRepository extends JpaRepository<Pokemon, UUID> {
+
     Optional<Pokemon> findByPokedexIdAndNameIgnoreCase(Integer pokedexId, String name);
+
+    Optional<Pokemon> findByPokedexIdAndNameIgnoreCaseAndVisibleTrue(Integer pokedexId, String name);
 }

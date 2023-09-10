@@ -35,6 +35,8 @@ public class Pokemon {
     @Embedded
     private PokemonAvailability availability;
 
+    private Boolean visible;
+
     public Pokemon() {
     }
 
@@ -47,6 +49,7 @@ public class Pokemon {
         this.pokemonTypes = pokemonTypes;
         this.rarity = rarity;
         this.availability = availability;
+        this.visible = true;
     }
 
     public UUID getId() {
@@ -79,6 +82,14 @@ public class Pokemon {
 
     public PokemonAvailability getAvailability() {
         return availability;
+    }
+
+    public Boolean getVisible() {
+        return visible;
+    }
+
+    public void setVisible(Boolean visible) {
+        this.visible = visible;
     }
 
     @Override

@@ -14,7 +14,7 @@ public class MessageConfig {
         ReloadableResourceBundleMessageSource messageSource
                 = new ReloadableResourceBundleMessageSource();
 
-        messageSource.setBasename("classpath:messages");
+        messageSource.setBasename("classpath:messages/pokemon");
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
     }

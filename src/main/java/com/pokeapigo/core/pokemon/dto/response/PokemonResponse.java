@@ -10,5 +10,6 @@ public record PokemonResponse(
         String name,
         PokemonTypeDuo pokemonTypes,
         PokemonRarity rarity,
-        PokemonAvailability availability
+        PokemonAvailability availability,
+        Boolean visible
 ) {}

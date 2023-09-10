@@ -1,6 +1,5 @@
 package com.pokeapigo.core.pokemon.controller;
 
-import com.pokeapigo.core.pokemon.Pokemon;
 import com.pokeapigo.core.pokemon.PokemonService;
 import com.pokeapigo.core.pokemon.dto.request.PokemonRequest;
 import com.pokeapigo.core.pokemon.dto.response.PokemonResponse;

@@ -6,20 +6,28 @@ import com.pokeapigo.core.pokemon.util.enums.PokemonRarity;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
+import java.beans.Transient;
+
 import static com.pokeapigo.core.pokemon.util.PokemonConstants.*;
 
 public record PokemonRequest(
         @NotNull(message = "{pokemon.dexId.notnull}")
-        @Size(min = DEX_ID_MIN, max = DEX_ID_MAX, message = "{pokemon.dexId.range}")
+        @Min(value = 1, message = "{pokemon.dexId.rangeMin}")
+        @Max(value = 1200, message = "{pokemon.dexId.rangeMax}")
         Integer pokedexId,
 
         @NotNull(message = "{pokemon.genId.notNull}")
-        @Size(min = GEN_ID_MIN, max = GEN_ID_MAX, message = "{pokemon.genId.range}")
+        @Min(value = 1, message = "{pokemon.genId.rangeMin}")
+        @Max(value = 10, message = "{pokemon.genId.rangeMax}")
         Integer generationId,
 
         @NotBlank(message = "{pokemon.name.notBlank}")
-        @Size(min = POK_NAME_MIN, max = POK_NAME_MAX, message = "{pokemon.name.range}")
+        @Size(min = 3, message = "{pokemon.name.rangeMin}")
         String name,
+
+        @Size(min = 1, message = "{pokemon.variant.rangeMin}")
+        @Size(max = 255, message = "{pokemon.variant.rangeMax}")
+        String variant,
 
         @Valid
         @NotNull(message = "{pokemon.type.notNull}")

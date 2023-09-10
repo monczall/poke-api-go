@@ -25,14 +25,68 @@ Application stores data about
   - isEgg - is Pokémon available in egg
   - isShadow - is Pokémon available as shadow
   - isMega - is Pokémon available as mega
+- visible - if set to false, makes Pokémon entity private (not shown when getting Pokémon, not validated for duplicates)
+
+### Enums
+
+#### PokemonRarity:
+  NONE | BUG | DARK | DRAGON | ELECTRIC | FAIRY | FIGHTING | FIRE | FLYING | GHOST | GRASS | GROUND | ICE | NORMAL | 
+  POISON | PSYCHIC | ROCK | STEEL | WATER
+
+#### PokemonType:
+  STANDARD | LEGENDARY | MYTHIC
 
 
 ## Endpoints
 
 ### Creating the data
 
-Here is the list of endpoints allowing to add data into the database.
+#### POST api/v1/pokemons
 
+Request Body: 
+```json
+{
+  "pokedexId": "integer from 1-1200 - required",
+  "generationId": "integer from 1-10 - required",
+  "name": "string min len. 3 - required",
+  "variant": "string from 1-255 - optional",
+  "pokemonTypes" : {
+    "typeOne": "Enum - PokemonType - required",
+    "typeTwo": "Enum - PokemonType - required"
+  },
+  "rarity": "Enum - PokemonRarity - required",
+  "availability": {
+    "isWild": "boolean - optional",
+    "isRaid": "boolean - optional",
+    "isEgg": "boolean - optional",
+    "isShadow": "boolean - optional",
+    "isMega": "boolean - optional"
+  }
+  
+}
+```
+
+Example response Body:
+```json
+{
+  "pokedexId": 1,
+  "generationId": 1,
+  "name": "Bulbasaur",
+  "pokemonTypes": {
+    "typeOne": "GRASS",
+    "typeTwo": "POISON"
+  },
+  "rarity": "STANDARD",
+  "availability": {
+    "isWild": false,
+    "isRaid": false,
+    "isEgg": false,
+    "isShadow": false,
+    "isMega": false
+  },
+  "visible": true
+}
+```
 
 
 ### Reading the data
