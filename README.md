@@ -1,8 +1,40 @@
 # PokeAPI GO
+ 
+The goal of this project was to create REST API for Pokemon GO bucket list apps.
 
-#### This file contains information about all the API endpoints that this service provides. 
+## Getting Started
 
-#### You can report any discrepancies or missing data here: [Twitter (X) - Monczall](https://twitter.com/Monczall).
+### Prerequisites
+
+- Java Development Kit (JDK) 17 or above
+- Maven
+
+### Installation
+
+Clone the repository
+
+```cmd
+git clone https://github.com/monczall/poke-api-go.git
+```
+
+Navigate to project directory and Use mvn to create application jar.
+
+```cmd
+mvn clean varify
+```
+
+Start the server
+
+```cmd
+java -jar target/poke-api-go-VERSION.jar
+```
+
+Server will run on localhost:8080
+
+## API
+
+This file contains information about all the API endpoints that this service provides. 
+You can report any discrepancies or missing data here: [Twitter (X) - Monczall](https://twitter.com/Monczall).
 
 ## What kind of data can you expect
 
@@ -41,7 +73,7 @@ Application stores data about
 
 ### Creating the data
 
-#### POST api/v1/pokemons
+#### POST api/v1/pokemons - create Pokemon 
 
 Request Body: 
 ```json
@@ -91,9 +123,75 @@ Example response Body:
 
 ### Reading the data
 
-Here is the list of endpoints allowing to read data from the database.
+#### GET api/v1/pokemons/secured
 
+Example response body
+```json
+[
+  {
+    "pokedexId": 1,
+    "generationId": 1,
+    "name": "Bulbasaur",
+    "pokemonTypes": {
+      "typeOne": "GRASS",
+      "typeTwo": "POISON"
+    },
+    "rarity": "STANDARD",
+    "availability": {
+      "isWild": false,
+      "isRaid": false,
+      "isEgg": false,
+      "isShadow": false,
+      "isMega": false
+    },
+    "visible": true
+  },
+  ...MORE POKEMONS
+]
+```
 
+#### GET GET api/v1/pokemons
+
+Example response body
+```json
+{
+    "content": [
+        {
+            "pokedexId": 2,
+            "generationId": 1,
+            "name": "Ivysaur",
+            "pokemonTypes": {
+                "typeOne": "WATER",
+                "typeTwo": "NONE"
+            },
+            "rarity": "STANDARD",
+            "availability": {
+                "isWild": false,
+                "isRaid": false,
+                "isEgg": false,
+                "isShadow": false,
+                "isMega": false
+            },
+            "visible": null
+        },
+        ...MORE POKEMONS
+    ],
+    "pageable": "INSTANCE",
+    "last": true,
+    "totalPages": 1,
+    "totalElements": 2,
+    "size": 2,
+    "number": 0,
+    "sort": {
+        "empty": true,
+        "sorted": false,
+        "unsorted": true
+    },
+    "first": true,
+    "numberOfElements": 2,
+    "empty": false
+}
+```
 
 ### Updating the data
 

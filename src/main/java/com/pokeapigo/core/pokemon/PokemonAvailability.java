@@ -27,6 +27,17 @@ public class PokemonAvailability {
     @Column(name = "is_mega")
     private boolean isMega;
 
+    public PokemonAvailability() {
+    }
+
+    public PokemonAvailability(boolean isWild, boolean isRaid, boolean isEgg, boolean isShadow, boolean isMega) {
+        this.isWild = isWild;
+        this.isRaid = isRaid;
+        this.isEgg = isEgg;
+        this.isShadow = isShadow;
+        this.isMega = isMega;
+    }
+
     @Override
     public String toString() {
         return "PokemonAvailability{" +

@@ -12,4 +12,5 @@ public record PokemonResponse(
         PokemonRarity rarity,
         PokemonAvailability availability,
         Boolean visible
-) {}
+) {
+}

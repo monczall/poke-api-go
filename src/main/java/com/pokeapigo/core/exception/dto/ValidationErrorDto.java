@@ -9,4 +9,5 @@ public record ValidationErrorDto(
         String statusText,
         Map<String, String> errors,
         String path
-) {}
+) {
+}

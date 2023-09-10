@@ -20,6 +20,14 @@ public class PokemonTypeDuo {
     @NotNull(message = "{pokemon.typeTwo.notNull}")
     private PokemonType typeTwo;
 
+    public PokemonTypeDuo() {
+    }
+
+    public PokemonTypeDuo(PokemonType typeOne, PokemonType typeTwo) {
+        this.typeOne = typeOne;
+        this.typeTwo = typeTwo;
+    }
+
     public PokemonType getTypeOne() {
         return typeOne;
     }

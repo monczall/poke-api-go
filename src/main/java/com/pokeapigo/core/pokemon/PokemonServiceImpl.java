@@ -1,13 +1,22 @@
 package com.pokeapigo.core.pokemon;
 
+import com.pokeapigo.core.exception.exceptions.InvalidColumnNameException;
+import com.pokeapigo.core.exception.exceptions.OtherDataAccessApiException;
 import com.pokeapigo.core.pokemon.dto.request.PokemonRequest;
 import com.pokeapigo.core.pokemon.dto.response.PokemonResponse;
 import com.pokeapigo.core.pokemon.exception.exceptions.PokemonAlreadyExistsException;
 import com.pokeapigo.core.pokemon.mapper.PokemonMapper;
 import jakarta.validation.Validator;
+import org.hibernate.query.SemanticException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Locale;
 
 import static com.pokeapigo.core.pokemon.mapper.PokemonMapper.toPokemonResponse;
@@ -18,6 +27,7 @@ public class PokemonServiceImpl implements PokemonService {
     private final PokemonRepository pokemonRepository;
     private final Validator validator;
     private final MessageSource messageSource;
+    Logger logger = LoggerFactory.getLogger(PokemonServiceImpl.class);
 
     public PokemonServiceImpl(PokemonRepository pokemonRepository, Validator validator, MessageSource messageSource) {
         this.pokemonRepository = pokemonRepository;
@@ -29,22 +39,59 @@ public class PokemonServiceImpl implements PokemonService {
     public PokemonResponse createPokemon(PokemonRequest pokemonRequest) {
         validator.validate(pokemonRequest);
 
-        Integer pokedexId = pokemonRequest.pokedexId();
-        String pokemonName = pokemonRequest.name();
+        final Integer pokedexId = pokemonRequest.pokedexId();
+        final String pokemonName = pokemonRequest.name();
 
-        boolean pokemonAlreadyExists = pokemonRepository
+        final boolean pokemonAlreadyExists = pokemonRepository
                 .findByPokedexIdAndNameIgnoreCaseAndVisibleTrue(pokedexId, pokemonName)
                 .isPresent();
 
         if (pokemonAlreadyExists) {
-            String message = messageSource.getMessage(
+            final String message = messageSource.getMessage(
                     "pokemon.alreadyExists", new Object[]{pokedexId, pokemonName}, Locale.getDefault());
             throw new PokemonAlreadyExistsException(message);
         }
 
-        Pokemon pokemon = PokemonMapper.toEntity(pokemonRequest);
-        Pokemon result = pokemonRepository.save(pokemon);
+        final PokemonEntity pokemon = PokemonMapper.toEntity(pokemonRequest);
+        final PokemonEntity result = pokemonRepository.save(pokemon);
+
+        logger.info("Pokemon with ID %s and Name %s has been saved to database"
+                .formatted(pokemon.getId(), pokemon.getName()));
 
         return toPokemonResponse(result);
     }
+
+    @Override
+    public List<PokemonResponse> getAllPokemons() {
+        logger.info("Called method to return all pokemons from the database!");
+
+        final List<PokemonEntity> pokemonList = pokemonRepository.findAllOrderByPokedexIdAscNameAscAndVisibleTrue();
+
+        return pokemonList.stream()
+                .map(PokemonMapper::toPokemonResponse)
+                .toList();
+    }
+
+    @Override
+    public Page<PokemonResponse> getPagedPokemons(Pageable pageable, String name) {
+        try {
+            final Page<PokemonEntity> pokemonPage = pokemonRepository
+                    .findAllByNameOrderByPokedexIdAscNameAscAndVisibleTrue(pageable, name);
+
+            return PokemonMapper.toPagedPokemonResponse(pokemonPage);
+        } catch (InvalidDataAccessApiUsageException e) {
+            if (e.getRootCause() instanceof SemanticException) {
+                final String message = messageSource.getMessage(
+                        "global.sort.invalidColumnName", null, Locale.getDefault()
+                );
+                throw new InvalidColumnNameException(message);
+            }
+
+            final String message = messageSource.getMessage(
+                    "global.sort.invalidData", new Object[]{e.getMessage()}, Locale.getDefault()
+            );
+            throw new OtherDataAccessApiException(message, e);
+        }
+    }
+
 }

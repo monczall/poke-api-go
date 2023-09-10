@@ -1,13 +1,15 @@
 package com.pokeapigo.core.pokemon.mapper;
 
-import com.pokeapigo.core.pokemon.Pokemon;
+import com.pokeapigo.core.pokemon.PokemonEntity;
 import com.pokeapigo.core.pokemon.dto.request.PokemonRequest;
 import com.pokeapigo.core.pokemon.dto.response.PokemonResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
 public class PokemonMapper {
 
-    public static Pokemon toEntity(PokemonRequest pokemonRequest) {
-        return new Pokemon(
+    public static PokemonEntity toEntity(PokemonRequest pokemonRequest) {
+        return new PokemonEntity(
                 pokemonRequest.pokedexId(),
                 pokemonRequest.generationId(),
                 pokemonRequest.name(),
@@ -18,7 +20,7 @@ public class PokemonMapper {
         );
     }
 
-    public static PokemonResponse toPokemonResponse(Pokemon pokemon) {
+    public static PokemonResponse toPokemonResponse(PokemonEntity pokemon) {
         return new PokemonResponse(
                 pokemon.getPokedexId(),
                 pokemon.getGenerationId(),
@@ -28,5 +30,21 @@ public class PokemonMapper {
                 pokemon.getAvailability(),
                 pokemon.getVisible()
         );
+    }
+
+    public static Page<PokemonResponse> toPagedPokemonResponse(Page<PokemonEntity> pagedPokemons) {
+        return new PageImpl<>(
+                pagedPokemons.getContent().stream()
+                        .map(pokemon ->
+                                new PokemonResponse(
+                                        pokemon.getPokedexId(),
+                                        pokemon.getGenerationId(),
+                                        pokemon.getName(),
+                                        pokemon.getPokemonTypes(),
+                                        pokemon.getRarity(),
+                                        pokemon.getAvailability(),
+                                        pokemon.getVisible())
+                        ).toList())
+                ;
     }
 }
