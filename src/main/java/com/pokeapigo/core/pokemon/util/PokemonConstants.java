@@ -9,5 +9,6 @@ public class PokemonConstants {
     public static final Integer POK_NAME_MIN = 3;
     public static final Integer POK_NAME_MAX = 255;
 
-    private PokemonConstants() {}
+    private PokemonConstants() {
+    }
 }

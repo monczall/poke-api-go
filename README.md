@@ -41,7 +41,7 @@ Application stores data about
 
 ### Creating the data
 
-#### POST api/v1/pokemons
+#### POST api/v1/pokemons - create Pokemon 
 
 Request Body: 
 ```json
@@ -93,7 +93,73 @@ Example response Body:
 
 #### GET api/v1/pokemons/secured
 
+Example response body
+```json
+[
+  {
+    "pokedexId": 1,
+    "generationId": 1,
+    "name": "Bulbasaur",
+    "pokemonTypes": {
+      "typeOne": "GRASS",
+      "typeTwo": "POISON"
+    },
+    "rarity": "STANDARD",
+    "availability": {
+      "isWild": false,
+      "isRaid": false,
+      "isEgg": false,
+      "isShadow": false,
+      "isMega": false
+    },
+    "visible": true
+  },
+  ...MORE POKEMONS
+]
+```
 
+#### GET GET api/v1/pokemons
+
+Example response body
+```json
+{
+    "content": [
+        {
+            "pokedexId": 2,
+            "generationId": 1,
+            "name": "Ivysaur",
+            "pokemonTypes": {
+                "typeOne": "WATER",
+                "typeTwo": "NONE"
+            },
+            "rarity": "STANDARD",
+            "availability": {
+                "isWild": false,
+                "isRaid": false,
+                "isEgg": false,
+                "isShadow": false,
+                "isMega": false
+            },
+            "visible": null
+        },
+        ...MORE POKEMONS
+    ],
+    "pageable": "INSTANCE",
+    "last": true,
+    "totalPages": 1,
+    "totalElements": 2,
+    "size": 2,
+    "number": 0,
+    "sort": {
+        "empty": true,
+        "sorted": false,
+        "unsorted": true
+    },
+    "first": true,
+    "numberOfElements": 2,
+    "empty": false
+}
+```
 
 ### Updating the data
 

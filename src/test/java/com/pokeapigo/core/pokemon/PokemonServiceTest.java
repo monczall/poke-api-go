@@ -56,8 +56,18 @@ class PokemonServiceTest {
         }
 
         @Test
-        @DisplayName("Should call findAll repository method when getting all Pokemons")
+        @DisplayName("Should call findAllOrderByPokedexIdAscNameAsc repository method when getting all Pokemons")
         void getAllPokemons_whenGettingPokemons_thenCallCorrectRepositoryMethod() {
+            // given
+
+            // when
+
+            // then
+        }
+
+        @Test
+        @DisplayName("Should call findAllByNameOrderByPokedexIdAscNameAsc repository method when getting paged Pokemons")
+        void getPagedPokemons_whenGettingPokemons_thenCallCorrectRepositoryMethod() {
             // given
 
             // when
@@ -80,6 +90,18 @@ class PokemonServiceTest {
             // when
 
             // then
+
+        }
+
+        @Test
+        @DisplayName("Should throw InvalidColumnNameException when invalid column name provided")
+        void getPagedPokemons_whenProvidedInvalidColumnName_throwInvalidColumnNameException() {
+
+        }
+
+        @Test
+        @DisplayName("Should throw OtherDataAccessApiException when other unknown exception happens")
+        void getPagedPokemons_whenUnknownErrorHappened_throwOtherDataAccessApiException() {
 
         }
     }
