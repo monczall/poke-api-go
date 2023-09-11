@@ -52,8 +52,8 @@ public class PokemonServiceImpl implements PokemonService {
             throw new PokemonAlreadyExistsException(message);
         }
 
-        final Pokemon pokemon = PokemonMapper.toEntity(pokemonRequest);
-        final Pokemon result = pokemonRepository.save(pokemon);
+        final PokemonEntity pokemon = PokemonMapper.toEntity(pokemonRequest);
+        final PokemonEntity result = pokemonRepository.save(pokemon);
 
         logger.info("Pokemon with ID %s and Name %s has been saved to database"
                 .formatted(pokemon.getId(), pokemon.getName()));
@@ -65,7 +65,7 @@ public class PokemonServiceImpl implements PokemonService {
     public List<PokemonResponse> getAllPokemons() {
         logger.info("Called method to return all pokemons from the database!");
 
-        final List<Pokemon> pokemonList = pokemonRepository.findAllOrderByPokedexIdAscNameAsc();
+        final List<PokemonEntity> pokemonList = pokemonRepository.findAllOrderByPokedexIdAscNameAscAndVisibleTrue();
 
         return pokemonList.stream()
                 .map(PokemonMapper::toPokemonResponse)
@@ -75,8 +75,8 @@ public class PokemonServiceImpl implements PokemonService {
     @Override
     public Page<PokemonResponse> getPagedPokemons(Pageable pageable, String name) {
         try {
-            final Page<Pokemon> pokemonPage = pokemonRepository
-                    .findAllByNameOrderByPokedexIdAscNameAsc(pageable, name);
+            final Page<PokemonEntity> pokemonPage = pokemonRepository
+                    .findAllByNameOrderByPokedexIdAscNameAscAndVisibleTrue(pageable, name);
 
             return PokemonMapper.toPagedPokemonResponse(pokemonPage);
         } catch (InvalidDataAccessApiUsageException e) {

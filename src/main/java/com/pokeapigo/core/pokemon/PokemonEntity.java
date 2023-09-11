@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "pokemons")
-public class Pokemon {
+public class PokemonEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,11 +37,11 @@ public class Pokemon {
 
     private Boolean visible;
 
-    public Pokemon() {
+    public PokemonEntity() {
     }
 
-    public Pokemon(Integer pokedexId, Integer generationId, String name, String variant, PokemonTypeDuo pokemonTypes,
-                   PokemonRarity rarity, PokemonAvailability availability) {
+    public PokemonEntity(Integer pokedexId, Integer generationId, String name, String variant, PokemonTypeDuo pokemonTypes,
+                         PokemonRarity rarity, PokemonAvailability availability) {
         this.pokedexId = pokedexId;
         this.generationId = generationId;
         this.name = name;

@@ -9,16 +9,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface PokemonRepository extends JpaRepository<Pokemon, UUID> {
+public interface PokemonRepository extends JpaRepository<PokemonEntity, UUID> {
 
     @Query("""
             SELECT p
             FROM Pokemon p
+            WHERE
+                p.visible = true
             ORDER BY
                 pokedexId ASC,
                 name ASC
             """)
-    List<Pokemon> findAllOrderByPokedexIdAscNameAsc();
+    List<PokemonEntity> findAllOrderByPokedexIdAscNameAscAndVisibleTrue();
 
     @Query("""
             SELECT p
@@ -32,7 +34,23 @@ public interface PokemonRepository extends JpaRepository<Pokemon, UUID> {
                 pokedexId ASC,
                 name ASC
             """)
-    Page<Pokemon> findAllByNameOrderByPokedexIdAscNameAsc(Pageable pageable, String name);
+    Page<PokemonEntity> findAllByNameOrderByPokedexIdAscNameAsc(Pageable pageable, String name);
+
+    @Query("""
+            SELECT p
+            FROM Pokemon p
+            WHERE (
+                :name IS null
+                OR
+                lower(p.name) LIKE lower(concat('%', :name, '%'))
+                )
+                AND
+                p.visible = true
+            ORDER BY
+                pokedexId ASC,
+                name ASC
+            """)
+    Page<PokemonEntity> findAllByNameOrderByPokedexIdAscNameAscAndVisibleTrue(Pageable pageable, String name);
 
     @Query("""
             SELECT p
@@ -43,7 +61,7 @@ public interface PokemonRepository extends JpaRepository<Pokemon, UUID> {
                 lower(p.name) = lower(:name)
             )
             """)
-    Optional<Pokemon> findByPokedexIdAndNameIgnoreCase(Integer pokedexId, String name);
+    Optional<PokemonEntity> findByPokedexIdAndNameIgnoreCase(Integer pokedexId, String name);
 
     @Query("""
             SELECT p
@@ -56,5 +74,5 @@ public interface PokemonRepository extends JpaRepository<Pokemon, UUID> {
                 p.visible = true
             )
             """)
-    Optional<Pokemon> findByPokedexIdAndNameIgnoreCaseAndVisibleTrue(Integer pokedexId, String name);
+    Optional<PokemonEntity> findByPokedexIdAndNameIgnoreCaseAndVisibleTrue(Integer pokedexId, String name);
 }

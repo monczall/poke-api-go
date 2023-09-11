@@ -1,8 +1,40 @@
 # PokeAPI GO
+ 
+The goal of this project was to create REST API for Pokemon GO bucket list apps.
 
-#### This file contains information about all the API endpoints that this service provides. 
+## Getting Started
 
-#### You can report any discrepancies or missing data here: [Twitter (X) - Monczall](https://twitter.com/Monczall).
+### Prerequisites
+
+- Java Development Kit (JDK) 17 or above
+- Maven
+
+### Installation
+
+Clone the repository
+
+```cmd
+git clone https://github.com/monczall/poke-api-go.git
+```
+
+Navigate to project directory and Use mvn to create application jar.
+
+```cmd
+mvn clean varify
+```
+
+Start the server
+
+```cmd
+java -jar target/poke-api-go-VERSION.jar
+```
+
+Server will run on localhost:8080
+
+## API
+
+This file contains information about all the API endpoints that this service provides. 
+You can report any discrepancies or missing data here: [Twitter (X) - Monczall](https://twitter.com/Monczall).
 
 ## What kind of data can you expect
 
