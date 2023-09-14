@@ -1,6 +1,7 @@
 package com.pokeapigo.core.pokemon;
 
 import com.pokeapigo.core.pokemon.dto.request.PokemonRequest;
+import com.pokeapigo.core.pokemon.exception.exceptions.PokemonAlreadyExistsException;
 import com.pokeapigo.core.pokemon.util.factory.PokemonDtoFactory;
 import com.pokeapigo.core.pokemon.util.factory.PokemonEntityFactory;
 import jakarta.validation.Validator;
@@ -16,8 +17,10 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.pokeapigo.core.pokemon.util.PokemonTestConstants.POKEMON_NAME_BULBASAUR;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 class PokemonServiceTest {
@@ -50,22 +53,8 @@ class PokemonServiceTest {
             systemUnderTest.createPokemon(pokemonRequest);
 
             // then
-            verify(pokemonRepository).save(any(PokemonEntity.class));
-        }
-
-        @Test
-        @DisplayName("Validator should be called when creating Pokemon")
-        void createPokemon_whenCreatingPokemon_thenValidatorShouldBeCalled() {
-            // given
-            final PokemonRequest pokemonRequest = PokemonDtoFactory.validPokemonRequestBulbasaur();
-            final PokemonEntity pokemon = PokemonEntityFactory.validPokemonEntityBulbasaur();
-            when(pokemonRepository.save(any(PokemonEntity.class))).thenReturn(pokemon);
-
-            // when
-            systemUnderTest.createPokemon(pokemonRequest);
-
-            // then
             verify(validator).validate(any(PokemonRequest.class));
+            verify(pokemonRepository).save(any(PokemonEntity.class));
         }
 
         @Test
@@ -119,25 +108,16 @@ class PokemonServiceTest {
     class UnhappyPaths {
         @Test
         @DisplayName("Should throw PokemonAlreadyExistsException with correct message when visible pokemon with given name and id already exists")
-        void createPokemon_whenPokemonNameAndIdWithStatusVisibleExists_throwPokemonAlreadyExistsException() {
+        void createPokemon_whenPokemonNameAndIdWithStatusVisibleAlreadyExists_throwPokemonAlreadyExistsException() {
             // given
+            final PokemonRequest pokemonRequest = PokemonDtoFactory.validPokemonRequestBulbasaur();
+            final PokemonEntity pokemon = PokemonEntityFactory.validPokemonEntityBulbasaur();
+            when(pokemonRepository.findByPokedexIdAndNameIgnoreCaseAndVisibleTrue(anyInt(), anyString()))
+                    .thenReturn(Optional.of(pokemon));
 
-            // when
-
-            // then
-
-        }
-
-        @Test
-        @DisplayName("Should throw InvalidColumnNameException when invalid column name provided")
-        void getPagedPokemons_whenProvidedInvalidColumnName_throwInvalidColumnNameException() {
-
-        }
-
-        @Test
-        @DisplayName("Should throw OtherDataAccessApiException when other unknown exception happens")
-        void getPagedPokemons_whenUnknownErrorHappened_throwOtherDataAccessApiException() {
-
+            // when - then
+            assertThrows(PokemonAlreadyExistsException.class, () -> systemUnderTest.createPokemon(pokemonRequest));
+            verify(pokemonRepository, never()).save(any(PokemonEntity.class));
         }
     }
 }
