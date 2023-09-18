@@ -22,9 +22,11 @@ public class PokemonMapper {
 
     public static PokemonResponse toPokemonResponse(PokemonEntity pokemon) {
         return new PokemonResponse(
+                pokemon.getId(),
                 pokemon.getPokedexId(),
                 pokemon.getGenerationId(),
                 pokemon.getName(),
+                pokemon.getVariant(),
                 pokemon.getPokemonTypes(),
                 pokemon.getRarity(),
                 pokemon.getAvailability(),
@@ -37,9 +39,11 @@ public class PokemonMapper {
                 pagedPokemons.getContent().stream()
                         .map(pokemon ->
                                 new PokemonResponse(
+                                        pokemon.getId(),
                                         pokemon.getPokedexId(),
                                         pokemon.getGenerationId(),
                                         pokemon.getName(),
+                                        pokemon.getVariant(),
                                         pokemon.getPokemonTypes(),
                                         pokemon.getRarity(),
                                         pokemon.getAvailability(),

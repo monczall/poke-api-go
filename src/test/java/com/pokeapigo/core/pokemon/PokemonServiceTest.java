@@ -2,6 +2,7 @@ package com.pokeapigo.core.pokemon;
 
 import com.pokeapigo.core.pokemon.dto.request.PokemonRequest;
 import com.pokeapigo.core.pokemon.exception.exceptions.PokemonAlreadyExistsException;
+import com.pokeapigo.core.pokemon.util.PokemonTestConstants;
 import com.pokeapigo.core.pokemon.util.factory.PokemonDtoFactory;
 import com.pokeapigo.core.pokemon.util.factory.PokemonEntityFactory;
 import jakarta.validation.Validator;
@@ -16,12 +17,11 @@ import org.springframework.context.MessageSource;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
-import static com.pokeapigo.core.pokemon.util.PokemonTestConstants.POKEMON_NAME_BULBASAUR;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
 class PokemonServiceTest {
 
@@ -42,7 +42,7 @@ class PokemonServiceTest {
     class HappyPaths {
 
         @ParameterizedTest
-        @MethodSource("correctPokemonRequestProvider")
+        @MethodSource("createPokemonProvider")
         @DisplayName("Should create and save Pokemon when correct Pokemon data is given")
         void createPokemon_whenPokemonRequestDataIsCorrect_thenSavePokemon(PokemonRequest pokemonRequest,
                                                                            PokemonEntity pokemon) {
@@ -50,7 +50,7 @@ class PokemonServiceTest {
             when(pokemonRepository.save(any(PokemonEntity.class))).thenReturn(pokemon);
 
             // when
-            systemUnderTest.createPokemon(pokemonRequest);
+            systemUnderTest.createPokemon(pokemonRequest, Locale.getDefault());
 
             // then
             verify(validator).validate(any(PokemonRequest.class));
@@ -64,7 +64,7 @@ class PokemonServiceTest {
             systemUnderTest.getAllPokemons();
 
             // then
-            verify(pokemonRepository).findAllOrderByPokedexIdAscNameAscAndVisibleTrue();
+            verify(pokemonRepository).findAllVisibleOrderByPokedexIdAndName();
         }
 
         @Test
@@ -74,18 +74,19 @@ class PokemonServiceTest {
             final PokemonEntity pokemon = PokemonEntityFactory.validPokemonEntityBulbasaur();
             final PageImpl<PokemonEntity> responseFromDb = new PageImpl<>(List.of(pokemon));
             when(pokemonRepository
-                    .findAllByNameOrderByPokedexIdAscNameAscAndVisibleTrue(any(Pageable.class), anyString())
+                    .findAllVisibleByNameOrderByPokedexIdAndName(any(Pageable.class), anyString())
             ).thenReturn(responseFromDb);
 
             // when
-            systemUnderTest.getPagedPokemons(Pageable.ofSize(1), POKEMON_NAME_BULBASAUR);
+            systemUnderTest.getPagedPokemons(Pageable.ofSize(1), PokemonTestConstants.POKEMON_NAME_BULBASAUR,
+                    Locale.getDefault());
 
             // then
             verify(pokemonRepository)
-                    .findAllByNameOrderByPokedexIdAscNameAscAndVisibleTrue(any(Pageable.class), anyString());
+                    .findAllVisibleByNameOrderByPokedexIdAndName(any(Pageable.class), anyString());
         }
 
-        private static List<Arguments> correctPokemonRequestProvider() {
+        private static List<Arguments> createPokemonProvider() {
             return List.of(
                     Arguments.of(
                             PokemonDtoFactory.validPokemonRequestBulbasaur(),
@@ -112,11 +113,12 @@ class PokemonServiceTest {
             // given
             final PokemonRequest pokemonRequest = PokemonDtoFactory.validPokemonRequestBulbasaur();
             final PokemonEntity pokemon = PokemonEntityFactory.validPokemonEntityBulbasaur();
-            when(pokemonRepository.findByPokedexIdAndNameIgnoreCaseAndVisibleTrue(anyInt(), anyString()))
-                    .thenReturn(Optional.of(pokemon));
+            when(pokemonRepository.pokemonExists(anyInt(), anyString(), any()))
+                    .thenReturn(true);
 
             // when - then
-            assertThrows(PokemonAlreadyExistsException.class, () -> systemUnderTest.createPokemon(pokemonRequest));
+            assertThrows(PokemonAlreadyExistsException.class, () ->
+                    systemUnderTest.createPokemon(pokemonRequest, Locale.getDefault()));
             verify(pokemonRepository, never()).save(any(PokemonEntity.class));
         }
     }

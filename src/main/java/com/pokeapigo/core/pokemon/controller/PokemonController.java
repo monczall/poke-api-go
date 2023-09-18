@@ -2,21 +2,25 @@ package com.pokeapigo.core.pokemon.controller;
 
 import com.pokeapigo.core.pokemon.PokemonService;
 import com.pokeapigo.core.pokemon.dto.request.PokemonRequest;
+import com.pokeapigo.core.pokemon.dto.request.PokemonVisibilityRequest;
 import com.pokeapigo.core.pokemon.dto.response.PokemonResponse;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
 
 import static com.pokeapigo.core.common.utli.constants.ApiConstants.*;
 
 @Controller
-@RequestMapping(API + API_VERSION_1 + API_POKEMONS)
+@RequestMapping(API_URI_V1 + API_POKEMONS)
 public class PokemonController {
 
     private final PokemonService pokemonService;
@@ -26,8 +30,11 @@ public class PokemonController {
     }
 
     @PostMapping
-    ResponseEntity<PokemonResponse> createPokemon(@Valid @RequestBody PokemonRequest pokemonRequest) {
-        final PokemonResponse createdPokemon = pokemonService.createPokemon(pokemonRequest);
+    ResponseEntity<PokemonResponse> createPokemon(
+            @RequestHeader(value = HttpHeaders.ACCEPT_LANGUAGE, required = false) Locale locale,
+            @Valid @RequestBody PokemonRequest pokemonRequest
+    ) {
+        final PokemonResponse createdPokemon = pokemonService.createPokemon(pokemonRequest, locale);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -45,13 +52,27 @@ public class PokemonController {
 
     @GetMapping
     ResponseEntity<Page<PokemonResponse>> getPagedPokemons(
+            @RequestHeader(value = HttpHeaders.ACCEPT_LANGUAGE, required = false) Locale locale,
             Pageable pageable,
             @RequestParam(required = false) String name
     ) {
-        final Page<PokemonResponse> pagedPokemons = pokemonService.getPagedPokemons(pageable, name);
+        final Page<PokemonResponse> pagedPokemons = pokemonService.getPagedPokemons(pageable, name, locale);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(pagedPokemons);
+    }
+
+    @PatchMapping("/{pokemonId}/visibility")
+    ResponseEntity<PokemonResponse> changePokemonVisibility(
+            @RequestHeader(value = HttpHeaders.ACCEPT_LANGUAGE, required = false) Locale locale,
+            @PathVariable UUID pokemonId,
+            @Valid @RequestBody PokemonVisibilityRequest request
+    ) {
+        final PokemonResponse updatedPokemon = pokemonService.changePokemonVisibility(pokemonId, request, locale);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(updatedPokemon);
     }
 }
