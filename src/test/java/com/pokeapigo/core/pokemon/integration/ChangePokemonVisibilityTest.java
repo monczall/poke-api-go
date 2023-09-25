@@ -44,12 +44,12 @@ public class ChangePokemonVisibilityTest extends TestBaseConfiguration {
                         PokemonJsonFactory.CHANGE_VISIBILITY_TRUE,
                         "c218b692-311b-4d39-ac6b-747921b73474",
                         true
-                        ),
+                ),
                 Arguments.of(
                         PokemonJsonFactory.CHANGE_VISIBILITY_FALSE,
                         "c218b692-311b-4d39-ac6b-747921b73474",
                         false
-                        ),
+                ),
                 Arguments.of(
                         PokemonJsonFactory.CHANGE_VISIBILITY_TRUE,
                         "c218b692-311b-4d39-ac6b-747921b73475",
