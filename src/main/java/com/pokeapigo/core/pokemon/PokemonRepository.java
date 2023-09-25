@@ -6,73 +6,54 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public interface PokemonRepository extends JpaRepository<PokemonEntity, UUID> {
 
     @Query("""
             SELECT p
-            FROM Pokemon p
+            FROM PokemonEntity p
             WHERE
                 p.visible = true
             ORDER BY
                 pokedexId ASC,
                 name ASC
             """)
-    List<PokemonEntity> findAllOrderByPokedexIdAscNameAscAndVisibleTrue();
+    List<PokemonEntity> findAllVisibleOrderByPokedexIdAndName();
 
     @Query("""
             SELECT p
-            FROM Pokemon p
+            FROM PokemonEntity p
             WHERE (
                 :name IS null
                 OR
                 lower(p.name) LIKE lower(concat('%', :name, '%'))
             )
+            AND
+                p.visible = true
             ORDER BY
                 pokedexId ASC,
                 name ASC
             """)
-    Page<PokemonEntity> findAllByNameOrderByPokedexIdAscNameAsc(Pageable pageable, String name);
+    Page<PokemonEntity> findAllVisibleByNameOrderByPokedexIdAndName(Pageable pageable, String name);
 
     @Query("""
-            SELECT p
-            FROM Pokemon p
-            WHERE (
-                :name IS null
-                OR
-                lower(p.name) LIKE lower(concat('%', :name, '%'))
+            SELECT
+                CASE WHEN COUNT(p) > 0
+                    THEN true
+                    ELSE false
+                END
+            FROM PokemonEntity p
+                WHERE (
+                    p.pokedexId = :pokedexId
+                    AND
+                    lower(p.name) LIKE lower(concat('%', :name, '%'))
+                    AND (
+                        :variant IS null
+                        OR
+                        lower(p.variant) LIKE lower(concat('%', :variant, '%'))
+                    )
                 )
-                AND
-                p.visible = true
-            ORDER BY
-                pokedexId ASC,
-                name ASC
             """)
-    Page<PokemonEntity> findAllByNameOrderByPokedexIdAscNameAscAndVisibleTrue(Pageable pageable, String name);
-
-    @Query("""
-            SELECT p
-            FROM Pokemon p
-            WHERE (
-                p.pokedexId = :pokedexId
-                AND
-                lower(p.name) = lower(:name)
-            )
-            """)
-    Optional<PokemonEntity> findByPokedexIdAndNameIgnoreCase(Integer pokedexId, String name);
-
-    @Query("""
-            SELECT p
-            FROM Pokemon p
-            WHERE (
-                p.pokedexId = :pokedexId
-                AND
-                lower(p.name) = lower(:name)
-                AND
-                p.visible = true
-            )
-            """)
-    Optional<PokemonEntity> findByPokedexIdAndNameIgnoreCaseAndVisibleTrue(Integer pokedexId, String name);
+    boolean pokemonExists(Integer pokedexId, String name, String variant);
 }

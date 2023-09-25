@@ -3,7 +3,7 @@ version: "3.8"
 services:
   db:
     container_name: poke-api-go
-    image: postgres:14.1-alpine
+    image: postgres:16.0-alpine3.18
     ports:
       - "5432:5432"
     environment:
