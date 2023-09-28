@@ -118,7 +118,7 @@ class PokemonServiceTest {
 
             // when - then
             assertThrows(PokemonAlreadyExistsException.class, () ->
-                    systemUnderTest.createPokemon(pokemonRequest, Locale.getDefault()));
+                    systemUnderTest.createPokemon(pokemonRequest, Locale.ENGLISH));
             verify(pokemonRepository, never()).save(any(PokemonEntity.class));
         }
     }

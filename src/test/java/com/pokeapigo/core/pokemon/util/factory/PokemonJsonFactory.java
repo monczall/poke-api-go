@@ -41,11 +41,17 @@ public class PokemonJsonFactory {
                 },
                 "rarity": "STANDARD",
                 "availability": {
-                    "isWild": true,
-                    "isRaid": true,
-                    "isEgg": true,
-                    "isShadow": true,
-                    "isMega": true
+                    "available": true,
+                    "shiny": true,
+                    "mega": true,
+                    "megaFamily": true,
+                    "shadow": true,
+                    "tradeEvolve": true,
+                    "tradeEvolveFamily": true,
+                    "tradeable": true,
+                    "raidable": true,
+                    "alternateForm": true,
+                    "costumeForm": true
                 }
             }
             """;
@@ -62,11 +68,17 @@ public class PokemonJsonFactory {
                 },
                 "rarity": "STANDARD",
                 "availability": {
-                    "isWild": true,
-                    "isRaid": true,
-                    "isEgg": true,
-                    "isShadow": true,
-                    "isMega": true
+                    "available": true,
+                    "shiny": true,
+                    "mega": true,
+                    "megaFamily": true,
+                    "shadow": true,
+                    "tradeEvolve": true,
+                    "tradeEvolveFamily": true,
+                    "tradeable": true,
+                    "raidable": true,
+                    "alternateForm": true,
+                    "costumeForm": true
                 }
             }
             """;

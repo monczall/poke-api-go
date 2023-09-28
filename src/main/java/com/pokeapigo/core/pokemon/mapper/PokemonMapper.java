@@ -51,4 +51,7 @@ public class PokemonMapper {
                         ).toList())
                 ;
     }
+
+    private PokemonMapper() {
+    }
 }

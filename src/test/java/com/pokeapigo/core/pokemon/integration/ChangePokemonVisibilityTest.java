@@ -16,7 +16,7 @@ import static com.pokeapigo.core.common.utli.constants.ApiConstants.API_URI_V1;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 
-public class ChangePokemonVisibilityTest extends TestBaseConfiguration {
+class ChangePokemonVisibilityTest extends TestBaseConfiguration {
 
     @ParameterizedTest
     @MethodSource("changePokemonVisibilityProvider")

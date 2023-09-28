@@ -42,14 +42,12 @@ public class PokemonServiceImpl implements PokemonService {
     public PokemonResponse createPokemon(PokemonRequest pokemonRequest, Locale locale) {
         validator.validate(pokemonRequest);
 
-        System.out.println(pokemonRequest);
-        final Boolean pokemonAlreadyExists = pokemonRepository
+        final boolean pokemonAlreadyExists = pokemonRepository
                 .pokemonExists(
                         pokemonRequest.pokedexId(),
                         pokemonRequest.name(),
                         pokemonRequest.variant()
                 );
-        System.out.println(pokemonAlreadyExists);
 
         if (pokemonAlreadyExists) {
             final String message = messageSource.getMessage(
@@ -64,8 +62,8 @@ public class PokemonServiceImpl implements PokemonService {
         final PokemonEntity pokemon = PokemonMapper.toEntity(pokemonRequest);
         final PokemonEntity result = pokemonRepository.save(pokemon);
 
-        logger.info("Pokemon %s with ID %s, Name %s and Variant %s has been saved to database"
-                .formatted(pokemon.getId(), pokemon.getPokedexId(), pokemon.getName(), pokemon.getVariant()));
+        logger.info("Pokemon {} with ID {}, Name {} and Variant {} has been saved to database",
+                pokemon.getId(), pokemon.getPokedexId(), pokemon.getName(), pokemon.getVariant());
 
         return toPokemonResponse(result);
     }
@@ -119,7 +117,8 @@ public class PokemonServiceImpl implements PokemonService {
         if (visibilityChanged) {
             pokemon.setVisible(requestedVisibility);
 
-            logger.info("Visibility of Pokemon with ID: %s changed to: %s".formatted(pokemonId, requestedVisibility));
+            logger.info("Visibility of Pokemon with ID: {} changed to: {}",
+                    pokemonId, requestedVisibility);
         }
 
         return PokemonMapper.toPokemonResponse(pokemonRepository.save(pokemon));
