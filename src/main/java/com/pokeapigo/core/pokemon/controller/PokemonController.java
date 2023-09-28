@@ -17,7 +17,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-import static com.pokeapigo.core.common.utli.constants.ApiConstants.*;
+import static com.pokeapigo.core.common.utli.constants.ApiConstants.API_POKEMONS;
+import static com.pokeapigo.core.common.utli.constants.ApiConstants.API_URI_V1;
 
 @Controller
 @RequestMapping(API_URI_V1 + API_POKEMONS)

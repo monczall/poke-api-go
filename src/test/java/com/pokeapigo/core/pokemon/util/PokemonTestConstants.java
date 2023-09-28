@@ -1,6 +1,7 @@
 package com.pokeapigo.core.pokemon.util;
 
 public class PokemonTestConstants {
+    public static final String NON_EXISTENT_POKEMON_UUID_STRING = "00000000-0000-0000-0000-000000000000";
     public static final Integer POKEMON_ID_ONE = 1;
     public static final Integer POKEMON_ID_TWO = 2;
     public static final Integer POKEMON_ID_THREE = 3;
