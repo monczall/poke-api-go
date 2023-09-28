@@ -2,6 +2,49 @@
  
 The goal of this project was to create REST API for Pokemon GO bucket list apps.
 
+## Current State
+
+### Core Service
+#### Pokemons
+- [ ] Create Pokemons Table
+- [ ] Fill DB With Pokemon Data
+- [ ] Feature: Create Pokemon
+- [ ] Feature: Update Pokemon Data
+- [ ] Feature: Update Pokemon Visibility (Soft Delete)
+- [ ] Feature: Get Single Pokemon Details
+- [ ] Feature: Get All Pokemons (With filters)
+- [ ] Feature: Get All Pokemons Paged (With filters)
+- [ ] Feature: Remove Pokemon Data (Hard Delete)
+- [ ] Feature: Get Pokemons Statistics Data (Available, Released etc.)
+- [ ] Feature: Export All Pokemons Data
+- [ ] Feature: Import All Pokemons Data
+     
+#### Trainers
+- [ ] Create Trainers Table
+- [ ] Feature: Register (Create Trainer)
+- [ ] Feature: Modify Trainer Data
+- [ ] Feature: Send Registration Email Confirmation To Message Queue
+- [ ] Feature: Get All Trainers Paged (With filters)
+- [ ] Feature: Get Single Trainer Data
+- [ ] Feature: Remove Trainer Data
+     
+#### Trainers - Pokemons
+- [ ] Create Trainers - Pokemons Relation
+- [ ] Feature: Assign Pokemon To Trainer
+- [ ] Feature: Modify Assignment Data
+- [ ] Feature: Get Single Assignment Data
+- [ ] Feature: Get All Assignment Data Paged (With filters)
+- [ ] Feature: Get Assignemt Statistics Data
+- [ ] Feature: Remove Single Assignment Data (Soft Delete)
+- [ ] Feature: Export Assignment Data For Single Trainer
+- [ ] Feature: Import Assignment Data For Single Trainer
+
+### Mailing service
+
+- [ ] Create mailing microservice
+- [ ] Feature: Read Email Message From Message Queue
+- [ ] Feature: Process And Send Received Email Data
+
 ## Getting Started
 
 ### Prerequisites
@@ -62,8 +105,10 @@ Application stores data about
 ### Enums
 
 #### PokemonRarity:
-  NONE | BUG | DARK | DRAGON | ELECTRIC | FAIRY | FIGHTING | FIRE | FLYING | GHOST | GRASS | GROUND | ICE | NORMAL | 
-  POISON | PSYCHIC | ROCK | STEEL | WATER
+  NONE | BUG | DARK | DRAGON | ELECTRIC\
+  FAIRY | FIGHTING | FIRE | FLYING | GHOST\
+  GRASS | GROUND | ICE | NORMAL | POISON\
+  PSYCHIC | ROCK | STEEL | WATER
 
 #### PokemonType:
   STANDARD | LEGENDARY | MYTHIC
