@@ -88,6 +88,34 @@ public class PokemonEntity {
         return visible;
     }
 
+    public void setPokedexId(Integer pokedexId) {
+        this.pokedexId = pokedexId;
+    }
+
+    public void setGenerationId(Integer generationId) {
+        this.generationId = generationId;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setVariant(String variant) {
+        this.variant = variant;
+    }
+
+    public void setPokemonTypes(PokemonTypeDuo pokemonTypes) {
+        this.pokemonTypes = pokemonTypes;
+    }
+
+    public void setRarity(PokemonRarity rarity) {
+        this.rarity = rarity;
+    }
+
+    public void setAvailability(PokemonAvailability availability) {
+        this.availability = availability;
+    }
+
     public void setVisible(Boolean visible) {
         this.visible = visible;
     }

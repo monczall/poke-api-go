@@ -13,9 +13,12 @@ import java.util.UUID;
 public interface PokemonService {
     PokemonResponse createPokemon(PokemonRequest pokemonRequest, Locale locale);
 
+    PokemonResponse updatePokemonData(UUID pokemonId, PokemonRequest request, Locale locale);
+
+    PokemonResponse changePokemonVisibility(UUID pokemonId, PokemonVisibilityRequest request, Locale locale);
+
     List<PokemonResponse> getAllPokemons();
 
     Page<PokemonResponse> getPagedPokemons(Pageable pageable, String name, Locale locale);
 
-    PokemonResponse changePokemonVisibility(UUID pokemonId, PokemonVisibilityRequest request, Locale locale);
 }

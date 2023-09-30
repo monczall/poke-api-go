@@ -6,14 +6,16 @@ The goal of this project was to create REST API for Pokemon GO bucket list apps.
 
 ### Core Service
 #### Pokemons
-- [ ] Create Pokemons Table
+- [x] Create Pokemons Table
 - [ ] Fill DB With Pokemon Data
-- [ ] Feature: Create Pokemon
+- [x] Feature: Create Pokemon
 - [ ] Feature: Update Pokemon Data
 - [ ] Feature: Update Pokemon Visibility (Soft Delete)
 - [ ] Feature: Get Single Pokemon Details
-- [ ] Feature: Get All Pokemons (With filters)
-- [ ] Feature: Get All Pokemons Paged (With filters)
+- [x] Feature: Get All Pokemons
+- [ ] Feature: Add Filtering to Get All Pokemons
+- [x] Feature: Get All Pokemons Paged
+- [ ] Feature: Add Filtering to Get All Pokemons Paged
 - [ ] Feature: Remove Pokemon Data (Hard Delete)
 - [ ] Feature: Get Pokemons Statistics Data (Available, Released etc.)
 - [ ] Feature: Export All Pokemons Data

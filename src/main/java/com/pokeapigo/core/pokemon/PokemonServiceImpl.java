@@ -39,33 +39,51 @@ public class PokemonServiceImpl implements PokemonService {
     }
 
     @Override
-    public PokemonResponse createPokemon(PokemonRequest pokemonRequest, Locale locale) {
-        validator.validate(pokemonRequest);
+    public PokemonResponse createPokemon(PokemonRequest request, Locale locale) {
+        validator.validate(request);
 
-        final boolean pokemonAlreadyExists = pokemonRepository
-                .pokemonExists(
-                        pokemonRequest.pokedexId(),
-                        pokemonRequest.name(),
-                        pokemonRequest.variant()
-                );
+        throwIfPokemonAlreadyExists(request, locale);
 
-        if (pokemonAlreadyExists) {
-            final String message = messageSource.getMessage(
-                    "pokemon.alreadyExists", new Object[]{
-                            pokemonRequest.pokedexId(),
-                            pokemonRequest.name(),
-                            pokemonRequest.variant()
-                    }, locale);
-            throw new PokemonAlreadyExistsException(message);
-        }
-
-        final PokemonEntity pokemon = PokemonMapper.toEntity(pokemonRequest);
+        final PokemonEntity pokemon = PokemonMapper.toEntity(request);
         final PokemonEntity result = pokemonRepository.save(pokemon);
 
         logger.info("Pokemon {} with ID {}, Name {} and Variant {} has been saved to database",
                 pokemon.getId(), pokemon.getPokedexId(), pokemon.getName(), pokemon.getVariant());
 
         return toPokemonResponse(result);
+    }
+
+    @Override
+    public PokemonResponse updatePokemonData(UUID pokemonId, PokemonRequest request, Locale locale) {
+        validator.validate(request);
+
+        throwIfPokemonAlreadyExists(request, locale);
+
+        PokemonEntity pokemon = getPokemonByUUID(pokemonId, locale);
+        final PokemonEntity result = pokemonRepository.save(
+                PokemonMapper.updatePokemonEntityData(pokemon, request)
+        );
+
+        return toPokemonResponse(result);
+    }
+
+    @Override
+    public PokemonResponse changePokemonVisibility(UUID pokemonId, PokemonVisibilityRequest request, Locale locale) {
+        validator.validate(request);
+
+        final Boolean requestedVisibility = request.visible();
+
+        PokemonEntity pokemon = getPokemonByUUID(pokemonId, locale);
+
+        final boolean visibilityChanged = !pokemon.getVisible().equals(requestedVisibility);
+        if (visibilityChanged) {
+            pokemon.setVisible(requestedVisibility);
+
+            logger.info("Visibility of Pokemon with ID: {} changed to: {}",
+                    pokemonId, requestedVisibility);
+        }
+
+        return PokemonMapper.toPokemonResponse(pokemonRepository.save(pokemon));
     }
 
     @Override
@@ -102,26 +120,31 @@ public class PokemonServiceImpl implements PokemonService {
         }
     }
 
-    @Override
-    public PokemonResponse changePokemonVisibility(UUID pokemonId, PokemonVisibilityRequest request, Locale locale) {
-        validator.validate(request);
+    private void throwIfPokemonAlreadyExists(PokemonRequest pokemonRequest, Locale locale) {
+        // TODO: Return PokemonEntity and conditionally check with UUID that is passed to method that it matches pokemon taken from DB
 
-        final Boolean requestedVisibility = request.visible();
+        final boolean pokemonAlreadyExists = pokemonRepository
+                .pokemonExists(
+                        pokemonRequest.pokedexId(),
+                        pokemonRequest.name(),
+                        pokemonRequest.variant()
+                );
 
-        PokemonEntity pokemon = pokemonRepository.findById(pokemonId)
+        if (pokemonAlreadyExists) {
+            throw new PokemonAlreadyExistsException(messageSource.getMessage(
+                    "pokemon.alreadyExists", new Object[]{
+                            pokemonRequest.pokedexId(),
+                            pokemonRequest.name(),
+                            pokemonRequest.variant()
+                    }, locale));
+        }
+    }
+
+    private PokemonEntity getPokemonByUUID(UUID pokemonId, Locale locale) {
+        return pokemonRepository.findById(pokemonId)
                 .orElseThrow(() -> new PokemonNotFoundException(
                         messageSource.getMessage("pokemon.notFound", new Object[]{pokemonId}, locale)
                 ));
-
-        final boolean visibilityChanged = !pokemon.getVisible().equals(requestedVisibility);
-        if (visibilityChanged) {
-            pokemon.setVisible(requestedVisibility);
-
-            logger.info("Visibility of Pokemon with ID: {} changed to: {}",
-                    pokemonId, requestedVisibility);
-        }
-
-        return PokemonMapper.toPokemonResponse(pokemonRepository.save(pokemon));
     }
 
 }
