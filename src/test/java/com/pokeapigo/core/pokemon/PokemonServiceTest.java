@@ -1,7 +1,10 @@
 package com.pokeapigo.core.pokemon;
 
 import com.pokeapigo.core.pokemon.dto.request.PokemonRequest;
+import com.pokeapigo.core.pokemon.dto.response.PokemonResponse;
 import com.pokeapigo.core.pokemon.exception.exceptions.PokemonAlreadyExistsException;
+import com.pokeapigo.core.pokemon.exception.exceptions.PokemonNotFoundException;
+import com.pokeapigo.core.pokemon.mapper.PokemonMapper;
 import com.pokeapigo.core.pokemon.util.PokemonTestConstants;
 import com.pokeapigo.core.pokemon.util.factory.PokemonDtoFactory;
 import com.pokeapigo.core.pokemon.util.factory.PokemonEntityFactory;
@@ -19,7 +22,10 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
+import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -44,10 +50,12 @@ class PokemonServiceTest {
         @ParameterizedTest
         @MethodSource("createPokemonProvider")
         @DisplayName("Should create and save Pokemon when correct Pokemon data is given")
-        void createPokemon_whenPokemonRequestDataIsCorrect_thenSavePokemon(PokemonRequest pokemonRequest,
-                                                                           PokemonEntity pokemon) {
+        void createPokemon_whenPokemonDataIsCorrect_thenSavePokemon(PokemonRequest pokemonRequest,
+                                                                    PokemonEntity pokemon) {
             // given
             when(pokemonRepository.save(any(PokemonEntity.class))).thenReturn(pokemon);
+            when(pokemonRepository.pokemonExists(any(UUID.class), anyInt(), anyString(), anyString()))
+                    .thenReturn(false);
 
             // when
             systemUnderTest.createPokemon(pokemonRequest, Locale.getDefault());
@@ -55,6 +63,52 @@ class PokemonServiceTest {
             // then
             verify(validator).validate(any(PokemonRequest.class));
             verify(pokemonRepository).save(any(PokemonEntity.class));
+        }
+
+        @ParameterizedTest
+        @MethodSource("updatePokemonProvider")
+        @DisplayName("Should update Pokemon when correct Pokemon data is given")
+        void updatePokemon_whenPokemonDataIsCorrect_thenUpdatePokemon(PokemonEntity findPokemon,
+                                                                      PokemonRequest request) {
+            // given
+            when(pokemonRepository.pokemonExists(any(UUID.class), anyInt(), anyString(), anyString()))
+                    .thenReturn(false);
+            when(pokemonRepository.findById(any(UUID.class))).thenReturn(Optional.ofNullable(findPokemon));
+            assert findPokemon != null;
+            PokemonEntity pokemonToSave = PokemonMapper.updatePokemonEntityData(findPokemon, request);
+            when(pokemonRepository.save(any(PokemonEntity.class))).thenReturn(pokemonToSave);
+
+            // when
+            PokemonResponse response = systemUnderTest.updatePokemonData(
+                    PokemonTestConstants.POKEMON_BULBASAUR_UUID,
+                    request,
+                    Locale.ENGLISH);
+
+            // then
+            verify(pokemonRepository).save(any(PokemonEntity.class));
+            assertEquals(request.name(), response.name());
+            assertEquals(request.variant(), response.variant());
+        }
+
+        private static List<Arguments> updatePokemonProvider() {
+            return List.of(
+                    Arguments.of(
+                            PokemonEntityFactory.validPokemonEntityBulbasaur(),
+                            PokemonDtoFactory.validPokemonRequestVenusaur()
+                    ),
+                    Arguments.of(
+                            PokemonEntityFactory.validPokemonEntityBulbasaur(),
+                            PokemonDtoFactory.validPokemonRequestBulbasaurPartyHat()
+                    ),
+                    Arguments.of(
+                            PokemonEntityFactory.validPokemonEntityVenusaur(),
+                            PokemonDtoFactory.validPokemonRequestIvysaur()
+                    ),
+                    Arguments.of(
+                            PokemonEntityFactory.validPokemonEntityBulbasaur(),
+                            PokemonDtoFactory.validPokemonRequestBulbasaur()
+                    )
+            );
         }
 
         @Test
@@ -108,18 +162,34 @@ class PokemonServiceTest {
     @Nested
     class UnhappyPaths {
         @Test
-        @DisplayName("Should throw PokemonAlreadyExistsException with correct message when visible pokemon with given name and id already exists")
+        @DisplayName("Should throw PokemonAlreadyExistsException with correct message when pokemon with given name and id already exists")
         void createPokemon_whenPokemonNameAndIdWithStatusVisibleAlreadyExists_throwPokemonAlreadyExistsException() {
             // given
             final PokemonRequest pokemonRequest = PokemonDtoFactory.validPokemonRequestBulbasaur();
-            final PokemonEntity pokemon = PokemonEntityFactory.validPokemonEntityBulbasaur();
-            when(pokemonRepository.pokemonExists(anyInt(), anyString(), any()))
+            when(pokemonRepository.pokemonExists(any(), anyInt(), anyString(), any()))
                     .thenReturn(true);
 
             // when - then
             assertThrows(PokemonAlreadyExistsException.class, () ->
                     systemUnderTest.createPokemon(pokemonRequest, Locale.ENGLISH));
             verify(pokemonRepository, never()).save(any(PokemonEntity.class));
+        }
+
+        @Test
+        @DisplayName("Should throw PokemonNotFound with correct message when pokemon with given name and id already exists")
+        void updatePokemon_whenPokemonDataIsIncorrect_thenThrowException() {
+            // given
+            final PokemonRequest pokemonRequest = PokemonDtoFactory.validPokemonRequestBulbasaur();
+            when(pokemonRepository.pokemonExists(any(UUID.class), anyInt(), anyString(), anyString()))
+                    .thenReturn(false);
+            when(pokemonRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
+
+            // when - then
+            assertThrows(PokemonNotFoundException.class, () ->
+                    systemUnderTest.updatePokemonData(
+                            PokemonTestConstants.NON_EXISTENT_POKEMON_UUID,
+                            pokemonRequest,
+                            Locale.ENGLISH));
         }
     }
 }

@@ -22,7 +22,7 @@ import static com.pokeapigo.core.common.utli.constants.ApiConstants.API_URI_V1;
 
 @Controller
 @RequestMapping(API_URI_V1 + API_POKEMONS)
-public class PokemonController {
+class PokemonController {
 
     private final PokemonService pokemonService;
 

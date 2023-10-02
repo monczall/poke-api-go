@@ -2,6 +2,8 @@ package com.pokeapigo.core.exception;
 
 import com.pokeapigo.core.exception.dto.BasicErrorDto;
 import com.pokeapigo.core.exception.dto.ValidationErrorDto;
+import com.pokeapigo.core.exception.exceptions.InvalidColumnNameException;
+import com.pokeapigo.core.exception.exceptions.OtherDataAccessApiException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -18,16 +20,21 @@ import static com.pokeapigo.core.exception.GeneralExceptionResponseFactory.getBa
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @ControllerAdvice
-public class GeneralExceptionHandler {
+class GeneralExceptionHandler {
 
     @ExceptionHandler({
-            HttpMessageNotReadableException.class
+            HttpMessageNotReadableException.class,
+            InvalidColumnNameException.class,
+            OtherDataAccessApiException.class
+
     })
     ResponseEntity<BasicErrorDto> generalBadRequestException(RuntimeException e, HttpServletRequest request) {
         return getBasicErrorDtoResponse(e, request, BAD_REQUEST);
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler({
+            MethodArgumentNotValidException.class
+    })
     ResponseEntity<ValidationErrorDto> validationError(MethodArgumentNotValidException e, HttpServletRequest request) {
         Map<String, String> errors = new HashMap<>();
 

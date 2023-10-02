@@ -19,15 +19,17 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
-public class CreatePokemonTest extends TestBaseConfiguration {
+class CreatePokemonTest extends TestBaseConfiguration {
 
     @Nested
     class HappyPaths {
 
         @ParameterizedTest
         @Sql("classpath:sql/cleanUp.sql")
-        @MethodSource("minimalPokemonProvider")
-        void createPokemon_withMinimalValidData_thenSavePokemonEntity(String json, Matcher<Object> matcher) {
+        @MethodSource("pokemonJsonProvider")
+        void createPokemon_withValidData_thenSavePokemonEntity(String json,
+                                                               Matcher<Object> matcher,
+                                                               boolean availableVal) {
             given()
                     .contentType(ContentType.JSON)
                     .body(json)
@@ -45,66 +47,26 @@ public class CreatePokemonTest extends TestBaseConfiguration {
                     .body("pokemonTypes.typeOne", is("GRASS"))
                     .body("pokemonTypes.typeTwo", is("POISON"))
                     .body("rarity", is("STANDARD"))
-                    .body("availability.available", is(false))
-                    .body("availability.shiny", is(false))
-                    .body("availability.mega", is(false))
-                    .body("availability.megaFamily", is(false))
-                    .body("availability.shadow", is(false))
-                    .body("availability.tradeEvolve", is(false))
-                    .body("availability.tradeEvolveFamily", is(false))
-                    .body("availability.tradeable", is(false))
-                    .body("availability.raidable", is(false))
-                    .body("availability.alternateForm", is(false))
-                    .body("availability.costumeForm", is(false))
+                    .body("availability.available", is(availableVal))
+                    .body("availability.shiny", is(availableVal))
+                    .body("availability.mega", is(availableVal))
+                    .body("availability.megaFamily", is(availableVal))
+                    .body("availability.shadow", is(availableVal))
+                    .body("availability.tradeEvolve", is(availableVal))
+                    .body("availability.tradeEvolveFamily", is(availableVal))
+                    .body("availability.tradeable", is(availableVal))
+                    .body("availability.raidable", is(availableVal))
+                    .body("availability.alternateForm", is(availableVal))
+                    .body("availability.costumeForm", is(availableVal))
                     .body("visible", is(true));
         }
 
-        @ParameterizedTest
-        @Sql("classpath:sql/cleanUp.sql")
-        @MethodSource("fullPokemonProvider")
-        void createPokemon_withFullValidData_thenSavePokemonEntity(String json, Matcher<Object> matcher) {
-            given()
-                    .contentType(ContentType.JSON)
-                    .body(json)
-
-                    .when()
-                    .post(API_URI_V1 + API_POKEMONS)
-
-                    .then()
-                    .log().ifValidationFails()
-                    .statusCode(HttpStatus.CREATED.value())
-                    .body("pokedexId", is(1))
-                    .body("generationId", is(1))
-                    .body("name", is("Bulbasaur"))
-                    .body("variant", matcher)
-                    .body("pokemonTypes.typeOne", is("GRASS"))
-                    .body("pokemonTypes.typeTwo", is("POISON"))
-                    .body("rarity", is("STANDARD"))
-                    .body("availability.available", is(true))
-                    .body("availability.shiny", is(true))
-                    .body("availability.mega", is(true))
-                    .body("availability.megaFamily", is(true))
-                    .body("availability.shadow", is(true))
-                    .body("availability.tradeEvolve", is(true))
-                    .body("availability.tradeEvolveFamily", is(true))
-                    .body("availability.tradeable", is(true))
-                    .body("availability.raidable", is(true))
-                    .body("availability.alternateForm", is(true))
-                    .body("availability.costumeForm", is(true))
-                    .body("visible", is(true));
-        }
-
-        private static List<Arguments> minimalPokemonProvider() {
+        private static List<Arguments> pokemonJsonProvider() {
             return List.of(
-                    Arguments.of(PokemonJsonFactory.CREATE_POKEMON_MINIMAL, nullValue()),
-                    Arguments.of(PokemonJsonFactory.CREATE_POKEMON_MINIMAL_VARIANT, is("Party Hat"))
-            );
-        }
-
-        private static List<Arguments> fullPokemonProvider() {
-            return List.of(
-                    Arguments.of(PokemonJsonFactory.CREATE_POKEMON_FULL, nullValue()),
-                    Arguments.of(PokemonJsonFactory.CREATE_POKEMON_FULL_VARIANT, is("Party Hat"))
+                    Arguments.of(PokemonJsonFactory.CREATE_POKEMON_MINIMAL, nullValue(), false),
+                    Arguments.of(PokemonJsonFactory.CREATE_POKEMON_MINIMAL_VARIANT, is("Party Hat"), false),
+                    Arguments.of(PokemonJsonFactory.CREATE_POKEMON_FULL, nullValue(), true),
+                    Arguments.of(PokemonJsonFactory.CREATE_POKEMON_FULL_VARIANT, is("Party Hat"), true)
             );
         }
     }

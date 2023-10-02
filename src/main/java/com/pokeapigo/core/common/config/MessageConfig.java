@@ -6,15 +6,21 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
+import java.util.Locale;
+
 @Configuration
-public class MessageConfig {
+class MessageConfig {
 
     @Bean
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource
                 = new ReloadableResourceBundleMessageSource();
 
-        messageSource.setBasename("classpath:messages/pokemon");
+        messageSource.setBasenames(
+                "classpath:messages/global",
+                "classpath:messages/pokemon"
+        );
+        messageSource.setDefaultLocale(Locale.ENGLISH);
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
     }

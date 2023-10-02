@@ -6,6 +6,7 @@ services:
     image: postgres:16.0-alpine3.18
     ports:
       - "5432:5432"
+    restart: always
     environment:
       POSTGRES_DB: pokedb
       POSTGRES_USER: admin

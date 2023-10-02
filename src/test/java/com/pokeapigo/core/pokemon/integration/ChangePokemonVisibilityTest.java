@@ -45,26 +45,10 @@ class ChangePokemonVisibilityTest extends TestBaseConfiguration {
 
         private static List<Arguments> changePokemonVisibilityProvider() {
             return List.of(
-                    Arguments.of(
-                            PokemonJsonFactory.CHANGE_VISIBILITY_TRUE,
-                            "c218b692-311b-4d39-ac6b-747921b73474",
-                            true
-                    ),
-                    Arguments.of(
-                            PokemonJsonFactory.CHANGE_VISIBILITY_FALSE,
-                            "c218b692-311b-4d39-ac6b-747921b73474",
-                            false
-                    ),
-                    Arguments.of(
-                            PokemonJsonFactory.CHANGE_VISIBILITY_TRUE,
-                            "c218b692-311b-4d39-ac6b-747921b73475",
-                            true
-                    ),
-                    Arguments.of(
-                            PokemonJsonFactory.CHANGE_VISIBILITY_FALSE,
-                            "c218b692-311b-4d39-ac6b-747921b73475",
-                            false
-                    )
+                    Arguments.of(PokemonJsonFactory.CHANGE_VISIBILITY_TRUE, "c218b692-311b-4d39-ac6b-747921b73474", true),
+                    Arguments.of(PokemonJsonFactory.CHANGE_VISIBILITY_FALSE, "c218b692-311b-4d39-ac6b-747921b73474", false),
+                    Arguments.of(PokemonJsonFactory.CHANGE_VISIBILITY_TRUE, "c218b692-311b-4d39-ac6b-747921b73475", true),
+                    Arguments.of(PokemonJsonFactory.CHANGE_VISIBILITY_FALSE, "c218b692-311b-4d39-ac6b-747921b73475", false)
             );
         }
     }
@@ -88,7 +72,7 @@ class ChangePokemonVisibilityTest extends TestBaseConfiguration {
                     .statusCode(HttpStatus.NOT_FOUND.value())
                     .body("statusCode", is(404))
                     .body("statusText", is(HttpStatus.NOT_FOUND.getReasonPhrase()))
-                    .body("message", is("Pokemon with ID: %s not found".formatted(NON_EXISTENT_POKEMON_UUID_STRING)));
+                    .body("message", is("Pokémon with ID: %s not found".formatted(NON_EXISTENT_POKEMON_UUID_STRING)));
         }
 
         private static List<String> changePokemonVisibilityProvider() {

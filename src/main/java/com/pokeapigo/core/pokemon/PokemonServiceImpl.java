@@ -41,8 +41,9 @@ public class PokemonServiceImpl implements PokemonService {
     @Override
     public PokemonResponse createPokemon(PokemonRequest request, Locale locale) {
         validator.validate(request);
+        locale = setLocaleIfNull(locale);
 
-        throwIfPokemonAlreadyExists(request, locale);
+        throwIfPokemonAlreadyExists(null, request, locale);
 
         final PokemonEntity pokemon = PokemonMapper.toEntity(request);
         final PokemonEntity result = pokemonRepository.save(pokemon);
@@ -54,12 +55,13 @@ public class PokemonServiceImpl implements PokemonService {
     }
 
     @Override
-    public PokemonResponse updatePokemonData(UUID pokemonId, PokemonRequest request, Locale locale) {
+    public PokemonResponse updatePokemonData(UUID pokemonUUID, PokemonRequest request, Locale locale) {
         validator.validate(request);
+        locale = setLocaleIfNull(locale);
 
-        throwIfPokemonAlreadyExists(request, locale);
+        throwIfPokemonAlreadyExists(pokemonUUID, request, locale);
 
-        PokemonEntity pokemon = getPokemonByUUID(pokemonId, locale);
+        PokemonEntity pokemon = getPokemonByUUID(pokemonUUID, locale);
         final PokemonEntity result = pokemonRepository.save(
                 PokemonMapper.updatePokemonEntityData(pokemon, request)
         );
@@ -68,19 +70,20 @@ public class PokemonServiceImpl implements PokemonService {
     }
 
     @Override
-    public PokemonResponse changePokemonVisibility(UUID pokemonId, PokemonVisibilityRequest request, Locale locale) {
+    public PokemonResponse changePokemonVisibility(UUID pokemonUUID, PokemonVisibilityRequest request, Locale locale) {
         validator.validate(request);
+        locale = setLocaleIfNull(locale);
 
         final Boolean requestedVisibility = request.visible();
 
-        PokemonEntity pokemon = getPokemonByUUID(pokemonId, locale);
+        PokemonEntity pokemon = getPokemonByUUID(pokemonUUID, locale);
 
         final boolean visibilityChanged = !pokemon.getVisible().equals(requestedVisibility);
         if (visibilityChanged) {
             pokemon.setVisible(requestedVisibility);
 
             logger.info("Visibility of Pokemon with ID: {} changed to: {}",
-                    pokemonId, requestedVisibility);
+                    pokemonUUID, requestedVisibility);
         }
 
         return PokemonMapper.toPokemonResponse(pokemonRepository.save(pokemon));
@@ -100,11 +103,16 @@ public class PokemonServiceImpl implements PokemonService {
 
     @Override
     public Page<PokemonResponse> getPagedPokemons(Pageable pageable, String name, Locale locale) {
-        try {
-            final Page<PokemonEntity> pokemonPage = pokemonRepository
-                    .findAllVisibleByNameOrderByPokedexIdAndName(pageable, name);
+        locale = setLocaleIfNull(locale);
 
-            return PokemonMapper.toPagedPokemonResponse(pokemonPage);
+        Page<PokemonEntity> pokemonPage = returnPagedPokemons(pageable, name, locale);
+
+        return PokemonMapper.toPagedPokemonResponse(pokemonPage);
+    }
+
+    private Page<PokemonEntity> returnPagedPokemons(Pageable pageable, String name, Locale locale) {
+        try {
+            return pokemonRepository.findAllVisibleByNameOrderByPokedexIdAndName(pageable, name);
         } catch (InvalidDataAccessApiUsageException e) {
             if (e.getRootCause() instanceof SemanticException) {
                 final String message = messageSource.getMessage(
@@ -120,15 +128,13 @@ public class PokemonServiceImpl implements PokemonService {
         }
     }
 
-    private void throwIfPokemonAlreadyExists(PokemonRequest pokemonRequest, Locale locale) {
-        // TODO: Return PokemonEntity and conditionally check with UUID that is passed to method that it matches pokemon taken from DB
-
-        final boolean pokemonAlreadyExists = pokemonRepository
-                .pokemonExists(
-                        pokemonRequest.pokedexId(),
-                        pokemonRequest.name(),
-                        pokemonRequest.variant()
-                );
+    private void throwIfPokemonAlreadyExists(UUID pokemonUUID, PokemonRequest pokemonRequest, Locale locale) {
+        final boolean pokemonAlreadyExists = pokemonRepository.pokemonExists(
+                pokemonUUID,
+                pokemonRequest.pokedexId(),
+                pokemonRequest.name(),
+                pokemonRequest.variant()
+        );
 
         if (pokemonAlreadyExists) {
             throw new PokemonAlreadyExistsException(messageSource.getMessage(
@@ -145,6 +151,13 @@ public class PokemonServiceImpl implements PokemonService {
                 .orElseThrow(() -> new PokemonNotFoundException(
                         messageSource.getMessage("pokemon.notFound", new Object[]{pokemonId}, locale)
                 ));
+    }
+
+    private Locale setLocaleIfNull(Locale locale) {
+        if (locale == null) {
+            return Locale.ENGLISH;
+        }
+        return locale;
     }
 
 }

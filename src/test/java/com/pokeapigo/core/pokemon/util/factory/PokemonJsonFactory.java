@@ -94,4 +94,112 @@ public class PokemonJsonFactory {
                 "visible": false
             }
             """;
+
+    public static String UPDATE_POKEMON_NO_VARIANT_IDENTICAL = """
+            {
+                "pokedexId": 1,
+                "generationId": 1,
+                "name": "Bulbasaur",
+                "pokemonTypes": {
+                    "typeOne": "GRASS",
+                    "typeTwo": "POISON"
+                },
+                "rarity": "STANDARD"
+            }
+            """;
+
+    public static String UPDATE_POKEMON_VARIANT_IDENTICAL = """
+            {
+                "pokedexId": 1,
+                "generationId": 1,
+                "name": "Bulbasaur",
+                "variant": "Party Hat",
+                "pokemonTypes": {
+                    "typeOne": "GRASS",
+                    "typeTwo": "POISON"
+                },
+                "rarity": "STANDARD"
+            }
+            """;
+
+    public static String UPDATE_POKEMON_NO_VARIANT_CHANGED = """
+            {
+                "pokedexId": 1,
+                "generationId": 1,
+                "name": "Bulbasaur New",
+                "pokemonTypes": {
+                    "typeOne": "GRASS",
+                    "typeTwo": "POISON"
+                },
+                "rarity": "STANDARD"
+            }
+            """;
+
+    public static String UPDATE_POKEMON_VARIANT_CHANGED = """
+            {
+                "pokedexId": 1,
+                "generationId": 1,
+                "name": "Bulbasaur",
+                "variant": "Party Hat New",
+                "pokemonTypes": {
+                    "typeOne": "GRASS",
+                    "typeTwo": "POISON"
+                },
+                "rarity": "STANDARD"
+            }
+            """;
+
+    public static String UPDATE_POKEMON_NAME_AND_VARIANT_CHANGED = """
+            {
+                "pokedexId": 1,
+                "generationId": 1,
+                "name": "Bulbasaur New",
+                "variant": "Party Hat New",
+                "pokemonTypes": {
+                    "typeOne": "GRASS",
+                    "typeTwo": "POISON"
+                },
+                "rarity": "STANDARD"
+            }
+            """;
+
+    public static String UPDATE_POKEMON_NO_VARIANT_DUPLICATE = """
+            {
+                "pokedexId": 1,
+                "generationId": 1,
+                "name": "Bulbasaur",
+                "pokemonTypes": {
+                    "typeOne": "GRASS",
+                    "typeTwo": "POISON"
+                },
+                "rarity": "STANDARD"
+            }
+            """;
+
+    public static String UPDATE_SECOND_POKEMON_NO_VARIANT_DUPLICATE = """
+            {
+                "pokedexId": 2,
+                "generationId": 1,
+                "name": "Ivysaur",
+                "pokemonTypes": {
+                    "typeOne": "GRASS",
+                    "typeTwo": "POISON"
+                },
+                "rarity": "STANDARD"
+            }
+            """;
+
+    public static String UPDATE_POKEMON_VARIANT_DUPLICATE = """
+            {
+                "pokedexId": 1,
+                "generationId": 1,
+                "name": "Bulbasaur",
+                "variant": "Party Hat",
+                "pokemonTypes": {
+                    "typeOne": "GRASS",
+                    "typeTwo": "POISON"
+                },
+                "rarity": "STANDARD"
+            }
+            """;
 }

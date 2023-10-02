@@ -45,15 +45,25 @@ public interface PokemonRepository extends JpaRepository<PokemonEntity, UUID> {
                 END
             FROM PokemonEntity p
                 WHERE (
+                    (
+                        cast(:pokemonUUID as org.hibernate.type.PostgresUUIDType) IS null
+                        OR
+                        p.id != :pokemonUUID
+                    )
+                    AND
                     p.pokedexId = :pokedexId
                     AND
-                    lower(p.name) LIKE lower(concat('%', :name, '%'))
+                    lower(p.name) = lower(:name)
                     AND (
-                        :variant IS null
+                        (
+                            :variant IS null
+                            AND
+                            p.variant IS null
+                        )
                         OR
-                        lower(p.variant) LIKE lower(concat('%', :variant, '%'))
+                        lower(p.variant) = lower(:variant)
                     )
                 )
             """)
-    boolean pokemonExists(Integer pokedexId, String name, String variant);
+    boolean pokemonExists(UUID pokemonUUID, Integer pokedexId, String name, String variant);
 }
