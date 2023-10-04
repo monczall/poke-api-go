@@ -19,6 +19,6 @@ public interface PokemonService {
 
     List<PokemonResponse> getAllPokemons();
 
-    Page<PokemonResponse> getPagedPokemons(Pageable pageable, String searchPhrase, Locale locale);
+    Page<PokemonResponse> getPagedPokemons(Pageable pageable, String search, Locale locale);
 
 }

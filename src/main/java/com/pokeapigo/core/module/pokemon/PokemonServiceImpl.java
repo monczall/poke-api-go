@@ -107,18 +107,18 @@ public class PokemonServiceImpl implements PokemonService {
     }
 
     @Override
-    public Page<PokemonResponse> getPagedPokemons(Pageable pageable, String searchPhrase, Locale locale) {
+    public Page<PokemonResponse> getPagedPokemons(Pageable pageable, String search, Locale locale) {
         locale = setEngLocaleIfNull(locale);
         pageable = ensureMaxPageSize(pageable);
 
-        Page<PokemonEntity> pokemonPage = returnPagedPokemons(pageable, searchPhrase, locale);
+        Page<PokemonEntity> pokemonPage = returnPagedPokemons(pageable, search, locale);
 
         return PokemonMapper.toPagedPokemonResponse(pokemonPage);
     }
 
-    private Page<PokemonEntity> returnPagedPokemons(Pageable pageable, String searchPhrase, Locale locale) {
+    private Page<PokemonEntity> returnPagedPokemons(Pageable pageable, String search, Locale locale) {
         try {
-            return pokemonRepository.findVisibleFilteredAndPaged(pageable, searchPhrase);
+            return pokemonRepository.findVisibleFilteredAndPaged(pageable, search);
         } catch (InvalidDataAccessApiUsageException e) {
             throw getCorrectSortingException(e, locale);
         }

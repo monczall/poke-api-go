@@ -8,7 +8,7 @@ public class PokemonConstants {
     public static final Integer GEN_ID_MAX = 10;
     public static final Integer POK_NAME_MIN = 3;
     public static final Integer POK_NAME_MAX = 255;
-    public static final Integer POKEMON_PAGE_MAX = 50;
+    public static final Integer POKEMON_PAGE_MAX = 100;
 
     private PokemonConstants() {
     }

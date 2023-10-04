@@ -25,9 +25,9 @@ public interface PokemonRepository extends JpaRepository<PokemonEntity, UUID> {
             SELECT p
             FROM PokemonEntity p
             WHERE (
-                :name IS null
+                :search IS null
                 OR
-                lower(p.name) LIKE lower(concat('%', :searchPhrase, '%'))
+                lower(p.name) LIKE lower(concat('%', :search, '%'))
             )
             AND
                 p.visible = true
@@ -35,7 +35,7 @@ public interface PokemonRepository extends JpaRepository<PokemonEntity, UUID> {
                 pokedexId ASC,
                 name ASC
             """)
-    Page<PokemonEntity> findVisibleFilteredAndPaged(Pageable pageable, String searchPhrase);
+    Page<PokemonEntity> findVisibleFilteredAndPaged(Pageable pageable, String search);
 
     @Query("""
             SELECT

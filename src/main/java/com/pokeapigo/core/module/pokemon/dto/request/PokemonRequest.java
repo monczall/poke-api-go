@@ -10,7 +10,7 @@ import static com.pokeapigo.core.module.pokemon.util.PokemonConstants.DEX_ID_MIN
 
 public record PokemonRequest(
         @NotNull(message = "{pokemon.dexId.notnull}")
-        @Min(value = DEX_ID_MIN, message = "{pokemon.dexId.rangeMin}")
+        @Min(value = 1, message = "{pokemon.dexId.rangeMin}")
         @Max(value = 1200, message = "{pokemon.dexId.rangeMax}")
         Integer pokedexId,
 

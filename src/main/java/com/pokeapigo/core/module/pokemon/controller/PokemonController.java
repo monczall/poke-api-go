@@ -82,9 +82,9 @@ class PokemonController {
     ResponseEntity<Page<PokemonResponse>> getPagedPokemons(
             @RequestHeader(value = HttpHeaders.ACCEPT_LANGUAGE, required = false) Locale locale,
             @PageableDefault Pageable pageable,
-            @RequestParam(required = false) String searchPhrase
+            @RequestParam(required = false) String search
     ) {
-        final Page<PokemonResponse> pagedPokemons = pokemonService.getPagedPokemons(pageable, searchPhrase, locale);
+        final Page<PokemonResponse> pagedPokemons = pokemonService.getPagedPokemons(pageable, search, locale);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
