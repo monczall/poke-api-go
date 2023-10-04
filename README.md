@@ -9,11 +9,10 @@ The goal of this project was to create REST API for Pokemon GO bucket list apps.
 - [x] Create Pokemons Table
 - [ ] Fill DB With Pokemon Data
 - [x] Feature: Create Pokemon
-- [ ] Feature: Update Pokemon Data
-- [ ] Feature: Update Pokemon Visibility (Soft Delete)
-- [ ] Feature: Get Single Pokemon Details
+- [x] Feature: Update Pokemon Data
+- [x] Feature: Update Pokemon Visibility (Soft Delete)
+- [x] Feature: Get Single Pokemon Details
 - [x] Feature: Get All Pokemons
-- [ ] Feature: Add Filtering to Get All Pokemons
 - [x] Feature: Get All Pokemons Paged
 - [ ] Feature: Add Filtering to Get All Pokemons Paged
 - [ ] Feature: Remove Pokemon Data (Hard Delete)
