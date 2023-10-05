@@ -2,8 +2,8 @@ package com.pokeapigo.core.module.pokemon.controller;
 
 import com.pokeapigo.core.module.pokemon.PokemonService;
 import com.pokeapigo.core.module.pokemon.dto.request.PokemonRequest;
-import com.pokeapigo.core.module.pokemon.dto.response.PokemonResponse;
 import com.pokeapigo.core.module.pokemon.dto.request.PokemonVisibilityRequest;
+import com.pokeapigo.core.module.pokemon.dto.response.PokemonResponse;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

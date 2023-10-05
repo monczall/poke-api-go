@@ -6,8 +6,6 @@ import com.pokeapigo.core.module.pokemon.util.enums.PokemonRarity;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
-import static com.pokeapigo.core.module.pokemon.util.PokemonConstants.DEX_ID_MIN;
-
 public record PokemonRequest(
         @NotNull(message = "{pokemon.dexId.notnull}")
         @Min(value = 1, message = "{pokemon.dexId.rangeMin}")

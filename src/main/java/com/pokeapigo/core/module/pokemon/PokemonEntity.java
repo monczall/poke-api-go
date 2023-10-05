@@ -11,6 +11,7 @@ public class PokemonEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private UUID id;
 
     @Column(name = "pokedex_id")
