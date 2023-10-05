@@ -110,6 +110,7 @@ public class PokemonServiceImpl implements PokemonService {
     public Page<PokemonResponse> getPagedPokemons(Pageable pageable, String search, Locale locale) {
         locale = setEngLocaleIfNull(locale);
         pageable = ensureMaxPageSize(pageable);
+        pageable = applyDefaultSortingIfNone(pageable);
 
         Page<PokemonEntity> pokemonPage = returnPagedPokemons(pageable, search, locale);
 
@@ -186,4 +187,12 @@ public class PokemonServiceImpl implements PokemonService {
         return pageable;
     }
 
+    private Pageable applyDefaultSortingIfNone(Pageable pageable) {
+        return PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Sort.Direction.ASC,
+                "pokedexId", "name", "variant"
+        );
+    }
 }
