@@ -6,6 +6,7 @@ import com.pokeapigo.core.module.pokemon.exception.exceptions.PokemonAlreadyExis
 import com.pokeapigo.core.module.pokemon.exception.exceptions.PokemonNotFoundException;
 import com.pokeapigo.core.module.pokemon.mapper.PokemonMapper;
 import com.pokeapigo.core.module.pokemon.util.PokemonTestConstants;
+import com.pokeapigo.core.module.pokemon.util.enums.PokemonType;
 import com.pokeapigo.core.module.pokemon.util.factory.PokemonDtoFactory;
 import com.pokeapigo.core.module.pokemon.util.factory.PokemonEntityFactory;
 import jakarta.validation.Validator;
@@ -127,17 +128,24 @@ class PokemonServiceTest {
             // given
             final PokemonEntity pokemon = PokemonEntityFactory.validPokemonEntityBulbasaur();
             final PageImpl<PokemonEntity> responseFromDb = new PageImpl<>(List.of(pokemon));
-            when(pokemonRepository
-                    .findVisibleFilteredAndPaged(any(Pageable.class), anyString())
-            ).thenReturn(responseFromDb);
+            when(pokemonRepository.findVisibleFilteredAndPaged(
+                    any(Pageable.class), anyString(), anyInt(), any(PokemonType.class), any(PokemonType.class)
+            )).thenReturn(responseFromDb);
 
             // when
-            systemUnderTest.getPagedPokemons(Pageable.ofSize(1), PokemonTestConstants.POKEMON_NAME_BULBASAUR,
-                    Locale.getDefault());
+            systemUnderTest.getPagedPokemons(
+                    Pageable.ofSize(1),
+                    PokemonTestConstants.POKEMON_NAME_BULBASAUR,
+                    1,
+                    PokemonType.GRASS,
+                    PokemonType.POISON,
+                    Locale.getDefault()
+            );
 
             // then
-            verify(pokemonRepository)
-                    .findVisibleFilteredAndPaged(any(Pageable.class), anyString());
+            verify(pokemonRepository).findVisibleFilteredAndPaged(
+                    any(Pageable.class), anyString(), anyInt(), any(PokemonType.class), any(PokemonType.class)
+            );
         }
 
         private static List<Arguments> createPokemonProvider() {

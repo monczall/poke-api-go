@@ -11,6 +11,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -25,8 +26,8 @@ class GeneralExceptionHandler {
     @ExceptionHandler({
             HttpMessageNotReadableException.class,
             InvalidColumnNameException.class,
-            OtherDataAccessApiException.class
-
+            OtherDataAccessApiException.class,
+            MethodArgumentTypeMismatchException.class
     })
     ResponseEntity<BasicErrorDto> generalBadRequestException(RuntimeException e, HttpServletRequest request) {
         return getBasicErrorDtoResponse(e, request, BAD_REQUEST);

@@ -3,6 +3,7 @@ package com.pokeapigo.core.module.pokemon;
 import com.pokeapigo.core.module.pokemon.dto.request.PokemonRequest;
 import com.pokeapigo.core.module.pokemon.dto.request.PokemonVisibilityRequest;
 import com.pokeapigo.core.module.pokemon.dto.response.PokemonResponse;
+import com.pokeapigo.core.module.pokemon.util.enums.PokemonType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -19,6 +20,7 @@ public interface PokemonService {
 
     List<PokemonResponse> getAllPokemons();
 
-    Page<PokemonResponse> getPagedPokemons(Pageable pageable, String search, Locale locale);
+    Page<PokemonResponse> getPagedPokemons(Pageable pageable, String search, Integer genId, PokemonType typeOne,
+                                           PokemonType typeTwo, Locale locale);
 
 }

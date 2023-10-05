@@ -9,6 +9,7 @@ import com.pokeapigo.core.module.pokemon.exception.exceptions.PokemonAlreadyExis
 import com.pokeapigo.core.module.pokemon.exception.exceptions.PokemonNotFoundException;
 import com.pokeapigo.core.module.pokemon.mapper.PokemonMapper;
 import com.pokeapigo.core.module.pokemon.util.PokemonConstants;
+import com.pokeapigo.core.module.pokemon.util.enums.PokemonType;
 import jakarta.validation.Validator;
 import org.hibernate.query.SemanticException;
 import org.slf4j.Logger;
@@ -107,19 +108,21 @@ public class PokemonServiceImpl implements PokemonService {
     }
 
     @Override
-    public Page<PokemonResponse> getPagedPokemons(Pageable pageable, String search, Locale locale) {
+    public Page<PokemonResponse> getPagedPokemons(Pageable pageable, String search, Integer genId, PokemonType typeOne,
+                                                  PokemonType typeTwo, Locale locale) {
         locale = setEngLocaleIfNull(locale);
         pageable = ensureMaxPageSize(pageable);
         pageable = applyDefaultSortingIfNone(pageable);
 
-        Page<PokemonEntity> pokemonPage = returnPagedPokemons(pageable, search, locale);
+        Page<PokemonEntity> pokemonPage = returnPagedPokemons(pageable, search, genId, typeOne, typeTwo, locale);
 
         return PokemonMapper.toPagedPokemonResponse(pokemonPage);
     }
 
-    private Page<PokemonEntity> returnPagedPokemons(Pageable pageable, String search, Locale locale) {
+    private Page<PokemonEntity> returnPagedPokemons(Pageable pageable, String search, Integer genId, PokemonType typeOne,
+                                                    PokemonType typeTwo, Locale locale) {
         try {
-            return pokemonRepository.findVisibleFilteredAndPaged(pageable, search);
+            return pokemonRepository.findVisibleFilteredAndPaged(pageable, search, genId, typeOne, typeTwo);
         } catch (InvalidDataAccessApiUsageException e) {
             throw getCorrectSortingException(e, locale);
         }

@@ -1,5 +1,6 @@
 package com.pokeapigo.core.module.pokemon;
 
+import com.pokeapigo.core.module.pokemon.util.enums.PokemonType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -33,16 +34,32 @@ public interface PokemonRepository extends JpaRepository<PokemonEntity, UUID> {
                 OR
                 lower(p.variant) LIKE lower(concat('%', :search, '%'))
                 OR
-                lower(p.pokemonTypes.typeOne) = lower(:search)
-                OR
-                lower(p.pokemonTypes.typeTwo) = lower(:search)
-                OR
                 lower(p.rarity) = lower(:search)
+            )
+            AND (
+                :genId IS null
+                OR
+                p.generationId = :genId
+            )
+            AND (
+                :typeOne IS null
+                OR
+                p.pokemonTypes.typeOne = :typeOne
+                OR
+                p.pokemonTypes.typeTwo = :typeOne
+            )
+            AND (
+                :typeTwo IS null
+                OR
+                p.pokemonTypes.typeOne = :typeTwo
+                OR
+                p.pokemonTypes.typeTwo = :typeTwo
             )
             AND
                 p.visible = true
             """)
-    Page<PokemonEntity> findVisibleFilteredAndPaged(Pageable pageable, String search);
+    Page<PokemonEntity> findVisibleFilteredAndPaged(Pageable pageable, String search, Integer genId,
+                                                    PokemonType typeOne, PokemonType typeTwo);
 
     @Query("""
             SELECT
