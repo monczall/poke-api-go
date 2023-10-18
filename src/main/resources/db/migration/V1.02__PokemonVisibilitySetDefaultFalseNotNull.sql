@@ -1,2 +1,3 @@
-ALTER TABLE pokemons ALTER COLUMN visible SET DEFAULT 'false';
-ALTER TABLE pokemons ALTER COLUMN visible SET NOT NULL;
+ALTER TABLE pokemons
+ALTER COLUMN visible SET DEFAULT 'false',
+ALTER COLUMN visible SET NOT NULL;

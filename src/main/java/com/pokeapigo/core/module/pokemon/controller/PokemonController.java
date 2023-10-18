@@ -6,7 +6,6 @@ import com.pokeapigo.core.module.pokemon.dto.request.PokemonVisibilityRequest;
 import com.pokeapigo.core.module.pokemon.dto.response.PokemonResponse;
 import com.pokeapigo.core.module.pokemon.util.enums.PokemonType;
 import jakarta.validation.Valid;
-import jdk.jfr.Frequency;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -88,7 +87,7 @@ class PokemonController {
             @RequestParam(required = false) Integer genId,
             @RequestParam(required = false) PokemonType typeOne,
             @RequestParam(required = false) PokemonType typeTwo
-            ) {
+    ) {
         final Page<PokemonResponse> pagedPokemons = pokemonService.getPagedPokemons(pageable, search, genId, typeOne,
                 typeTwo, locale);
 
