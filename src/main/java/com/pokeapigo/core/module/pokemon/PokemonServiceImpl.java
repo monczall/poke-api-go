@@ -191,11 +191,14 @@ public class PokemonServiceImpl implements PokemonService {
     }
 
     private Pageable applyDefaultSortingIfNone(Pageable pageable) {
+        Sort sort = pageable.getSortOr(
+                Sort.by(Sort.Direction.ASC, "pokedexId", "name", "variant")
+        );
+
         return PageRequest.of(
                 pageable.getPageNumber(),
                 pageable.getPageSize(),
-                Sort.Direction.ASC,
-                "pokedexId", "name", "variant"
+                sort
         );
     }
 }
