@@ -3,6 +3,8 @@ package com.pokeapigo.core.module.pokemon.integration;
 import com.pokeapigo.core.common.config.TestBaseConfiguration;
 import com.pokeapigo.core.module.pokemon.mapper.PokemonMapper;
 import io.restassured.http.ContentType;
+import io.restassured.path.json.JsonPath;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -17,6 +19,8 @@ import static com.pokeapigo.core.common.utli.constants.ApiConstants.API_POKEMONS
 import static com.pokeapigo.core.common.utli.constants.ApiConstants.API_URI_V1;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Import(PokemonMapper.class)
 class GetPagedPokemonTest extends TestBaseConfiguration {
@@ -26,7 +30,8 @@ class GetPagedPokemonTest extends TestBaseConfiguration {
 
         @ParameterizedTest
         @Sql(scripts = {"classpath:sql/cleanUp.sql", "classpath:sql/pokemon/searchPagedPokemonInitData.sql"})
-        @MethodSource("getSearchParameters")
+        @MethodSource("getPagedPokemonsParameters")
+        @DisplayName("Should return page of Pokemons when searching and sorting data valid")
         void getPagedPokemons_whenGivenDataValid_getPageOfPokemons(String search, Integer genId, String typeOne,
                                                                    String typeTwo, Integer page, Integer size, String sort,
                                                                    String expectedName, String expectedVariant
@@ -53,7 +58,7 @@ class GetPagedPokemonTest extends TestBaseConfiguration {
                     .body("content[0].variant", is(expectedVariant));
         }
 
-        private static List<Arguments> getSearchParameters() {
+        private static List<Arguments> getPagedPokemonsParameters() {
             return List.of(
                     Arguments.of("", 0, "", "", 0, 1, "", null, null),
                     Arguments.of("", 1, "", "", 0, 1, "name,asc", "Bulbasaur", null),
@@ -73,6 +78,36 @@ class GetPagedPokemonTest extends TestBaseConfiguration {
 
     @Nested
     class UnhappyPaths {
+
+        @ParameterizedTest
+        @MethodSource("getPagedPokemonsParameters")
+        @DisplayName("Should throw exception when invalid sorting data provided")
+        void getPagedPokemons_whenSortingFieldInvalid_throwInvalidColumnNameException(String sortValue,
+                                                                                      String expectedMessage
+        ) {
+            JsonPath jsonPath = given()
+                    .contentType(ContentType.JSON)
+
+                    .when()
+                    .get(API_URI_V1 + API_POKEMONS + "?sort={sort}", sortValue)
+
+                    .then()
+                    .log().ifValidationFails()
+                    .statusCode(HttpStatus.BAD_REQUEST.value())
+
+                    .extract().response().jsonPath();
+
+            assertInstanceOf(String.class, jsonPath.get("message"));
+            String message = jsonPath.getString("message");
+            assertTrue(message.startsWith(expectedMessage));
+        }
+
+        private static List<Arguments> getPagedPokemonsParameters() {
+            return List.of(
+                    Arguments.of("badColumn", "Invalid sorting column name provided"),
+                    Arguments.of("badColumn%26", "Unexpected error during sorting")
+            );
+        }
 
     }
 }

@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface PokemonRepository extends JpaRepository<PokemonEntity, UUID> {
-
     @Query("""
             SELECT p
             FROM PokemonEntity p
