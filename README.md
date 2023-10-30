@@ -99,11 +99,17 @@ Application stores data about
   - typeTwo - second type of Pokémon
 - rarity - e.g. standard, legendary, mythic
 - available
-  - isWild - is Pokémon available in wild
-  - isRaid - is Pokémon available in raid
-  - isEgg - is Pokémon available in egg
-  - isShadow - is Pokémon available as shadow
-  - isMega - is Pokémon available as mega
+  - available - is Pokémon available in wild
+  - shiny - is Pokémon available as shiny
+  - mega - is Pokémon available as mega
+  - megaFamily - is Pokémon a family of mega
+  - shadow - is Pokémon available as shadow
+  - tradeEvolve - does Pokémon have free evolution after trade
+  - tradeEvolveFamily - is Pokémon a family of tradeEvolve
+  - tradeable - is Pokémon available for trade
+  - raidable - is Pokémon available in raids
+  - alternateForm - is Pokémon an alternate form
+  - costumeForm - is Pokémon costumed
 - visible - if set to false, makes Pokémon entity private (not shown when getting Pokémon, not validated for duplicates)
 
 ### Enums
@@ -137,11 +143,17 @@ Request Body:
   },
   "rarity": "Enum - PokemonRarity - required",
   "availability": {
-    "isWild": "boolean - optional",
-    "isRaid": "boolean - optional",
-    "isEgg": "boolean - optional",
-    "isShadow": "boolean - optional",
-    "isMega": "boolean - optional"
+    "available": "boolean - optional",
+    "shiny": "boolean - optional",
+    "mega": "boolean - optional",
+    "megaFamily": "boolean - optional",
+    "shadow": "boolean - optional",
+    "tradeEvolve": "boolean - optional",
+    "tradeEvolveFamily": "boolean - optional",
+    "tradeable": "boolean - optional",
+    "raidable": "boolean - optional",
+    "alternateForm": "boolean - optional",
+    "costumeForm": "boolean - optional"
   }
   
 }
@@ -153,17 +165,24 @@ Example response Body:
   "pokedexId": 1,
   "generationId": 1,
   "name": "Bulbasaur",
+  "variant": null,
   "pokemonTypes": {
     "typeOne": "GRASS",
     "typeTwo": "POISON"
   },
   "rarity": "STANDARD",
   "availability": {
-    "isWild": false,
-    "isRaid": false,
-    "isEgg": false,
-    "isShadow": false,
-    "isMega": false
+    "available": false,
+    "shiny": false,
+    "mega": false,
+    "megaFamily": false,
+    "shadow": false,
+    "tradeEvolve": false,
+    "tradeEvolveFamily": false,
+    "tradeable": false,
+    "raidable": false,
+    "alternateForm": false,
+    "costumeForm": false
   },
   "visible": true
 }
@@ -181,17 +200,24 @@ Example response body
     "pokedexId": 1,
     "generationId": 1,
     "name": "Bulbasaur",
+    "variant": null,
     "pokemonTypes": {
       "typeOne": "GRASS",
       "typeTwo": "POISON"
     },
     "rarity": "STANDARD",
     "availability": {
-      "isWild": false,
-      "isRaid": false,
-      "isEgg": false,
-      "isShadow": false,
-      "isMega": false
+      "available": false,
+      "shiny": false,
+      "mega": false,
+      "megaFamily": false,
+      "shadow": false,
+      "tradeEvolve": false,
+      "tradeEvolveFamily": false,
+      "tradeable": false,
+      "raidable": false,
+      "alternateForm": false,
+      "costumeForm": false
     },
     "visible": true
   },
@@ -199,7 +225,7 @@ Example response body
 ]
 ```
 
-#### GET GET api/v1/pokemons
+#### GET api/v1/pokemons
 
 Example response body
 ```json
@@ -209,19 +235,26 @@ Example response body
             "pokedexId": 2,
             "generationId": 1,
             "name": "Ivysaur",
+            "variant": null,
             "pokemonTypes": {
                 "typeOne": "WATER",
                 "typeTwo": "NONE"
             },
             "rarity": "STANDARD",
             "availability": {
-                "isWild": false,
-                "isRaid": false,
-                "isEgg": false,
-                "isShadow": false,
-                "isMega": false
+              "available": false,
+              "shiny": false,
+              "mega": false,
+              "megaFamily": false,
+              "shadow": false,
+              "tradeEvolve": false,
+              "tradeEvolveFamily": false,
+              "tradeable": false,
+              "raidable": false,
+              "alternateForm": false,
+              "costumeForm": false
             },
-            "visible": null
+            "visible": true
         },
         ...MORE POKEMONS
     ],
@@ -244,12 +277,102 @@ Example response body
 
 ### Updating the data
 
-Here is the list of endpoints allowing to modify existing data in the database.
+#### PUT api/v1/pokemons/{pokemonUUID}
 
+Example request body
+```json
+{
+    "pokedexId": 2,
+    "generationId": 1,
+    "name": "Venusaur",
+    "pokemonTypes": {
+        "typeOne": "GRASS",
+        "typeTwo": "POISON"
+    },
+    "rarity": "STANDARD"
+}
+```
 
+Example response body
+```json
+{
+    "pokemonId": "18549be1-07f5-4fee-8f8c-5b0b037763ab",
+    "pokedexId": 2,
+    "generationId": 1,
+    "name": "Venusaur",
+    "variant": null,
+    "pokemonTypes": {
+        "typeOne": "GRASS",
+        "typeTwo": "POISON"
+    },
+    "rarity": "STANDARD",
+    "availability": {
+        "available": false,
+        "shiny": false,
+        "mega": false,
+        "megaFamily": false,
+        "shadow": false,
+        "tradeEvolve": false,
+        "tradeEvolveFamily": false,
+        "tradeable": false,
+        "raidable": false,
+        "alternateForm": false,
+        "costumeForm": false
+    },
+    "visible": true
+}
+```
+
+#### PATCH api/v1/pokemons/{pokemonUUID}/visibility
+
+Example request body
+```json
+{
+  "visible": true
+}
+```
+
+Example response body
+```json
+{
+    "pokemonId": "6e2b0cf2-28df-453d-b79f-70eaa663ff4f",
+    "pokedexId": 1,
+    "generationId": 1,
+    "name": "Bulbasaur",
+    "variant": "Party Hat",
+    "pokemonTypes": {
+        "typeOne": "GRASS",
+        "typeTwo": "POISON"
+    },
+    "rarity": "STANDARD",
+    "availability": {
+        "available": true,
+        "shiny": true,
+        "mega": true,
+        "megaFamily": true,
+        "shadow": true,
+        "tradeEvolve": true,
+        "tradeEvolveFamily": true,
+        "tradeable": true,
+        "raidable": true,
+        "alternateForm": true,
+        "costumeForm": true
+    },
+    "visible": true
+}
+```
 
 ### Deleting the data
 
-Here is the list of endpoints allowing to remove the data from the database or hide it from clients.
+#### DELETE api/v1/pokemons/{pokemonUUID}
 
+Example response body
+```json
+{
+  "pokedexId": 1,
+  "name": "Bulbasaur",
+  "variant": "Party Hat",
+  "message": "Pokémon with UUID: 6e2b0cf2-28df-453d-b79f-70eaa663ff4f deleted successfully"
+}
+```
 
