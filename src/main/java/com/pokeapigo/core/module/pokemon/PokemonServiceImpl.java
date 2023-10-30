@@ -4,6 +4,7 @@ import com.pokeapigo.core.exception.exceptions.InvalidColumnNameException;
 import com.pokeapigo.core.exception.exceptions.OtherDataAccessApiException;
 import com.pokeapigo.core.module.pokemon.dto.request.PokemonRequest;
 import com.pokeapigo.core.module.pokemon.dto.request.PokemonVisibilityRequest;
+import com.pokeapigo.core.module.pokemon.dto.response.PokemonDeleteResponse;
 import com.pokeapigo.core.module.pokemon.dto.response.PokemonResponse;
 import com.pokeapigo.core.module.pokemon.exception.exceptions.PokemonAlreadyExistsException;
 import com.pokeapigo.core.module.pokemon.exception.exceptions.PokemonNotFoundException;
@@ -59,6 +60,30 @@ public class PokemonServiceImpl implements PokemonService {
     }
 
     @Override
+    public List<PokemonResponse> getAllPokemons() {
+        logger.warn("Called method to return all pokemons from the database!");
+
+        final List<PokemonEntity> pokemonList = pokemonRepository
+                .findAllVisibleByOrder();
+
+        return pokemonList.stream()
+                .map(PokemonMapper::toPokemonResponse)
+                .toList();
+    }
+
+    @Override
+    public Page<PokemonResponse> getPagedPokemons(Pageable pageable, String search, Integer genId, PokemonType typeOne,
+                                                  PokemonType typeTwo, Locale locale) {
+        locale = setEngLocaleIfNull(locale);
+        pageable = ensureMaxPageSize(pageable);
+        pageable = applyDefaultSortingIfNone(pageable);
+
+        Page<PokemonEntity> pokemonPage = returnPagedPokemons(pageable, search, genId, typeOne, typeTwo, locale);
+
+        return PokemonMapper.toPagedPokemonResponse(pokemonPage);
+    }
+
+    @Override
     @Transactional
     public PokemonResponse updatePokemonData(UUID pokemonUUID, PokemonRequest request, Locale locale) {
         validator.validate(request);
@@ -96,27 +121,18 @@ public class PokemonServiceImpl implements PokemonService {
     }
 
     @Override
-    public List<PokemonResponse> getAllPokemons() {
-        logger.warn("Called method to return all pokemons from the database!");
-
-        final List<PokemonEntity> pokemonList = pokemonRepository
-                .findAllVisibleByOrder();
-
-        return pokemonList.stream()
-                .map(PokemonMapper::toPokemonResponse)
-                .toList();
-    }
-
-    @Override
-    public Page<PokemonResponse> getPagedPokemons(Pageable pageable, String search, Integer genId, PokemonType typeOne,
-                                                  PokemonType typeTwo, Locale locale) {
+    @Transactional
+    public PokemonDeleteResponse deletePokemon(UUID pokemonUUID, Locale locale) {
         locale = setEngLocaleIfNull(locale);
-        pageable = ensureMaxPageSize(pageable);
-        pageable = applyDefaultSortingIfNone(pageable);
+        PokemonEntity pokemon = getPokemonByUUID(pokemonUUID, locale);
 
-        Page<PokemonEntity> pokemonPage = returnPagedPokemons(pageable, search, genId, typeOne, typeTwo, locale);
+        pokemonRepository.delete(pokemon);
 
-        return PokemonMapper.toPagedPokemonResponse(pokemonPage);
+        final String deleteMessage = messageSource.getMessage(
+                "pokemon.deletedSuccess", new Object[]{pokemonUUID}, locale
+        );
+
+        return new PokemonDeleteResponse(pokemon.getPokedexId(), pokemon.getName(), pokemon.getVariant(), deleteMessage);
     }
 
     private Page<PokemonEntity> returnPagedPokemons(Pageable pageable, String search, Integer genId, PokemonType typeOne,
@@ -160,10 +176,10 @@ public class PokemonServiceImpl implements PokemonService {
         }
     }
 
-    private PokemonEntity getPokemonByUUID(UUID pokemonId, Locale locale) {
-        return pokemonRepository.findById(pokemonId)
+    private PokemonEntity getPokemonByUUID(UUID pokemonUUID, Locale locale) {
+        return pokemonRepository.findById(pokemonUUID)
                 .orElseThrow(() -> new PokemonNotFoundException(
-                        messageSource.getMessage("pokemon.notFound", new Object[]{pokemonId}, locale)
+                        messageSource.getMessage("pokemon.notFound", new Object[]{pokemonUUID}, locale)
                 ));
     }
 

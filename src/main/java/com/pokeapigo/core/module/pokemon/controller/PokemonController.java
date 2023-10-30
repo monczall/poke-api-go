@@ -3,6 +3,7 @@ package com.pokeapigo.core.module.pokemon.controller;
 import com.pokeapigo.core.module.pokemon.PokemonService;
 import com.pokeapigo.core.module.pokemon.dto.request.PokemonRequest;
 import com.pokeapigo.core.module.pokemon.dto.request.PokemonVisibilityRequest;
+import com.pokeapigo.core.module.pokemon.dto.response.PokemonDeleteResponse;
 import com.pokeapigo.core.module.pokemon.dto.response.PokemonResponse;
 import com.pokeapigo.core.module.pokemon.util.enums.PokemonType;
 import jakarta.validation.Valid;
@@ -44,32 +45,6 @@ class PokemonController {
                 .body(createdPokemon);
     }
 
-    @PutMapping("/{pokemonId}")
-    ResponseEntity<PokemonResponse> updatePokemonData(
-            @RequestHeader(value = HttpHeaders.ACCEPT_LANGUAGE, required = false) Locale locale,
-            @PathVariable UUID pokemonId,
-            @Valid @RequestBody PokemonRequest request
-    ) {
-        final PokemonResponse updatedPokemon = pokemonService.updatePokemonData(pokemonId, request, locale);
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(updatedPokemon);
-    }
-
-    @PatchMapping("/{pokemonId}/visibility")
-    ResponseEntity<PokemonResponse> changePokemonVisibility(
-            @RequestHeader(value = HttpHeaders.ACCEPT_LANGUAGE, required = false) Locale locale,
-            @PathVariable UUID pokemonId,
-            @Valid @RequestBody PokemonVisibilityRequest request
-    ) {
-        final PokemonResponse updatedPokemon = pokemonService.changePokemonVisibility(pokemonId, request, locale);
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(updatedPokemon);
-    }
-
     @GetMapping("/secured")
     ResponseEntity<List<PokemonResponse>> getAllPokemons() {
         final List<PokemonResponse> listOfAllPokemons = pokemonService.getAllPokemons();
@@ -95,5 +70,44 @@ class PokemonController {
                 .status(HttpStatus.OK)
                 .body(pagedPokemons);
     }
+
+    @PutMapping("/{pokemonUUID}")
+    ResponseEntity<PokemonResponse> updatePokemonData(
+            @RequestHeader(value = HttpHeaders.ACCEPT_LANGUAGE, required = false) Locale locale,
+            @PathVariable UUID pokemonUUID,
+            @Valid @RequestBody PokemonRequest request
+    ) {
+        final PokemonResponse updatedPokemon = pokemonService.updatePokemonData(pokemonUUID, request, locale);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(updatedPokemon);
+    }
+
+    @PatchMapping("/{pokemonUUID}/visibility")
+    ResponseEntity<PokemonResponse> changePokemonVisibility(
+            @RequestHeader(value = HttpHeaders.ACCEPT_LANGUAGE, required = false) Locale locale,
+            @PathVariable UUID pokemonUUID,
+            @Valid @RequestBody PokemonVisibilityRequest request
+    ) {
+        final PokemonResponse updatedPokemon = pokemonService.changePokemonVisibility(pokemonUUID, request, locale);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(updatedPokemon);
+    }
+
+    @DeleteMapping("/{pokemonUUID}")
+    ResponseEntity<PokemonDeleteResponse> deletePokemon(
+            @RequestHeader(value = HttpHeaders.ACCEPT_LANGUAGE, required = false) Locale locale,
+            @PathVariable UUID pokemonUUID
+    ) {
+        final PokemonDeleteResponse deleteResponse = pokemonService.deletePokemon(pokemonUUID, locale);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(deleteResponse);
+    }
+
 
 }

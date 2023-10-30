@@ -1,24 +1,24 @@
 # PokeAPI GO
  
-The goal of this project was to create REST API for Pokemon GO bucket list apps.
+The goal of this project was to create REST API for Pokémon GO bucket list apps.
 
 ## Current State
 
 ### Core Service
-#### Pokemons
-- [x] Create Pokemons Table
+#### Pokémon
+- [x] Create Pokémon Table
 - [ ] Fill DB With Pokemon Data
 - [x] Feature: Create Pokemon
 - [x] Feature: Update Pokemon Data
-- [x] Feature: Update Pokemon Visibility (Soft Delete)
-- [x] Feature: Get Single Pokemon Details
+- [x] Feature: Update Pokémon Visibility (Soft Delete)
+- [x] Feature: Get Single Pokémon Details
 - [x] Feature: Get All Pokemons
-- [x] Feature: Get All Pokemons Paged
-- [ ] Feature: Add Filtering to Get All Pokemons Paged
-- [ ] Feature: Remove Pokemon Data (Hard Delete)
-- [ ] Feature: Get Pokemons Statistics Data (Available, Released etc.)
-- [ ] Feature: Export All Pokemons Data
-- [ ] Feature: Import All Pokemons Data
+- [x] Feature: Get All Pokémon Paged
+- [x] Feature: Add Filtering to Get All Pokémon Paged
+- [x] Feature: Remove Pokémon Data (Hard Delete)
+- [ ] Feature: Get Pokémon Statistics Data (Available, Released etc.)
+- [ ] Feature: Export All Pokémon Data
+- [ ] Feature: Import All Pokémon Data
      
 #### Trainers
 - [ ] Create Trainers Table
@@ -29,20 +29,20 @@ The goal of this project was to create REST API for Pokemon GO bucket list apps.
 - [ ] Feature: Get Single Trainer Data
 - [ ] Feature: Remove Trainer Data
      
-#### Trainers - Pokemons
-- [ ] Create Trainers - Pokemons Relation
-- [ ] Feature: Assign Pokemon To Trainer
+#### Trainers - Pokémon
+- [ ] Create Trainers - Pokémon Relation
+- [ ] Feature: Assign Pokémon To Trainer
 - [ ] Feature: Modify Assignment Data
 - [ ] Feature: Get Single Assignment Data
 - [ ] Feature: Get All Assignment Data Paged (With filters)
-- [ ] Feature: Get Assignemt Statistics Data
+- [ ] Feature: Get Assignment Statistics Data
 - [ ] Feature: Remove Single Assignment Data (Soft Delete)
 - [ ] Feature: Export Assignment Data For Single Trainer
 - [ ] Feature: Import Assignment Data For Single Trainer
 
 ### Mailing service
 
-- [ ] Create mailing microservice
+- [x] Create mailing microservice
 - [ ] Feature: Read Email Message From Message Queue
 - [ ] Feature: Process And Send Received Email Data
 
@@ -59,21 +59,24 @@ Clone the repository
 
 ```cmd
 git clone https://github.com/monczall/poke-api-go.git
+git clone https://github.com/monczall/poke-api-go-mailing.git
 ```
 
-Navigate to project directory and Use mvn to create application jar.
+Navigate to each project directory and Use mvn to create application jar.
 
 ```cmd
-mvn clean varify
+mvn clean verify
 ```
 
 Start the server
 
 ```cmd
 java -jar target/poke-api-go-VERSION.jar
+java -jar target/poke-api-go-mailing-VERSION.jar
 ```
 
-Server will run on localhost:8080
+Core Server will run on localhost:8080\
+Mailing Server will run on localhost:8081
 
 ## API
 
