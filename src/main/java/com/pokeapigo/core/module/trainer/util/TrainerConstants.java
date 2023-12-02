@@ -6,5 +6,6 @@ public class TrainerConstants {
     public static final Integer FRIEND_CODE_LENGTH = 12;
 
     private TrainerConstants() {
+        throw new UnsupportedOperationException("This is utility class and cannot be instantiated");
     }
 }

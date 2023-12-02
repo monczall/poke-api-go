@@ -7,5 +7,6 @@ public class ApiConstants {
     public static final String API_POKEMONS = "/pokemons";
 
     private ApiConstants() {
+        throw new UnsupportedOperationException("This is utility class and cannot be instantiated");
     }
 }

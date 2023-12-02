@@ -11,5 +11,6 @@ public class PokemonConstants {
     public static final Integer POKEMON_PAGE_MAX = 100;
 
     private PokemonConstants() {
+        throw new UnsupportedOperationException("This is utility class and cannot be instantiated");
     }
 }

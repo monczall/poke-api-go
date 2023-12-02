@@ -1,4 +1,4 @@
-package com.pokeapigo.core.module.auth.dto;
+package com.pokeapigo.core.module.auth.dto.request;
 
 import com.pokeapigo.core.common.utli.constants.Constants;
 import jakarta.validation.constraints.*;
