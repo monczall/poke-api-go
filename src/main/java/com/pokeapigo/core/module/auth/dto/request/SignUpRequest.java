@@ -1,7 +1,10 @@
 package com.pokeapigo.core.module.auth.dto.request;
 
 import com.pokeapigo.core.common.utli.constants.Constants;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 public record SignUpRequest(
         @NotBlank(message = "{auth.name.notBlank}")

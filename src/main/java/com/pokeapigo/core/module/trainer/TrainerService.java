@@ -1,8 +1,8 @@
-package com.pokeapigo.core.module.auth;
+package com.pokeapigo.core.module.trainer;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-public interface UserService {
+public interface TrainerService {
 
     UserDetailsService userDetailsService();
 }

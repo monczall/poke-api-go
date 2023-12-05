@@ -1,17 +1,15 @@
-package com.pokeapigo.core.module.auth.impl;
+package com.pokeapigo.core.module.trainer;
 
-import com.pokeapigo.core.module.auth.UserService;
-import com.pokeapigo.core.module.trainer.TrainerRepository;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class TrainerServiceImpl implements TrainerService {
 
     private final TrainerRepository trainerRepository;
 
-    public UserServiceImpl(TrainerRepository trainerRepository) {
+    public TrainerServiceImpl(TrainerRepository trainerRepository) {
         this.trainerRepository = trainerRepository;
     }
 
