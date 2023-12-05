@@ -16,10 +16,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static com.pokeapigo.core.common.utli.constants.ApiConstants.*;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
 
+    private static final String API_URI_AUTH = API_URI_V1 + API_AUTH;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final TrainerService trainerService;
 
@@ -33,7 +36,7 @@ public class SecurityConfiguration {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/v1/auth/**")
+                        .requestMatchers(API_URI_AUTH + API_REGISTER, API_URI_AUTH + API_LOGIN)
                         .permitAll()
                         .anyRequest()
                         .authenticated()

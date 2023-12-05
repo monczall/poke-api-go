@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public record SignUpRequest(
+public record RegisterRequest(
         @NotBlank(message = "{auth.name.notBlank}")
         @Size(min = 3, message = "{auth.name.rangeMin}")
         @Size(max = 35, message = "{auth.name.rangeMax}")

@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public record SignInRequest(
+public record LoginRequest(
         @NotBlank(message = "{auth.email.notBlank}")
         @Size(min = 10, message = "{auth.email.rangeMin}")
         @Size(max = 320, message = "{auth.email.rangeMax}")

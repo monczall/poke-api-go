@@ -2,8 +2,8 @@ package com.pokeapigo.core.module.auth.impl;
 
 import com.pokeapigo.core.module.auth.AuthenticationService;
 import com.pokeapigo.core.module.auth.JwtService;
-import com.pokeapigo.core.module.auth.dto.request.SignInRequest;
-import com.pokeapigo.core.module.auth.dto.request.SignUpRequest;
+import com.pokeapigo.core.module.auth.dto.request.LoginRequest;
+import com.pokeapigo.core.module.auth.dto.request.RegisterRequest;
 import com.pokeapigo.core.module.auth.dto.response.JwtAuthenticationResponse;
 import com.pokeapigo.core.module.auth.exception.exceptions.EmailOrPasswordMismatch;
 import com.pokeapigo.core.module.auth.exception.exceptions.PasswordsDoNotMatchException;
@@ -48,8 +48,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public JwtAuthenticationResponse signUp(SignUpRequest request, Locale locale) {
-        logger.info("Received signup request for user: {}", request.email());
+    public JwtAuthenticationResponse register(RegisterRequest request, Locale locale) {
+        logger.info("Received register request for user: {}", request.email());
         validator.validate(request);
         boolean passwordsMatch = checkIfPasswordsMatch(request.password(), request.confirmPassword());
 
@@ -58,7 +58,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     "auth.passwordsDoNotMatch", null, locale
             ));
         }
-        logger.info("Proceeding with signup request for user: {}", request.email());
+        logger.info("Proceeding with register request for user: {}", request.email());
 
         final UserDetails userDetails = new TrainerEntity.TrainerEntityBuilder()
                 .setName(request.name())
@@ -73,7 +73,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public JwtAuthenticationResponse signIn(SignInRequest request, Locale locale) {
+    public JwtAuthenticationResponse login(LoginRequest request, Locale locale) {
         validator.validate(request);
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.email(), request.password())
