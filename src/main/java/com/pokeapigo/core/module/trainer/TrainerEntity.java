@@ -11,8 +11,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import static com.pokeapigo.core.common.utli.constants.DataBaseConstants.TRAINERS_TABLE;
+
 @Entity
-@Table(name = "trainers")
+@Table(name = TRAINERS_TABLE)
 public class TrainerEntity implements UserDetails {
 
     @Id
@@ -26,6 +28,7 @@ public class TrainerEntity implements UserDetails {
     @Column(name = "level")
     private Integer level;
 
+    @Enumerated(value = EnumType.STRING)
     @Column(name = "team")
     private TrainerTeam team;
 

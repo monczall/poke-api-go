@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS pokemons;
+DROP TABLE IF EXISTS POK_POKEMONS;
 
-CREATE TABLE pokemons (
+CREATE TABLE POK_POKEMONS (
         id UUID DEFAULT gen_random_uuid () PRIMARY KEY,
         pokedex_id INTEGER NOT NULL,
         generation_id INTEGER NOT NULL,

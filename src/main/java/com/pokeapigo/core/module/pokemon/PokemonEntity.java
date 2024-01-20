@@ -5,8 +5,10 @@ import jakarta.persistence.*;
 
 import java.util.UUID;
 
+import static com.pokeapigo.core.common.utli.constants.DataBaseConstants.POKEMONS_TABLE;
+
 @Entity
-@Table(name = "pokemons")
+@Table(name = POKEMONS_TABLE)
 public class PokemonEntity {
 
     @Id

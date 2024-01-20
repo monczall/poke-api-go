@@ -4,6 +4,7 @@ import com.pokeapigo.core.module.pokemon.dto.request.PokemonRequest;
 import com.pokeapigo.core.module.pokemon.dto.response.PokemonResponse;
 import com.pokeapigo.core.module.pokemon.exception.exceptions.PokemonAlreadyExistsException;
 import com.pokeapigo.core.module.pokemon.exception.exceptions.PokemonNotFoundException;
+import com.pokeapigo.core.module.pokemon.impl.PokemonServiceImpl;
 import com.pokeapigo.core.module.pokemon.mapper.PokemonMapper;
 import com.pokeapigo.core.module.pokemon.util.PokemonTestConstants;
 import com.pokeapigo.core.module.pokemon.util.enums.PokemonType;

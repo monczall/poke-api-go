@@ -1,7 +1,10 @@
-package com.pokeapigo.core.module.pokemon;
+package com.pokeapigo.core.module.pokemon.impl;
 
 import com.pokeapigo.core.exception.exceptions.InvalidColumnNameException;
 import com.pokeapigo.core.exception.exceptions.OtherDataAccessApiException;
+import com.pokeapigo.core.module.pokemon.PokemonEntity;
+import com.pokeapigo.core.module.pokemon.PokemonRepository;
+import com.pokeapigo.core.module.pokemon.PokemonService;
 import com.pokeapigo.core.module.pokemon.dto.request.PokemonRequest;
 import com.pokeapigo.core.module.pokemon.dto.request.PokemonVisibilityRequest;
 import com.pokeapigo.core.module.pokemon.dto.response.PokemonDeleteResponse;

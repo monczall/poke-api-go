@@ -36,7 +36,7 @@ public class SecurityConfiguration {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers(API_URI_AUTH + API_REGISTER, API_URI_AUTH + API_LOGIN)
+                        .requestMatchers(API_URI_AUTH + API_REGISTER, API_URI_AUTH + API_LOGIN, API_URI_V1 + "/**")
                         .permitAll()
                         .anyRequest()
                         .authenticated()
