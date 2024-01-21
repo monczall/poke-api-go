@@ -1,7 +1,7 @@
 package com.pokeapigo.core.module.pokemon.integration;
 
 import com.pokeapigo.core.common.config.TestBaseConfiguration;
-import com.pokeapigo.core.module.pokemon.mapper.PokemonMapper;
+import com.pokeapigo.core.module.pokemon.util.PokemonMapper;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import org.junit.jupiter.api.DisplayName;

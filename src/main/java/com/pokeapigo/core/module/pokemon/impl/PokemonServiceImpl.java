@@ -9,9 +9,9 @@ import com.pokeapigo.core.module.pokemon.dto.request.PokemonRequest;
 import com.pokeapigo.core.module.pokemon.dto.request.PokemonVisibilityRequest;
 import com.pokeapigo.core.module.pokemon.dto.response.PokemonDeleteResponse;
 import com.pokeapigo.core.module.pokemon.dto.response.PokemonResponse;
-import com.pokeapigo.core.module.pokemon.exception.exceptions.PokemonAlreadyExistsException;
-import com.pokeapigo.core.module.pokemon.exception.exceptions.PokemonNotFoundException;
-import com.pokeapigo.core.module.pokemon.mapper.PokemonMapper;
+import com.pokeapigo.core.module.pokemon.exception.PokemonAlreadyExistsException;
+import com.pokeapigo.core.module.pokemon.exception.PokemonNotFoundException;
+import com.pokeapigo.core.module.pokemon.util.PokemonMapper;
 import com.pokeapigo.core.module.pokemon.util.PokemonConstants;
 import com.pokeapigo.core.module.pokemon.util.enums.PokemonType;
 import jakarta.validation.Validator;
@@ -60,6 +60,13 @@ public class PokemonServiceImpl implements PokemonService {
                 pokemon.getId(), pokemon.getPokedexId(), pokemon.getName(), pokemon.getVariant());
 
         return PokemonMapper.toPokemonResponse(result);
+    }
+
+    @Override
+    public PokemonResponse getPokemon(UUID pokemonUUID, Locale locale) {
+        PokemonEntity pokemon = getPokemonByUUID(pokemonUUID, locale);
+
+        return PokemonMapper.toPokemonResponse(pokemon);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.pokeapigo.core.module.pokemon.mapper;
+package com.pokeapigo.core.module.pokemon.util;
 
 import com.pokeapigo.core.module.pokemon.PokemonEntity;
 import com.pokeapigo.core.module.pokemon.dto.request.PokemonRequest;

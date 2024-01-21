@@ -9,6 +9,7 @@ import com.pokeapigo.core.module.auth.exception.exceptions.EmailOrPasswordMismat
 import com.pokeapigo.core.module.auth.exception.exceptions.PasswordsDoNotMatchException;
 import com.pokeapigo.core.module.trainer.TrainerEntity;
 import com.pokeapigo.core.module.trainer.TrainerRepository;
+import com.pokeapigo.core.module.trainer.util.TrainerUtils;
 import com.pokeapigo.core.module.trainer.util.enums.TrainerRole;
 import com.pokeapigo.core.module.trainer.util.enums.TrainerTeam;
 import jakarta.validation.Validator;
@@ -28,6 +29,7 @@ import java.util.Locale;
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final TrainerRepository trainerRepository;
+    private final TrainerUtils trainerUtils;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -36,12 +38,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     Logger logger = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
 
     public AuthenticationServiceImpl(TrainerRepository trainerRepository,
+                                     TrainerUtils trainerUtils,
                                      PasswordEncoder passwordEncoder,
                                      JwtService jwtService,
                                      AuthenticationManager authenticationManager,
                                      Validator validator,
                                      MessageSource messageSource) {
         this.trainerRepository = trainerRepository;
+        this.trainerUtils = trainerUtils;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
@@ -66,6 +70,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .setName(request.name())
                 .setLevel(0)
                 .setTeam(TrainerTeam.NONE)
+                .setFriendCode(trainerUtils.generateFriendCode(locale))
                 .setEmail(request.email())
                 .setPassword(passwordEncoder.encode(request.password()))
                 .setRole(TrainerRole.USER)

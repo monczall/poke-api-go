@@ -1,8 +1,8 @@
-package com.pokeapigo.core.module.pokemon.exception;
+package com.pokeapigo.core.module.pokemon.exception.handler;
 
 import com.pokeapigo.core.exception.dto.BasicErrorDto;
-import com.pokeapigo.core.module.pokemon.exception.exceptions.PokemonAlreadyExistsException;
-import com.pokeapigo.core.module.pokemon.exception.exceptions.PokemonNotFoundException;
+import com.pokeapigo.core.module.pokemon.exception.PokemonAlreadyExistsException;
+import com.pokeapigo.core.module.pokemon.exception.PokemonNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -4,7 +4,19 @@ The goal of this project was to create REST API for Pokémon GO bucket list apps
 
 ## Current State
 
+### General
+- [ ] Unit tests
+- [ ] Controller tests
+- [ ] Integration tests
+
+
+- [ ] Create Documentation
+- [ ] Create Release Pipelines
+- [ ] Deploy Somewhere 
+
+
 ### Core Service
+
 #### Pokémon
 - [x] Create Pokémon Table
 - [ ] Fill DB With Pokemon Data
@@ -19,16 +31,19 @@ The goal of this project was to create REST API for Pokémon GO bucket list apps
 - [ ] Feature: Get Pokémon Statistics Data (Available, Released etc.)
 - [ ] Feature: Export All Pokémon Data
 - [ ] Feature: Import All Pokémon Data
-     
+   
+  
 #### Trainers
-- [ ] Create Trainers Table
+- [x] Create Trainers Table
 - [ ] Feature: Register (Create Trainer)
 - [ ] Feature: Modify Trainer Data
+- [ ] Feature: Modify Trainer Roles
 - [ ] Feature: Send Registration Email Confirmation To Message Queue
 - [ ] Feature: Get All Trainers Paged (With filters)
 - [ ] Feature: Get Single Trainer Data
 - [ ] Feature: Remove Trainer Data
      
+
 #### Trainers - Pokémon
 - [ ] Create Trainers - Pokémon Relation
 - [ ] Feature: Assign Pokémon To Trainer
@@ -40,8 +55,8 @@ The goal of this project was to create REST API for Pokémon GO bucket list apps
 - [ ] Feature: Export Assignment Data For Single Trainer
 - [ ] Feature: Import Assignment Data For Single Trainer
 
-### Mailing service
 
+### Mailing service
 - [x] Create mailing microservice
 - [ ] Feature: Read Email Message From Message Queue
 - [ ] Feature: Process And Send Received Email Data

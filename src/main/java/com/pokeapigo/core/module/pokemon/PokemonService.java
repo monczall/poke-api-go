@@ -15,6 +15,8 @@ import java.util.UUID;
 public interface PokemonService {
     PokemonResponse createPokemon(PokemonRequest pokemonRequest, Locale locale);
 
+    PokemonResponse getPokemon(UUID pokemonUUID, Locale locale);
+
     List<PokemonResponse> getAllPokemons();
 
     Page<PokemonResponse> getPagedPokemons(Pageable pageable, String search, Integer genId, PokemonType typeOne,

@@ -2,10 +2,10 @@ package com.pokeapigo.core.module.pokemon;
 
 import com.pokeapigo.core.module.pokemon.dto.request.PokemonRequest;
 import com.pokeapigo.core.module.pokemon.dto.response.PokemonResponse;
-import com.pokeapigo.core.module.pokemon.exception.exceptions.PokemonAlreadyExistsException;
-import com.pokeapigo.core.module.pokemon.exception.exceptions.PokemonNotFoundException;
+import com.pokeapigo.core.module.pokemon.exception.PokemonAlreadyExistsException;
+import com.pokeapigo.core.module.pokemon.exception.PokemonNotFoundException;
 import com.pokeapigo.core.module.pokemon.impl.PokemonServiceImpl;
-import com.pokeapigo.core.module.pokemon.mapper.PokemonMapper;
+import com.pokeapigo.core.module.pokemon.util.PokemonMapper;
 import com.pokeapigo.core.module.pokemon.util.PokemonTestConstants;
 import com.pokeapigo.core.module.pokemon.util.enums.PokemonType;
 import com.pokeapigo.core.module.pokemon.util.factory.PokemonDtoFactory;
@@ -38,6 +38,8 @@ class PokemonServiceTest {
 
     final MessageSource messageSource = spy(MessageSource.class);
 
+    final Locale defaultLocale = Locale.getDefault();
+
     PokemonService systemUnderTest;
 
     @BeforeEach
@@ -56,7 +58,7 @@ class PokemonServiceTest {
                 .thenReturn(false);
 
         // when
-        systemUnderTest.createPokemon(pokemonRequest, Locale.getDefault());
+        systemUnderTest.createPokemon(pokemonRequest, defaultLocale);
 
         // then
         verify(validator).validate(any(PokemonRequest.class));
@@ -80,7 +82,7 @@ class PokemonServiceTest {
         PokemonResponse response = systemUnderTest.updatePokemonData(
                 PokemonTestConstants.POKEMON_BULBASAUR_UUID,
                 request,
-                Locale.ENGLISH);
+                defaultLocale);
 
         // then
         verify(pokemonRepository).save(any(PokemonEntity.class));
@@ -136,7 +138,7 @@ class PokemonServiceTest {
                 1,
                 PokemonType.GRASS,
                 PokemonType.POISON,
-                Locale.getDefault()
+                defaultLocale
         );
 
         // then
@@ -173,7 +175,7 @@ class PokemonServiceTest {
 
         // when - then
         assertThrows(PokemonAlreadyExistsException.class, () ->
-                systemUnderTest.createPokemon(pokemonRequest, Locale.ENGLISH));
+                systemUnderTest.createPokemon(pokemonRequest, defaultLocale));
         verify(pokemonRepository, never()).save(any(PokemonEntity.class));
     }
 
@@ -191,7 +193,7 @@ class PokemonServiceTest {
                 systemUnderTest.updatePokemonData(
                         PokemonTestConstants.NON_EXISTENT_POKEMON_UUID,
                         pokemonRequest,
-                        Locale.ENGLISH));
+                        defaultLocale));
     }
 
 }

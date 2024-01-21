@@ -10,4 +10,6 @@ import java.util.UUID;
 public interface TrainerRepository extends JpaRepository<TrainerEntity, UUID> {
 
     Optional<TrainerEntity> findByEmail(String email);
+
+    boolean existsByFriendCode(String friendCode);
 }

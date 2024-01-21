@@ -1,6 +1,8 @@
 package com.pokeapigo.core.module.pokemon.util;
 
-public class PokemonConstants {
+import static com.pokeapigo.core.common.utli.constants.Constants.PRIVATE_CONSTRUCTOR_EXCEPTION_MESSAGE;
+
+public final class PokemonConstants {
 
     public static final Integer DEX_ID_MIN = 1;
     public static final Integer DEX_ID_MAX = 1200;
@@ -11,6 +13,6 @@ public class PokemonConstants {
     public static final Integer POKEMON_PAGE_MAX = 100;
 
     private PokemonConstants() {
-        throw new UnsupportedOperationException("This is utility class and cannot be instantiated");
+        throw new UnsupportedOperationException(PRIVATE_CONSTRUCTOR_EXCEPTION_MESSAGE);
     }
 }
