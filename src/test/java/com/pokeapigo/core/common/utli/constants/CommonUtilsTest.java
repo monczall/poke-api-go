@@ -29,12 +29,4 @@ class CommonUtilsTest {
         assertThrows(InvocationTargetException.class, c::newInstance);
     }
 
-    @Test
-    void dataBaseConstantsPrivateConstructorTest() throws NoSuchMethodException {
-        Constructor<DataBaseConstants> c = DataBaseConstants.class.getDeclaredConstructor();
-        assertTrue(Modifier.isPrivate(c.getModifiers()));
-
-        c.setAccessible(true);
-        assertThrows(InvocationTargetException.class, c::newInstance);
-    }
 }

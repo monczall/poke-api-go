@@ -4,7 +4,7 @@ import com.pokeapigo.core.module.trainer.TrainerRepository;
 import com.pokeapigo.core.module.trainer.TrainerService;
 import com.pokeapigo.core.module.trainer.dto.request.TrainerRequest;
 import com.pokeapigo.core.module.trainer.dto.response.LimitedTrainerResponse;
-import com.pokeapigo.core.module.trainer.util.enums.TrainerRole;
+import com.pokeapigo.core.role.RoleEntity;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -56,7 +56,7 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
     @Override
-    public Boolean updateTrainerRoles(UUID trainerUUID, List<TrainerRole> trainerRoles, Locale locale) {
+    public Boolean updateTrainerRoles(UUID trainerUUID, List<RoleEntity> trainerRoles, Locale locale) {
         return null;
     }
 

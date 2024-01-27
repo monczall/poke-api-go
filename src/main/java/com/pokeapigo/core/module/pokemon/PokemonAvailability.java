@@ -6,37 +6,37 @@ import jakarta.persistence.Embeddable;
 @Embeddable
 public class PokemonAvailability {
 
-    @Column(name = "available")
+    @Column(name = "AVAILABLE")
     private boolean available;
 
-    @Column(name = "shiny")
+    @Column(name = "SHINY")
     private boolean shiny;
 
-    @Column(name = "mega")
+    @Column(name = "MEGA")
     private boolean mega;
 
-    @Column(name = "mega_family")
+    @Column(name = "MEGAFAMILY")
     private boolean megaFamily;
 
-    @Column(name = "shadow")
+    @Column(name = "SHADOW")
     private boolean shadow;
 
-    @Column(name = "trade_evolve")
+    @Column(name = "TRADEEVOLVE")
     private boolean tradeEvolve;
 
-    @Column(name = "trade_evolve_family")
+    @Column(name = "TRADEEVOLVEFAMILY")
     private boolean tradeEvolveFamily;
 
-    @Column(name = "tradeable")
+    @Column(name = "TRADEABLE")
     private boolean tradeable;
 
-    @Column(name = "raidable")
+    @Column(name = "RAIDABLE")
     private boolean raidable;
 
-    @Column(name = "alternate_form")
+    @Column(name = "ALTERNATEFORM")
     private boolean alternateForm;
 
-    @Column(name = "costume_form")
+    @Column(name = "COSTUMEFORM")
     private boolean costumeForm;
 
     public PokemonAvailability() {

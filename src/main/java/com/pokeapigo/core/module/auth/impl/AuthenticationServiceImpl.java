@@ -10,7 +10,6 @@ import com.pokeapigo.core.module.auth.exception.exceptions.PasswordsDoNotMatchEx
 import com.pokeapigo.core.module.trainer.TrainerEntity;
 import com.pokeapigo.core.module.trainer.TrainerRepository;
 import com.pokeapigo.core.module.trainer.util.TrainerUtils;
-import com.pokeapigo.core.module.trainer.util.enums.TrainerRole;
 import com.pokeapigo.core.module.trainer.util.enums.TrainerTeam;
 import jakarta.validation.Validator;
 import org.apache.commons.lang3.StringUtils;
@@ -24,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Locale;
+import java.util.Set;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -73,7 +73,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .setFriendCode(trainerUtils.generateFriendCode(locale))
                 .setEmail(request.email())
                 .setPassword(passwordEncoder.encode(request.password()))
-                .setRole(TrainerRole.USER)
+                .setRoles(Set.of())
                 .build();
         final String jwt = jwtService.generateToken(userDetails);
         return new JwtAuthenticationResponse(jwt);

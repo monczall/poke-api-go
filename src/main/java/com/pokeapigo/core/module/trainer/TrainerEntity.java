@@ -1,56 +1,59 @@
 package com.pokeapigo.core.module.trainer;
 
-import com.pokeapigo.core.module.trainer.util.enums.TrainerRole;
 import com.pokeapigo.core.module.trainer.util.enums.TrainerTeam;
+import com.pokeapigo.core.role.RoleEntity;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
-import static com.pokeapigo.core.common.utli.constants.DataBaseConstants.TRAINERS_TABLE;
-
 @Entity
-@Table(name = TRAINERS_TABLE)
+@Table(name = "TRA_TRAINERS")
 public class TrainerEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "ID")
     private UUID id;
 
-    @Column(name = "name")
+    @Column(name = "NAME")
     private String name;
 
-    @Column(name = "level")
+    @Column(name = "LEVEL")
     private Integer level;
 
     @Enumerated(value = EnumType.STRING)
-    @Column(name = "team")
+    @Column(name = "TEAM")
     private TrainerTeam team;
 
-    @Column(name = "avatar_url")
+    @Column(name = "AVATARURL")
     private String avatarUrl;
 
-    @Column(name = "friend_code")
+    @Column(name = "FRIENDCODE")
     private String friendCode;
 
-    @Column(name = "email")
+    @Column(name = "EMAIL")
     private String email;
 
-    @Column(name = "password")
+    @Column(name = "PASSWORD")
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role")
-    private TrainerRole role;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "TRA_ROLE_MEMBERS",
+            joinColumns = @JoinColumn(name = "TRAINERID"),
+            inverseJoinColumns = @JoinColumn(name = "ROLEID"))
+    @Column(name = "ROLES")
+    private Set<RoleEntity> roles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return roles.stream().map(role ->
+                new SimpleGrantedAuthority(role.getName())
+        ).toList();
     }
 
     @Override
@@ -91,7 +94,7 @@ public class TrainerEntity implements UserDetails {
         this.friendCode = builder.friendCode;
         this.email = builder.email;
         this.password = builder.password;
-        this.role = builder.role;
+        this.roles = builder.roles;
     }
 
     public static class TrainerEntityBuilder {
@@ -102,7 +105,7 @@ public class TrainerEntity implements UserDetails {
         private String friendCode;
         private String email;
         private String password;
-        private TrainerRole role;
+        private Set<RoleEntity> roles;
 
         public TrainerEntityBuilder setName(String name) {
             this.name = name;
@@ -139,8 +142,8 @@ public class TrainerEntity implements UserDetails {
             return this;
         }
 
-        public TrainerEntityBuilder setRole(TrainerRole role) {
-            this.role = role;
+        public TrainerEntityBuilder setRoles(Set<RoleEntity> roles) {
+            this.roles = roles;
             return this;
         }
 

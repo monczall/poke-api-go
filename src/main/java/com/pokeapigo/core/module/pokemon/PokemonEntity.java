@@ -5,39 +5,38 @@ import jakarta.persistence.*;
 
 import java.util.UUID;
 
-import static com.pokeapigo.core.common.utli.constants.DataBaseConstants.POKEMONS_TABLE;
-
 @Entity
-@Table(name = POKEMONS_TABLE)
+@Table(name = "POK_POKEMONS")
 public class PokemonEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "ID")
     private UUID id;
 
-    @Column(name = "pokedex_id")
+    @Column(name = "POKEDEXID")
     private Integer pokedexId;
 
-    @Column(name = "generation_id")
+    @Column(name = "GENERATIONID")
     private Integer generationId;
 
-    @Column(name = "name")
+    @Column(name = "NAME")
     private String name;
 
-    @Column(name = "variant")
+    @Column(name = "VARIANT")
     private String variant;
 
     @Embedded
     private PokemonTypeDuo pokemonTypes;
 
-    @Column(name = "rarity")
+    @Column(name = "RARITY")
     @Enumerated(EnumType.STRING)
     private PokemonRarity rarity;
 
     @Embedded
     private PokemonAvailability availability;
 
+    @Column(name = "VISIBLE")
     private Boolean visible;
 
     public PokemonEntity() {

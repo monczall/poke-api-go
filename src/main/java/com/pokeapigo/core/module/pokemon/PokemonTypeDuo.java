@@ -10,12 +10,12 @@ import jakarta.validation.constraints.NotNull;
 @Embeddable
 public class PokemonTypeDuo {
 
-    @Column(name = "type_one")
+    @Column(name = "TYPEONE")
     @Enumerated(EnumType.STRING)
     @NotNull(message = "{pokemon.typeOne.notNull}")
     private PokemonType typeOne;
 
-    @Column(name = "type_two")
+    @Column(name = "TYPETWO")
     @Enumerated(EnumType.STRING)
     @NotNull(message = "{pokemon.typeTwo.notNull}")
     private PokemonType typeTwo;
