@@ -6,6 +6,7 @@ import com.pokeapigo.core.module.pokemon.dto.request.PokemonVisibilityRequest;
 import com.pokeapigo.core.module.pokemon.dto.response.PokemonDeleteResponse;
 import com.pokeapigo.core.module.pokemon.dto.response.PokemonResponse;
 import com.pokeapigo.core.module.pokemon.util.enums.PokemonType;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +14,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,8 +23,9 @@ import java.util.UUID;
 import static com.pokeapigo.core.common.utli.constants.ApiConstants.API_POKEMONS;
 import static com.pokeapigo.core.common.utli.constants.ApiConstants.API_URI_V1;
 
-@Controller
+@RestController
 @RequestMapping(API_URI_V1 + API_POKEMONS)
+@Tag(name = "Pokemon Controller", description = "Controller used to perform operations on Pokemons")
 class PokemonController {
 
     private final PokemonService pokemonService;

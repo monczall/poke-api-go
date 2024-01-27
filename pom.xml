@@ -10,17 +10,38 @@
 	</parent>
 	<groupId>com.poke-api-go</groupId>
 	<artifactId>core</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>core</name>
+	<version>2024.01.01</version>
+	<name>PokeApi Go Core</name>
 	<description>Spring Boot project for PokemonGo API</description>
+
+	<organization>
+		<name>MonczallDev</name>
+		<url>http://www.monczall.dev</url>
+	</organization>
+
+	<developers>
+		<developer>
+			<id>Monczall</id>
+			<name>Lukasz Maczka</name>
+			<email>lukaszmaczka3604@gmail.com</email>
+			<organization>MonczallDev</organization>
+			<organizationUrl>http://www.monczall.dev</organizationUrl>
+		</developer>
+	</developers>
 
 	<properties>
 		<java.version>17</java.version>
 
 		<!--	Core Dependencies Versions	-->
-		<springframework.version>3.2.0</springframework.version>
+		<springframework.version>3.2.2</springframework.version>
 		<flyway.version>9.22.3</flyway.version>
 		<postgresql.driver.version>42.7.0</postgresql.driver.version>
+
+		<!--	Other Dependencies Version	-->
+		<snakeyaml.version>2.2</snakeyaml.version>
+		<commons-lang3.version>3.14.0</commons-lang3.version>
+		<jsonwebtoken.version>0.11.5</jsonwebtoken.version>
+		<springdoc-openapi-starter-webmvc-ui.version>2.3.0</springdoc-openapi-starter-webmvc-ui.version>
 
 		<!--	Test Dependencies Versions	-->
 		<junit-jupiter.version>5.10.1</junit-jupiter.version>
@@ -29,11 +50,6 @@
 		<rest-assured.version>5.3.2</rest-assured.version>
 		<testcontainers.junit-jupiter.version>1.19.3</testcontainers.junit-jupiter.version>
 		<testcontainers.postgresql.version>1.19.3</testcontainers.postgresql.version>
-
-		<!--	Other Dependencies Version	-->
-		<snakeyaml.version>2.2</snakeyaml.version>
-		<commons-lang3.version>3.14.0</commons-lang3.version>
-		<jsonwebtoken.version>0.11.5</jsonwebtoken.version>
 
 		<!--	Code coverage plugin	-->
 		<jacoco.version>0.8.11</jacoco.version>
@@ -67,6 +83,16 @@
 			<version>${springframework.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-cache</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
 			<version>${flyway.version}</version>
@@ -76,6 +102,40 @@
 			<artifactId>postgresql</artifactId>
 			<version>${postgresql.driver.version}</version>
 			<scope>runtime</scope>
+		</dependency>
+
+		<!--	Other dependencies	-->
+		<dependency>
+			<groupId>org.yaml</groupId>
+			<artifactId>snakeyaml</artifactId>
+			<version>${snakeyaml.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${commons-lang3.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>${jsonwebtoken.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>${jsonwebtoken.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>${jsonwebtoken.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>${springdoc-openapi-starter-webmvc-ui.version}</version>
 		</dependency>
 
 		<!--	Test dependencies	-->
@@ -127,35 +187,6 @@
 			<version>${testcontainers.postgresql.version}</version>
 			<scope>test</scope>
 		</dependency>
-
-		<!--	Other dependencies	-->
-		<dependency>
-			<groupId>org.yaml</groupId>
-			<artifactId>snakeyaml</artifactId>
-			<version>${snakeyaml.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>${commons-lang3.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt-api</artifactId>
-			<version>${jsonwebtoken.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt-impl</artifactId>
-			<version>${jsonwebtoken.version}</version>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt-jackson</artifactId>
-			<version>${jsonwebtoken.version}</version>
-			<scope>runtime</scope>
-		</dependency>
 	</dependencies>
 
 	<build>
@@ -163,6 +194,20 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>build-info</goal>
+						</goals>
+						<configuration>
+							<additionalProperties>
+								<appDescription>${project.description}</appDescription>
+								<developerName>${project.developers[0].name}</developerName>
+								<developerEmail>${project.developers[0].email}</developerEmail>
+							</additionalProperties>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
