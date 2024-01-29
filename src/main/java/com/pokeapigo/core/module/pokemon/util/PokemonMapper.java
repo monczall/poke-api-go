@@ -6,8 +6,6 @@ import com.pokeapigo.core.module.pokemon.dto.response.PokemonResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
-import static com.pokeapigo.core.common.utli.constants.Constants.PRIVATE_CONSTRUCTOR_EXCEPTION_MESSAGE;
-
 public final class PokemonMapper {
 
     public static PokemonEntity toEntity(PokemonRequest pokemonRequest) {

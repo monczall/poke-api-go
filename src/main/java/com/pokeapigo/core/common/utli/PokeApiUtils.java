@@ -13,8 +13,6 @@ import org.springframework.data.domain.Sort;
 
 import java.util.Locale;
 
-import static com.pokeapigo.core.common.utli.constants.Constants.PRIVATE_CONSTRUCTOR_EXCEPTION_MESSAGE;
-
 public class PokeApiUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(PokeApiUtils.class);
