@@ -52,13 +52,41 @@ public class TrainerEntity implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream().map(role ->
-                new SimpleGrantedAuthority(role.getName())
+                new SimpleGrantedAuthority(role.getRole().name())
         ).toList();
     }
 
     @Override
     public String getUsername() {
         return email;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public TrainerTeam getTeam() {
+        return team;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public String getFriendCode() {
+        return friendCode;
+    }
+
+    public Set<RoleEntity> getRoles() {
+        return roles;
     }
 
     @Override
@@ -84,6 +112,22 @@ public class TrainerEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
+    }
+
+    public void setTeam(TrainerTeam team) {
+        this.team = team;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
     private TrainerEntity(TrainerEntityBuilder builder) {

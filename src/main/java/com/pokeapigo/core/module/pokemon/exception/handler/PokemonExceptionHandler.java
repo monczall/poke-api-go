@@ -14,7 +14,9 @@ import static com.pokeapigo.core.exception.GeneralExceptionResponseFactory.getBa
 @ControllerAdvice
 public class PokemonExceptionHandler {
 
-    @ExceptionHandler({PokemonNotFoundException.class})
+    @ExceptionHandler({
+            PokemonNotFoundException.class
+    })
     ResponseEntity<BasicErrorDto> pokemonNotFound(RuntimeException ex, HttpServletRequest request) {
         return getBasicErrorDtoResponse(ex, request, HttpStatus.NOT_FOUND);
     }

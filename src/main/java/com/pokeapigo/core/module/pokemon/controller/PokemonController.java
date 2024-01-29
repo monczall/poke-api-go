@@ -46,6 +46,18 @@ class PokemonController {
                 .body(createdPokemon);
     }
 
+    @GetMapping("/{pokemonUUID}")
+    ResponseEntity<PokemonResponse> getPokemon(
+            @RequestHeader(value = HttpHeaders.ACCEPT_LANGUAGE, required = false) Locale locale,
+            @PathVariable UUID pokemonUUID
+    ) {
+        final PokemonResponse pokemonResponse = pokemonService.getPokemon(pokemonUUID, locale);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(pokemonResponse);
+    }
+
     @GetMapping("/secured")
     ResponseEntity<List<PokemonResponse>> getAllPokemons() {
         final List<PokemonResponse> listOfAllPokemons = pokemonService.getAllPokemons();

@@ -1,4 +1,4 @@
-package com.pokeapigo.core.exception.exceptions;
+package com.pokeapigo.core.exception;
 
 public class InvalidColumnNameException extends RuntimeException {
     public InvalidColumnNameException(String message) {

@@ -1,7 +1,9 @@
 package com.pokeapigo.core.module.trainer.util;
 
+import com.pokeapigo.core.module.trainer.TrainerEntity;
 import com.pokeapigo.core.module.trainer.TrainerRepository;
-import com.pokeapigo.core.module.trainer.exception.FailedToGenerateFriendCodeInReasonableAmountOfTries;
+import com.pokeapigo.core.module.trainer.dto.request.TrainerRequest;
+import com.pokeapigo.core.module.trainer.exception.FailedToGenerateFriendCodeException;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
@@ -22,6 +24,15 @@ public class TrainerUtils {
         this.messageSource = messageSource;
     }
 
+    public static TrainerEntity updateTrainerEntityData(TrainerEntity trainer, TrainerRequest request) {
+        trainer.setName(request.name());
+        trainer.setLevel(request.level());
+        trainer.setTeam(request.team());
+        trainer.setAvatarUrl(request.avatarUrl());
+
+        return trainer;
+    }
+
     public String generateFriendCode(Locale locale) {
         String generatedFriendCode = null;
 
@@ -34,8 +45,9 @@ public class TrainerUtils {
             tries++;
         }
 
-        throw new FailedToGenerateFriendCodeInReasonableAmountOfTries(
+        throw new FailedToGenerateFriendCodeException(
                 messageSource.getMessage("trainer.exceededReasonableAmountOfTries", new Object[]{FRIEND_CODE_GEN_TRIES}, locale)
         );
     }
+
 }

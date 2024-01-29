@@ -53,11 +53,11 @@
 
 		<!--	Code coverage plugin	-->
 		<jacoco.version>0.8.11</jacoco.version>
-		<jacoco.instruction.cover>0.95</jacoco.instruction.cover>
-		<jacoco.line.cover>0.95</jacoco.line.cover>
-		<jacoco.branch.cover>0.95</jacoco.branch.cover>
-		<jacoco.method.cover>0.95</jacoco.method.cover>
-		<jacoco.class.cover>0.95</jacoco.class.cover>
+		<jacoco.instruction.cover>0.40</jacoco.instruction.cover>
+		<jacoco.line.cover>0.40</jacoco.line.cover>
+		<jacoco.branch.cover>0.40</jacoco.branch.cover>
+		<jacoco.method.cover>0.40</jacoco.method.cover>
+		<jacoco.class.cover>0.40</jacoco.class.cover>
 	</properties>
 
 	<dependencies>

@@ -1,9 +1,9 @@
-package com.pokeapigo.core.exception;
+package com.pokeapigo.core.exception.handler;
 
+import com.pokeapigo.core.exception.InvalidColumnNameException;
+import com.pokeapigo.core.exception.OtherDataAccessApiException;
 import com.pokeapigo.core.exception.dto.BasicErrorDto;
 import com.pokeapigo.core.exception.dto.ValidationErrorDto;
-import com.pokeapigo.core.exception.exceptions.InvalidColumnNameException;
-import com.pokeapigo.core.exception.exceptions.OtherDataAccessApiException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;

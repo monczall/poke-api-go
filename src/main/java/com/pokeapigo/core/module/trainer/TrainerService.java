@@ -1,8 +1,9 @@
 package com.pokeapigo.core.module.trainer;
 
 import com.pokeapigo.core.module.trainer.dto.request.TrainerRequest;
+import com.pokeapigo.core.module.trainer.dto.response.FullTrainerResponse;
 import com.pokeapigo.core.module.trainer.dto.response.LimitedTrainerResponse;
-import com.pokeapigo.core.role.RoleEntity;
+import com.pokeapigo.core.role.util.enums.TrainerRole;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,15 +16,15 @@ public interface TrainerService {
 
     UserDetailsService userDetailsService();
 
-    LimitedTrainerResponse getTrainer(UUID trainerUUID);
+    LimitedTrainerResponse getTrainer(UUID trainerUUID, Locale locale);
 
-    List<LimitedTrainerResponse> getAllTrainers();
+    List<FullTrainerResponse> getAllTrainers();
 
-    Page<LimitedTrainerResponse> getPagedTrainers(Pageable pageable, String search);
+    Page<LimitedTrainerResponse> getPagedTrainers(Pageable pageable, String search, Locale locale);
 
-    LimitedTrainerResponse updateTrainerData(UUID trainerUUID, TrainerRequest trainerRequest, Locale locale);
+    FullTrainerResponse updateTrainerData(UUID trainerUUID, TrainerRequest trainerRequest, Locale locale);
 
-    Boolean updateTrainerRoles(UUID trainerUUID, List<RoleEntity> trainerRoles, Locale locale);
+    FullTrainerResponse updateTrainerRoles(UUID trainerUUID, List<TrainerRole> trainerRoles, Locale locale);
 
     Boolean deleteTrainer(UUID trainerUUID, Locale locale);
 

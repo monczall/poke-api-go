@@ -5,8 +5,8 @@ import com.pokeapigo.core.module.pokemon.dto.response.PokemonResponse;
 import com.pokeapigo.core.module.pokemon.exception.PokemonAlreadyExistsException;
 import com.pokeapigo.core.module.pokemon.exception.PokemonNotFoundException;
 import com.pokeapigo.core.module.pokemon.impl.PokemonServiceImpl;
-import com.pokeapigo.core.module.pokemon.util.PokemonMapper;
 import com.pokeapigo.core.module.pokemon.util.PokemonTestConstants;
+import com.pokeapigo.core.module.pokemon.util.PokemonUtils;
 import com.pokeapigo.core.module.pokemon.util.enums.PokemonType;
 import com.pokeapigo.core.module.pokemon.util.factory.PokemonDtoFactory;
 import com.pokeapigo.core.module.pokemon.util.factory.PokemonEntityFactory;
@@ -75,7 +75,7 @@ class PokemonServiceTest {
                 .thenReturn(false);
         when(pokemonRepository.findById(any(UUID.class))).thenReturn(Optional.ofNullable(findPokemon));
         assert findPokemon != null;
-        PokemonEntity pokemonToSave = PokemonMapper.updatePokemonEntityData(findPokemon, request);
+        PokemonEntity pokemonToSave = PokemonUtils.updatePokemonEntityData(findPokemon, request);
         when(pokemonRepository.save(any(PokemonEntity.class))).thenReturn(pokemonToSave);
 
         // when

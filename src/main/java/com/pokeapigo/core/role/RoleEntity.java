@@ -1,5 +1,6 @@
 package com.pokeapigo.core.role;
 
+import com.pokeapigo.core.role.util.enums.TrainerRole;
 import jakarta.persistence.*;
 
 @Entity
@@ -11,10 +12,15 @@ public class RoleEntity {
     @Column(name = "ID")
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "NAME")
-    private String name;
+    private TrainerRole role;
 
-    public String getName() {
-        return name;
+    public RoleEntity(TrainerRole role) {
+        this.role = role;
+    }
+
+    public TrainerRole getRole() {
+        return role;
     }
 }

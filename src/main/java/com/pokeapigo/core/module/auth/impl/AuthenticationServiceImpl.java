@@ -5,12 +5,14 @@ import com.pokeapigo.core.module.auth.JwtService;
 import com.pokeapigo.core.module.auth.dto.request.LoginRequest;
 import com.pokeapigo.core.module.auth.dto.request.RegisterRequest;
 import com.pokeapigo.core.module.auth.dto.response.JwtAuthenticationResponse;
-import com.pokeapigo.core.module.auth.exception.exceptions.EmailOrPasswordMismatch;
-import com.pokeapigo.core.module.auth.exception.exceptions.PasswordsDoNotMatchException;
+import com.pokeapigo.core.module.auth.exception.EmailOrPasswordMismatch;
+import com.pokeapigo.core.module.auth.exception.PasswordsDoNotMatchException;
 import com.pokeapigo.core.module.trainer.TrainerEntity;
 import com.pokeapigo.core.module.trainer.TrainerRepository;
 import com.pokeapigo.core.module.trainer.util.TrainerUtils;
 import com.pokeapigo.core.module.trainer.util.enums.TrainerTeam;
+import com.pokeapigo.core.role.RoleEntity;
+import com.pokeapigo.core.role.util.enums.TrainerRole;
 import jakarta.validation.Validator;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -68,12 +70,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         final UserDetails userDetails = new TrainerEntity.TrainerEntityBuilder()
                 .setName(request.name())
-                .setLevel(0)
+                .setLevel(1)
                 .setTeam(TrainerTeam.NONE)
                 .setFriendCode(trainerUtils.generateFriendCode(locale))
                 .setEmail(request.email())
                 .setPassword(passwordEncoder.encode(request.password()))
-                .setRoles(Set.of())
+                .setRoles(Set.of(new RoleEntity(TrainerRole.USER)))
                 .build();
         final String jwt = jwtService.generateToken(userDetails);
         return new JwtAuthenticationResponse(jwt);

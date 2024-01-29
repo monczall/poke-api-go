@@ -1,8 +1,8 @@
-package com.pokeapigo.core.module.auth.exception;
+package com.pokeapigo.core.module.auth.exception.handler;
 
 import com.pokeapigo.core.exception.dto.BasicErrorDto;
-import com.pokeapigo.core.module.auth.exception.exceptions.EmailOrPasswordMismatch;
-import com.pokeapigo.core.module.auth.exception.exceptions.PasswordsDoNotMatchException;
+import com.pokeapigo.core.module.auth.exception.EmailOrPasswordMismatch;
+import com.pokeapigo.core.module.auth.exception.PasswordsDoNotMatchException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

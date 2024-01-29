@@ -12,7 +12,6 @@ public final class ApiConstants {
     public static final String API_POKEMONS = "/pokemons";
     public static final String API_TRAINERS = "/trainers";
 
-
     private ApiConstants() {
         throw new UnsupportedOperationException(PRIVATE_CONSTRUCTOR_EXCEPTION_MESSAGE);
     }

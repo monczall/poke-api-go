@@ -6,7 +6,9 @@ import com.pokeapigo.core.module.pokemon.dto.response.PokemonResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
-public class PokemonMapper {
+import static com.pokeapigo.core.common.utli.constants.Constants.PRIVATE_CONSTRUCTOR_EXCEPTION_MESSAGE;
+
+public final class PokemonMapper {
 
     public static PokemonEntity toEntity(PokemonRequest pokemonRequest) {
         return new PokemonEntity(
@@ -36,32 +38,19 @@ public class PokemonMapper {
 
     public static Page<PokemonResponse> toPagedPokemonResponse(Page<PokemonEntity> pagedPokemons) {
         return new PageImpl<>(
-                pagedPokemons.getContent().stream()
-                        .map(pokemon ->
-                                new PokemonResponse(
-                                        pokemon.getId(),
-                                        pokemon.getPokedexId(),
-                                        pokemon.getGenerationId(),
-                                        pokemon.getName(),
-                                        pokemon.getVariant(),
-                                        pokemon.getPokemonTypes(),
-                                        pokemon.getRarity(),
-                                        pokemon.getAvailability(),
-                                        pokemon.getVisible())
-                        ).toList())
-                ;
-    }
-
-    public static PokemonEntity updatePokemonEntityData(PokemonEntity pokemon, PokemonRequest request) {
-        pokemon.setPokedexId(request.pokedexId());
-        pokemon.setGenerationId(request.generationId());
-        pokemon.setName(request.name());
-        pokemon.setVariant(request.variant());
-        pokemon.setPokemonTypes(request.pokemonTypes());
-        pokemon.setRarity(request.rarity());
-        pokemon.setAvailability(request.availability());
-
-        return pokemon;
+                pagedPokemons.getContent().stream().map(pokemon ->
+                        new PokemonResponse(
+                                pokemon.getId(),
+                                pokemon.getPokedexId(),
+                                pokemon.getGenerationId(),
+                                pokemon.getName(),
+                                pokemon.getVariant(),
+                                pokemon.getPokemonTypes(),
+                                pokemon.getRarity(),
+                                pokemon.getAvailability(),
+                                pokemon.getVisible())
+                ).toList()
+        );
     }
 
     private PokemonMapper() {

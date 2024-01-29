@@ -2,6 +2,7 @@ package com.pokeapigo.core.module.trainer.impl;
 
 import com.pokeapigo.core.module.trainer.TrainerRepository;
 import com.pokeapigo.core.module.trainer.TrainerService;
+import jakarta.validation.Validator;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.context.MessageSource;
 
@@ -13,7 +14,7 @@ import static org.mockito.Mockito.spy;
 class TrainerServiceImplTest {
 
     final TrainerRepository trainerRepository = mock(TrainerRepository.class);
-
+    final Validator validator = spy(Validator.class);
     final MessageSource messageSource = spy(MessageSource.class);
 
     final Locale defaultLocale = Locale.getDefault();
@@ -22,7 +23,7 @@ class TrainerServiceImplTest {
 
     @BeforeEach
     void setup() {
-        systemUnderTest = new TrainerServiceImpl(trainerRepository, messageSource);
+        systemUnderTest = new TrainerServiceImpl(trainerRepository, validator, messageSource);
     }
 
 

@@ -1,7 +1,5 @@
 package com.pokeapigo.core.module.pokemon.impl;
 
-import com.pokeapigo.core.exception.exceptions.InvalidColumnNameException;
-import com.pokeapigo.core.exception.exceptions.OtherDataAccessApiException;
 import com.pokeapigo.core.module.pokemon.PokemonEntity;
 import com.pokeapigo.core.module.pokemon.PokemonRepository;
 import com.pokeapigo.core.module.pokemon.PokemonService;
@@ -13,17 +11,15 @@ import com.pokeapigo.core.module.pokemon.exception.PokemonAlreadyExistsException
 import com.pokeapigo.core.module.pokemon.exception.PokemonNotFoundException;
 import com.pokeapigo.core.module.pokemon.util.PokemonConstants;
 import com.pokeapigo.core.module.pokemon.util.PokemonMapper;
+import com.pokeapigo.core.module.pokemon.util.PokemonUtils;
 import com.pokeapigo.core.module.pokemon.util.enums.PokemonType;
 import jakarta.validation.Validator;
-import org.hibernate.query.SemanticException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,13 +27,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import static com.pokeapigo.core.common.utli.PokeApiUtils.*;
+
 @Service
 public class PokemonServiceImpl implements PokemonService {
 
     private final PokemonRepository pokemonRepository;
     private final Validator validator;
     private final MessageSource messageSource;
-    Logger logger = LoggerFactory.getLogger(PokemonServiceImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(PokemonServiceImpl.class);
 
     public PokemonServiceImpl(PokemonRepository pokemonRepository, Validator validator, MessageSource messageSource) {
         this.pokemonRepository = pokemonRepository;
@@ -64,7 +62,9 @@ public class PokemonServiceImpl implements PokemonService {
 
     @Override
     public PokemonResponse getPokemon(UUID pokemonUUID, Locale locale) {
-        PokemonEntity pokemon = getPokemonByUUID(pokemonUUID, locale);
+        locale = setEngLocaleIfNull(locale);
+
+        final PokemonEntity pokemon = getPokemonByUUID(pokemonUUID, locale);
 
         return PokemonMapper.toPokemonResponse(pokemon);
     }
@@ -85,8 +85,8 @@ public class PokemonServiceImpl implements PokemonService {
     public Page<PokemonResponse> getPagedPokemons(Pageable pageable, String search, Integer genId, PokemonType typeOne,
                                                   PokemonType typeTwo, Locale locale) {
         locale = setEngLocaleIfNull(locale);
-        pageable = ensureMaxPageSize(pageable);
-        pageable = applyDefaultSortingIfNone(pageable);
+        pageable = ensureMaxPageSize(pageable, PokemonConstants.POKEMON_PAGE_MAX);
+        pageable = applyDefaultSortingIfNone(pageable, "pokedexId", "name", "variant");
 
         Page<PokemonEntity> pokemonPage = returnPagedPokemons(pageable, search, genId, typeOne, typeTwo, locale);
 
@@ -103,7 +103,7 @@ public class PokemonServiceImpl implements PokemonService {
 
         PokemonEntity pokemon = getPokemonByUUID(pokemonUUID, locale);
         final PokemonEntity result = pokemonRepository.save(
-                PokemonMapper.updatePokemonEntityData(pokemon, request)
+                PokemonUtils.updatePokemonEntityData(pokemon, request)
         );
 
         return PokemonMapper.toPokemonResponse(result);
@@ -123,7 +123,7 @@ public class PokemonServiceImpl implements PokemonService {
         if (visibilityChanged) {
             pokemon.setVisible(requestedVisibility);
 
-            logger.info("Visibility of Pokemon with ID: {} changed to: {}",
+            logger.info("Visibility of Pokemon with UUID: {} changed to: {}",
                     pokemonUUID, requestedVisibility);
         }
 
@@ -136,7 +136,10 @@ public class PokemonServiceImpl implements PokemonService {
         locale = setEngLocaleIfNull(locale);
         PokemonEntity pokemon = getPokemonByUUID(pokemonUUID, locale);
 
+        logger.info("About to delete Pokemon with UUID: {}, ID: {}, Name: {} and Variant: {}",
+                pokemonUUID, pokemon.getPokedexId(), pokemon.getName(), pokemon.getVariant());
         pokemonRepository.delete(pokemon);
+        logger.info("Deletion of Pokemon UUID: {} successful", pokemonUUID);
 
         final String deleteMessage = messageSource.getMessage(
                 "pokemon.deletedSuccess", new Object[]{pokemonUUID}, locale
@@ -150,22 +153,8 @@ public class PokemonServiceImpl implements PokemonService {
         try {
             return pokemonRepository.findVisibleFilteredAndPaged(pageable, search, genId, typeOne, typeTwo);
         } catch (InvalidDataAccessApiUsageException e) {
-            throw getCorrectSortingException(e, locale);
+            throw getCorrectSortingException(e, locale, messageSource);
         }
-    }
-
-    private RuntimeException getCorrectSortingException(InvalidDataAccessApiUsageException e, Locale locale) {
-        if (e.getRootCause() instanceof SemanticException) {
-            final String message = messageSource.getMessage(
-                    "global.sort.invalidColumnName", null, locale
-            );
-            return new InvalidColumnNameException(message);
-        }
-
-        final String message = messageSource.getMessage(
-                "global.sort.invalidData", new Object[]{e.getMessage()}, locale
-        );
-        return new OtherDataAccessApiException(message, e);
     }
 
     private void throwIfPokemonAlreadyExists(UUID pokemonUUID, PokemonRequest pokemonRequest, Locale locale) {
@@ -193,38 +182,4 @@ public class PokemonServiceImpl implements PokemonService {
                 ));
     }
 
-    private Locale setEngLocaleIfNull(Locale locale) {
-        if (locale == null) {
-            return Locale.ENGLISH;
-        }
-        return locale;
-    }
-
-    private Pageable ensureMaxPageSize(Pageable pageable) {
-        if (pageable.getPageSize() <= PokemonConstants.POKEMON_PAGE_MAX) {
-            return pageable;
-        }
-
-        logger.warn("Tried to get page of {} Pokemons", pageable.getPageSize());
-        pageable = PageRequest.of(
-                pageable.getPageNumber(),
-                PokemonConstants.POKEMON_PAGE_MAX,
-                pageable.getSortOr(Sort.unsorted())
-        );
-        logger.info("Ensured max page size");
-
-        return pageable;
-    }
-
-    private Pageable applyDefaultSortingIfNone(Pageable pageable) {
-        Sort sort = pageable.getSortOr(
-                Sort.by(Sort.Direction.ASC, "pokedexId", "name", "variant")
-        );
-
-        return PageRequest.of(
-                pageable.getPageNumber(),
-                pageable.getPageSize(),
-                sort
-        );
-    }
 }

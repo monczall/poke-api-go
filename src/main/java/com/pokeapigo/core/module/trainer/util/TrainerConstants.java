@@ -7,6 +7,7 @@ public final class TrainerConstants {
     public static final Integer TRAINER_MAX_LEVEL = 50;
     public static final Integer FRIEND_CODE_LENGTH = 12;
     public static final Integer FRIEND_CODE_GEN_TRIES = 5;
+    public static final Integer TRAINER_PAGE_MAX = 100;
 
     private TrainerConstants() {
         throw new UnsupportedOperationException(PRIVATE_CONSTRUCTOR_EXCEPTION_MESSAGE);

@@ -1,7 +1,7 @@
 package com.pokeapigo.core.module.trainer.util;
 
 import com.pokeapigo.core.module.trainer.TrainerRepository;
-import com.pokeapigo.core.module.trainer.exception.FailedToGenerateFriendCodeInReasonableAmountOfTries;
+import com.pokeapigo.core.module.trainer.exception.FailedToGenerateFriendCodeException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -60,7 +60,7 @@ class TrainerUtilsTest {
         when(trainerRepository.existsByFriendCode(anyString())).thenReturn(true);
 
         // when then
-        assertThrows(FailedToGenerateFriendCodeInReasonableAmountOfTries.class, () ->
+        assertThrows(FailedToGenerateFriendCodeException.class, () ->
                 systemUnderTest.generateFriendCode(defaultLocale)
         );
     }

@@ -65,7 +65,7 @@ class ChangePokemonVisibilityTest extends TestBaseConfiguration {
                 .statusCode(HttpStatus.NOT_FOUND.value())
                 .body("statusCode", is(404))
                 .body("statusText", is(HttpStatus.NOT_FOUND.getReasonPhrase()))
-                .body("message", Matchers.is("Pokémon with ID: %s not found".formatted(PokemonTestConstants.NON_EXISTENT_POKEMON_UUID_STRING)));
+                .body("message", Matchers.is("Pokémon with UUID: %s not found".formatted(PokemonTestConstants.NON_EXISTENT_POKEMON_UUID_STRING)));
     }
 
     private static List<String> changePokemonVisibilityProviderUnhappyPath() {

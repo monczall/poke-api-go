@@ -27,4 +27,5 @@ public interface PokemonService {
     PokemonResponse changePokemonVisibility(UUID pokemonUUID, PokemonVisibilityRequest request, Locale locale);
 
     PokemonDeleteResponse deletePokemon(UUID pokemonUUID, Locale locale);
+
 }
