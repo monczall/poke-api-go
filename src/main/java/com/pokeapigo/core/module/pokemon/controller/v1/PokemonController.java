@@ -1,4 +1,4 @@
-package com.pokeapigo.core.module.pokemon.controller;
+package com.pokeapigo.core.module.pokemon.controller.v1;
 
 import com.pokeapigo.core.module.pokemon.PokemonService;
 import com.pokeapigo.core.module.pokemon.dto.request.PokemonRequest;

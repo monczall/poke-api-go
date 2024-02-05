@@ -35,8 +35,10 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/actuator/**").permitAll()
-                        .requestMatchers(API_URI_AUTH + API_REGISTER, API_URI_AUTH + API_LOGIN).permitAll()
+                        .requestMatchers(API_URI_AUTH + API_REGISTER).permitAll()
+                        .requestMatchers(API_URI_AUTH + API_LOGIN).permitAll()
                         .requestMatchers(API_URI_V1 + "/**", "**").permitAll()
+                        .requestMatchers("/**", "**").permitAll()
                         .anyRequest()
                         .authenticated()
                 )

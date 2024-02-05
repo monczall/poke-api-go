@@ -16,6 +16,9 @@ public class RoleEntity {
     @Column(name = "NAME")
     private TrainerRole role;
 
+    public RoleEntity() {
+    }
+
     public RoleEntity(TrainerRole role) {
         this.role = role;
     }

@@ -1,4 +1,4 @@
-package com.pokeapigo.core.module.auth.controller;
+package com.pokeapigo.core.module.auth.controller.v1;
 
 import com.pokeapigo.core.module.auth.AuthenticationService;
 import com.pokeapigo.core.module.auth.dto.request.LoginRequest;

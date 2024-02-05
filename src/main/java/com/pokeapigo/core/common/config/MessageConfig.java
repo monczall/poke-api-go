@@ -17,8 +17,10 @@ class MessageConfig {
                 = new ReloadableResourceBundleMessageSource();
 
         messageSource.setBasenames(
+                "classpath:messages/auth",
                 "classpath:messages/global",
-                "classpath:messages/pokemon"
+                "classpath:messages/pokemon",
+                "classpath:messages/trainer"
         );
         messageSource.setDefaultLocale(Locale.ENGLISH);
         messageSource.setDefaultEncoding("UTF-8");

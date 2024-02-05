@@ -1,4 +1,4 @@
-package com.pokeapigo.core.module.trainer.controller;
+package com.pokeapigo.core.module.trainer.controller.v1;
 
 import com.pokeapigo.core.module.trainer.TrainerService;
 import com.pokeapigo.core.module.trainer.dto.request.TrainerRequest;

@@ -42,7 +42,7 @@ public class TrainerEntity implements UserDetails {
     @Column(name = "PASSWORD")
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "TRA_ROLE_MEMBERS",
             joinColumns = @JoinColumn(name = "TRAINERID"),
             inverseJoinColumns = @JoinColumn(name = "ROLEID"))
@@ -54,6 +54,9 @@ public class TrainerEntity implements UserDetails {
         return roles.stream().map(role ->
                 new SimpleGrantedAuthority(role.getRole().name())
         ).toList();
+    }
+
+    public TrainerEntity() {
     }
 
     @Override
@@ -128,6 +131,10 @@ public class TrainerEntity implements UserDetails {
 
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
+    }
+
+    public void setRoles(Set<RoleEntity> roles) {
+        this.roles = roles;
     }
 
     private TrainerEntity(TrainerEntityBuilder builder) {

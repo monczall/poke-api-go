@@ -1,6 +1,7 @@
 package com.pokeapigo.core.module.auth.exception.handler;
 
 import com.pokeapigo.core.exception.dto.BasicErrorDto;
+import com.pokeapigo.core.module.auth.exception.EmailOrNameAlreadyInUseException;
 import com.pokeapigo.core.module.auth.exception.EmailOrPasswordMismatch;
 import com.pokeapigo.core.module.auth.exception.PasswordsDoNotMatchException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,7 +17,8 @@ public class AuthExceptionHandler {
 
     @ExceptionHandler({
             PasswordsDoNotMatchException.class,
-            EmailOrPasswordMismatch.class
+            EmailOrPasswordMismatch.class,
+            EmailOrNameAlreadyInUseException.class
     })
     ResponseEntity<BasicErrorDto> badRequestExceptions(RuntimeException ex, HttpServletRequest request) {
         return getBasicErrorDtoResponse(ex, request, HttpStatus.BAD_REQUEST);

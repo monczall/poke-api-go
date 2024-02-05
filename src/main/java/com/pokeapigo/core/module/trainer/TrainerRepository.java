@@ -12,6 +12,21 @@ import java.util.UUID;
 @Repository
 public interface TrainerRepository extends JpaRepository<TrainerEntity, UUID> {
 
+    @Query("""
+            SELECT
+                CASE WHEN COUNT(t) > 0
+                    THEN true
+                    ELSE false
+                END
+            FROM TrainerEntity t
+            WHERE (
+                lower(t.email) = lower(:email)
+                OR
+                lower(t.name) = lower(:name)
+            )
+            """)
+    boolean existsEmailOrName(String email, String name);
+
     Optional<TrainerEntity> findByEmail(String email);
 
     @Query("""
@@ -21,7 +36,7 @@ public interface TrainerRepository extends JpaRepository<TrainerEntity, UUID> {
                 :search IS null
                 OR
                 CAST(t.name AS string) = :search
-            )            
+            )
             """)
     Page<TrainerEntity> findBySearch(Pageable pageable, String search);
 

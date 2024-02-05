@@ -11,6 +11,7 @@ import com.pokeapigo.core.module.trainer.exception.TrainerNotFoundException;
 import com.pokeapigo.core.module.trainer.util.TrainerConstants;
 import com.pokeapigo.core.module.trainer.util.TrainerMapper;
 import com.pokeapigo.core.module.trainer.util.TrainerUtils;
+import com.pokeapigo.core.role.RoleEntity;
 import com.pokeapigo.core.role.util.enums.TrainerRole;
 import jakarta.validation.Validator;
 import org.slf4j.Logger;
@@ -26,7 +27,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static com.pokeapigo.core.common.utli.PokeApiUtils.*;
 
@@ -86,6 +89,8 @@ public class TrainerServiceImpl implements TrainerService {
     public FullTrainerResponse updateTrainerData(UUID trainerUUID, TrainerRequest request, Locale locale) {
         validator.validate(request);
         locale = setEngLocaleIfNull(locale);
+        logger.info("Started update of trainer with UUID: {}. Data: [Name: {}, Level: {}, Team: {}, avatarUrl: {}]",
+                trainerUUID, request.name(), request.level(), request.team(), request.avatarUrl());
 
         throwIfTrainerAlreadyExists(trainerUUID, request, locale);
 
@@ -94,6 +99,7 @@ public class TrainerServiceImpl implements TrainerService {
                 TrainerUtils.updateTrainerEntityData(trainer, request)
         );
 
+        logger.info("Finished update of trainer with UUID: {}", trainerUUID);
         return TrainerMapper.toFullTrainerResponse(result);
     }
 
@@ -101,9 +107,16 @@ public class TrainerServiceImpl implements TrainerService {
     @Transactional
     public FullTrainerResponse updateTrainerRoles(UUID trainerUUID, List<TrainerRole> trainerRoles, Locale locale) {
         locale = setEngLocaleIfNull(locale);
+        TrainerEntity trainer = getTrainerByUUID(trainerUUID, locale);
+        logger.info("Started update of trainer role with UUID: {}. New roles: {}", trainerUUID, trainerRoles);
 
+        Set<RoleEntity> roles = trainerRoles.stream()
+                .map(RoleEntity::new)
+                .collect(Collectors.toSet());
+        trainer.setRoles(roles);
 
-        return null;
+        logger.info("Finished update of trainer with UUID: {}", trainerUUID);
+        return TrainerMapper.toFullTrainerResponse(null);
     }
 
     @Override

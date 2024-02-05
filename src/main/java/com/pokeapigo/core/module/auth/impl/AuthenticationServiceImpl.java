@@ -5,6 +5,7 @@ import com.pokeapigo.core.module.auth.JwtService;
 import com.pokeapigo.core.module.auth.dto.request.LoginRequest;
 import com.pokeapigo.core.module.auth.dto.request.RegisterRequest;
 import com.pokeapigo.core.module.auth.dto.response.JwtAuthenticationResponse;
+import com.pokeapigo.core.module.auth.exception.EmailOrNameAlreadyInUseException;
 import com.pokeapigo.core.module.auth.exception.EmailOrPasswordMismatch;
 import com.pokeapigo.core.module.auth.exception.PasswordsDoNotMatchException;
 import com.pokeapigo.core.module.trainer.TrainerEntity;
@@ -20,12 +21,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Locale;
 import java.util.Set;
+
+import static com.pokeapigo.core.common.utli.PokeApiUtils.setEngLocaleIfNull;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -56,28 +59,41 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
+    @Transactional
     public JwtAuthenticationResponse register(RegisterRequest request, Locale locale) {
         logger.info("Received register request for user: {}", request.email());
         validator.validate(request);
-        boolean passwordsMatch = checkIfPasswordsMatch(request.password(), request.confirmPassword());
+        locale = setEngLocaleIfNull(locale);
 
+        String email = request.email();
+        String name = request.name();
+
+        boolean passwordsMatch = checkIfPasswordsMatch(request.password(), request.confirmPassword());
         if (!passwordsMatch) {
             throw new PasswordsDoNotMatchException(messageSource.getMessage(
                     "auth.passwordsDoNotMatch", null, locale
             ));
         }
-        logger.info("Proceeding with register request for user: {}", request.email());
+        logger.info("Passwords matched. Proceeding with register request for user: {}", email);
 
-        final UserDetails userDetails = new TrainerEntity.TrainerEntityBuilder()
-                .setName(request.name())
+        if (trainerRepository.existsEmailOrName(email, name)) {
+            throw new EmailOrNameAlreadyInUseException(messageSource.getMessage(
+                    "auth.emailOrNameAlreadyInUse", null, locale
+            ));
+        }
+
+        final TrainerEntity trainerEntity = new TrainerEntity.TrainerEntityBuilder()
+                .setName(name)
                 .setLevel(1)
                 .setTeam(TrainerTeam.NONE)
                 .setFriendCode(trainerUtils.generateFriendCode(locale))
-                .setEmail(request.email())
+                .setEmail(email)
                 .setPassword(passwordEncoder.encode(request.password()))
                 .setRoles(Set.of(new RoleEntity(TrainerRole.USER)))
                 .build();
-        final String jwt = jwtService.generateToken(userDetails);
+        trainerRepository.save(trainerEntity);
+        final String jwt = jwtService.generateToken(trainerEntity);
+
         return new JwtAuthenticationResponse(jwt);
     }
 
@@ -87,10 +103,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.email(), request.password())
         );
+        final Locale finalLocale = setEngLocaleIfNull(locale);
 
-        final UserDetails userDetails = trainerRepository.findByEmail(request.email())
+        final TrainerEntity userDetails = trainerRepository.findByEmail(request.email())
                 .orElseThrow(() -> new EmailOrPasswordMismatch(messageSource.getMessage(
-                        "auth.emailOrPasswordMismatch", null, locale
+                        "auth.emailOrPasswordMismatch", null, finalLocale
                 )));
         final String jwt = jwtService.generateToken(userDetails);
         return new JwtAuthenticationResponse(jwt);
