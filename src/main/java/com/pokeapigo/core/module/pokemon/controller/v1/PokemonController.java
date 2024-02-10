@@ -20,11 +20,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-import static com.pokeapigo.core.common.utli.constants.ApiConstants.API_POKEMONS;
-import static com.pokeapigo.core.common.utli.constants.ApiConstants.API_URI_V1;
+import static com.pokeapigo.core.common.utli.constants.ApiConstants.*;
 
 @RestController
-@RequestMapping(API_URI_V1 + API_POKEMONS)
+@RequestMapping(API_URI_V1 + URI_POKEMONS)
 @Tag(name = "Pokemon Controller", description = "Controller used to perform operations on Pokemons")
 class PokemonController {
 
@@ -58,7 +57,7 @@ class PokemonController {
                 .body(pokemonResponse);
     }
 
-    @GetMapping("/secured")
+    @GetMapping(URI_SECURED)
     ResponseEntity<List<PokemonResponse>> getAllPokemons() {
         final List<PokemonResponse> listOfAllPokemons = pokemonService.getAllPokemons();
 

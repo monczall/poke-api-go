@@ -4,7 +4,6 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.servers.Server;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.context.annotation.Bean;
@@ -16,12 +15,8 @@ public class OpenApiConfig {
     @Value("${server.port}")
     int portNumber;
 
-    @Autowired
-    private BuildProperties buildProperties;
-
     @Bean
-    public OpenAPI openApiInformation() {
-        System.out.println(buildProperties);
+    public OpenAPI openApiInformation(BuildProperties buildProperties) {
         Server localServer = new Server()
                 .url("http://localhost:" + portNumber)
                 .description(buildProperties.getArtifact());

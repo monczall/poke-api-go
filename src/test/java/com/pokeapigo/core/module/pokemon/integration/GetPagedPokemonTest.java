@@ -14,7 +14,7 @@ import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 
-import static com.pokeapigo.core.common.utli.constants.ApiConstants.API_POKEMONS;
+import static com.pokeapigo.core.common.utli.constants.ApiConstants.URI_POKEMONS;
 import static com.pokeapigo.core.common.utli.constants.ApiConstants.API_URI_V1;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
@@ -36,7 +36,7 @@ class GetPagedPokemonTest extends TestBaseConfiguration {
                 .contentType(ContentType.JSON)
 
                 .when()
-                .get(API_URI_V1 + API_POKEMONS +
+                .get(API_URI_V1 + URI_POKEMONS +
                                 "?search={search}&genId={genId}&typeOne={typeOne}&typeTwo={typeTwo}&page={page}&size={size}&sort={sort}",
                         search,
                         genId,
@@ -81,7 +81,7 @@ class GetPagedPokemonTest extends TestBaseConfiguration {
                 .contentType(ContentType.JSON)
 
                 .when()
-                .get(API_URI_V1 + API_POKEMONS + "?sort={sort}", sortValue)
+                .get(API_URI_V1 + URI_POKEMONS + "?sort={sort}", sortValue)
 
                 .then()
                 .log().ifValidationFails()

@@ -12,7 +12,7 @@ import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 
-import static com.pokeapigo.core.common.utli.constants.ApiConstants.API_POKEMONS;
+import static com.pokeapigo.core.common.utli.constants.ApiConstants.URI_POKEMONS;
 import static com.pokeapigo.core.common.utli.constants.ApiConstants.API_URI_V1;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
@@ -33,7 +33,7 @@ class UpdatePokemonTest extends TestBaseConfiguration {
                 .body(json)
 
                 .when()
-                .put(API_URI_V1 + API_POKEMONS + "/{pokemonId}", pokemonUUID)
+                .put(API_URI_V1 + URI_POKEMONS + "/{pokemonId}", pokemonUUID)
 
                 .then()
                 .log().ifValidationFails()
@@ -81,7 +81,7 @@ class UpdatePokemonTest extends TestBaseConfiguration {
                 .body(json)
 
                 .when()
-                .put(API_URI_V1 + API_POKEMONS + "/{pokemonId}", pokemonUUID)
+                .put(API_URI_V1 + URI_POKEMONS + "/{pokemonId}", pokemonUUID)
 
                 .then()
                 .log().ifValidationFails()

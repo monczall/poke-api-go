@@ -16,7 +16,7 @@ import java.util.Locale;
 import static com.pokeapigo.core.common.utli.constants.ApiConstants.*;
 
 @RestController
-@RequestMapping(API_URI_V1 + API_AUTH)
+@RequestMapping(API_URI_V1 + URI_AUTH)
 @Tag(name = "Authentication Controller", description = "Controller to authenticate user in the system")
 public class AuthenticationController {
 
@@ -26,7 +26,7 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
     }
 
-    @PostMapping(API_REGISTER)
+    @PostMapping(URI_REGISTER)
     public ResponseEntity<JwtAuthenticationResponse> register(
             @RequestHeader(value = HttpHeaders.ACCEPT_LANGUAGE, required = false) Locale locale,
             @Valid @RequestBody RegisterRequest request
@@ -38,7 +38,7 @@ public class AuthenticationController {
                 .body(jwtAuthenticationResponse);
     }
 
-    @PostMapping(API_LOGIN)
+    @PostMapping(URI_LOGIN)
     public ResponseEntity<JwtAuthenticationResponse> login(
             @RequestHeader(value = HttpHeaders.ACCEPT_LANGUAGE, required = false) Locale locale,
             @Valid @RequestBody LoginRequest request

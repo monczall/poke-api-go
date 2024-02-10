@@ -19,11 +19,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-import static com.pokeapigo.core.common.utli.constants.ApiConstants.API_TRAINERS;
-import static com.pokeapigo.core.common.utli.constants.ApiConstants.API_URI_V1;
+import static com.pokeapigo.core.common.utli.constants.ApiConstants.*;
 
 @RestController
-@RequestMapping(API_URI_V1 + API_TRAINERS)
+@RequestMapping(API_URI_V1 + URI_TRAINERS)
 @Tag(name = "Trainer Controller", description = "Controller used to perform operations on Trainers")
 public class TrainerController {
 
@@ -45,7 +44,7 @@ public class TrainerController {
                 .body(trainerResponse);
     }
 
-    @GetMapping("/secured")
+    @GetMapping(URI_SECURED)
     ResponseEntity<List<FullTrainerResponse>> getAllTrainers() {
         final List<FullTrainerResponse> listOfAllTrainers = trainerService.getAllTrainers();
 

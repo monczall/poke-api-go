@@ -13,7 +13,7 @@ import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 
-import static com.pokeapigo.core.common.utli.constants.ApiConstants.API_POKEMONS;
+import static com.pokeapigo.core.common.utli.constants.ApiConstants.URI_POKEMONS;
 import static com.pokeapigo.core.common.utli.constants.ApiConstants.API_URI_V1;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
@@ -31,7 +31,7 @@ class ChangePokemonVisibilityTest extends TestBaseConfiguration {
                 .body(changeVisibilityJson)
 
                 .when()
-                .patch(API_URI_V1 + API_POKEMONS + "/{$pokemonId}/visibility", pokemonUUID)
+                .patch(API_URI_V1 + URI_POKEMONS + "/{$pokemonId}/visibility", pokemonUUID)
 
                 .then()
                 .log().ifValidationFails()
@@ -58,7 +58,7 @@ class ChangePokemonVisibilityTest extends TestBaseConfiguration {
                 .body(changeVisibilityJson)
 
                 .when()
-                .patch(API_URI_V1 + API_POKEMONS + "/{$pokemonId}/visibility", PokemonTestConstants.NON_EXISTENT_POKEMON_UUID_STRING)
+                .patch(API_URI_V1 + URI_POKEMONS + "/{$pokemonId}/visibility", PokemonTestConstants.NON_EXISTENT_POKEMON_UUID_STRING)
 
                 .then()
                 .log().ifValidationFails()
