@@ -1,5 +1,6 @@
 package com.pokeapigo.core.exception.handler;
 
+import com.pokeapigo.core.exception.CSVParserException;
 import com.pokeapigo.core.exception.InvalidColumnNameException;
 import com.pokeapigo.core.exception.OtherDataAccessApiException;
 import com.pokeapigo.core.exception.dto.BasicErrorDto;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -27,7 +29,9 @@ class GeneralExceptionHandler {
             HttpMessageNotReadableException.class,
             InvalidColumnNameException.class,
             OtherDataAccessApiException.class,
-            MethodArgumentTypeMismatchException.class
+            MethodArgumentTypeMismatchException.class,
+            CSVParserException.class,
+            MaxUploadSizeExceededException.class
     })
     ResponseEntity<BasicErrorDto> generalBadRequestException(RuntimeException e, HttpServletRequest request) {
         return getBasicErrorDtoResponse(e, request, BAD_REQUEST);

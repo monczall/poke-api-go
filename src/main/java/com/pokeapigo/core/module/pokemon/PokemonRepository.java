@@ -5,8 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface PokemonRepository extends JpaRepository<PokemonEntity, UUID> {
@@ -60,6 +62,9 @@ public interface PokemonRepository extends JpaRepository<PokemonEntity, UUID> {
     Page<PokemonEntity> findVisibleFilteredAndPaged(Pageable pageable, String search, Integer genId,
                                                     PokemonType typeOne, PokemonType typeTwo);
 
+
+    Optional<PokemonEntity> findByPokedexIdAndNameAndVariant(Integer pokedexId, String name, String variant);
+
     @Query("""
             SELECT
                 CASE WHEN COUNT(p) > 0
@@ -89,4 +94,5 @@ public interface PokemonRepository extends JpaRepository<PokemonEntity, UUID> {
             )
             """)
     boolean pokemonExists(UUID pokemonUUID, Integer pokedexId, String name, String variant);
+
 }

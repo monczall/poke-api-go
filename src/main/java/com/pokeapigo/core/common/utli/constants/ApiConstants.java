@@ -12,6 +12,7 @@ public final class ApiConstants {
     public static final String URI_LOGIN = "/login";
     public static final String URI_POKEMONS = "/pokemons";
     public static final String URI_TRAINERS = "/trainers";
+    public static final String URI_CSV = "/csv";
 
     private ApiConstants() {
         throw new UnsupportedOperationException(PRIVATE_CONSTRUCTOR_EXCEPTION_MESSAGE);
