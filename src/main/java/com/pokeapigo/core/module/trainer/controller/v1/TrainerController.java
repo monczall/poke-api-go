@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-import static com.pokeapigo.core.common.utli.constants.ApiConstants.*;
+import static com.pokeapigo.core.common.util.constants.ApiConstants.*;
 
 @RestController
 @RequestMapping(API_URI_V1 + URI_TRAINERS)
@@ -92,6 +92,30 @@ public class TrainerController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(updatedTrainer);
+    }
+
+    @PatchMapping("/{trainerUUID}/disable")
+    ResponseEntity<Boolean> deactivateTrainer(
+            @RequestHeader(value = HttpHeaders.ACCEPT_LANGUAGE, required = false) Locale locale,
+            @PathVariable UUID trainerUUID
+    ) {
+        trainerService.disableTrainer(trainerUUID, locale);
+
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
+
+    @PatchMapping("/{trainerUUID}/enable")
+    ResponseEntity<Boolean> activateTrainer(
+            @RequestHeader(value = HttpHeaders.ACCEPT_LANGUAGE, required = false) Locale locale,
+            @PathVariable UUID trainerUUID
+    ) {
+        trainerService.enableTrainer(trainerUUID, locale);
+
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
     }
 
     @DeleteMapping("/{trainerUUID}")

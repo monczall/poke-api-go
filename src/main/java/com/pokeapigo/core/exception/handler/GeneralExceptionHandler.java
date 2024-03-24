@@ -19,7 +19,7 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.pokeapigo.core.exception.GeneralExceptionResponseFactory.getBasicErrorDtoResponse;
+import static com.pokeapigo.core.exception.util.GeneralExceptionResponseFactory.getBasicErrorDtoResponse;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @ControllerAdvice

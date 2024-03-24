@@ -4,7 +4,6 @@ import com.pokeapigo.core.module.pokemon.PokemonEntity;
 import com.pokeapigo.core.module.pokemon.PokemonRepository;
 import com.pokeapigo.core.module.pokemon.PokemonService;
 import com.pokeapigo.core.module.pokemon.dto.request.PokemonRequest;
-import com.pokeapigo.core.module.pokemon.dto.request.PokemonVisibilityRequest;
 import com.pokeapigo.core.module.pokemon.dto.response.PokemonDeleteResponse;
 import com.pokeapigo.core.module.pokemon.dto.response.PokemonResponse;
 import com.pokeapigo.core.module.pokemon.exception.PokemonAlreadyExistsException;
@@ -27,7 +26,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-import static com.pokeapigo.core.common.utli.PokeApiUtils.*;
+import static com.pokeapigo.core.common.util.PokeApiUtils.*;
 
 @Service
 public class PokemonServiceImpl implements PokemonService {
@@ -74,7 +73,7 @@ public class PokemonServiceImpl implements PokemonService {
         logger.warn("Called method to return all pokemons from the database!");
 
         final List<PokemonEntity> pokemonList = pokemonRepository
-                .findAllVisibleByOrder();
+                .findAllValidByOrder();
 
         return pokemonList.stream()
                 .map(PokemonMapper::toPokemonResponse)
@@ -88,7 +87,7 @@ public class PokemonServiceImpl implements PokemonService {
         pageable = ensureMaxPageSize(pageable, PokemonConstants.POKEMON_PAGE_MAX);
         pageable = applyDefaultSortingIfNone(pageable, "pokedexId", "name", "variant");
 
-        Page<PokemonEntity> pokemonPage = returnPagedPokemons(pageable, search, genId, typeOne, typeTwo, locale);
+        final Page<PokemonEntity> pokemonPage = returnPagedPokemons(pageable, search, genId, typeOne, typeTwo, locale);
 
         return PokemonMapper.toPagedPokemonResponse(pokemonPage);
     }
@@ -111,23 +110,38 @@ public class PokemonServiceImpl implements PokemonService {
 
     @Override
     @Transactional
-    public PokemonResponse changePokemonVisibility(UUID pokemonUUID, PokemonVisibilityRequest request, Locale locale) {
-        validator.validate(request);
+    public void disablePokemon(UUID pokemonUUID, Locale locale) {
         locale = setEngLocaleIfNull(locale);
-
-        final Boolean requestedVisibility = request.visible();
-
         PokemonEntity pokemon = getPokemonByUUID(pokemonUUID, locale);
+        final String name = pokemon.getName();
+        final String variant = pokemon.getVariant();
 
-        final boolean visibilityChanged = !pokemon.getVisible().equals(requestedVisibility);
-        if (visibilityChanged) {
-            pokemon.setVisible(requestedVisibility);
-
-            logger.info("Visibility of Pokemon with UUID: {} changed to: {}",
-                    pokemonUUID, requestedVisibility);
+        logger.info("About to disable Pokemon with UUID: {}, Name: {}, Variant: {}", pokemonUUID, name, variant);
+        if (Boolean.FALSE.equals(pokemon.getValidIndicator())) {
+            logger.info("Pokemon with UUID: {}, Name: {}, Variant: {} is already disabled. No action taken.",
+                    pokemonUUID, name, variant);
+            return;
         }
+        pokemon.setValidIndicator(false);
+        logger.info("Pokemon {} - {} disabled", name, variant);
+    }
 
-        return PokemonMapper.toPokemonResponse(pokemonRepository.save(pokemon));
+    @Override
+    @Transactional
+    public void enablePokemon(UUID pokemonUUID, Locale locale) {
+        locale = setEngLocaleIfNull(locale);
+        PokemonEntity pokemon = getPokemonByUUID(pokemonUUID, locale);
+        final String name = pokemon.getName();
+        final String variant = pokemon.getVariant();
+
+        logger.info("About to enable Pokemon with UUID: {}, Name: {}, Variant: {}", pokemonUUID, name, variant);
+        if (Boolean.TRUE.equals(pokemon.getValidIndicator())) {
+            logger.info("Pokemon with UUID: {}, Name: {}, Variant: {} is already enabled. No action taken.",
+                    pokemonUUID, name, variant);
+            return;
+        }
+        pokemon.setValidIndicator(true);
+        logger.info("Pokemon {} - {} enabled", name, variant);
     }
 
     @Override
@@ -151,7 +165,7 @@ public class PokemonServiceImpl implements PokemonService {
     private Page<PokemonEntity> returnPagedPokemons(Pageable pageable, String search, Integer genId, PokemonType typeOne,
                                                     PokemonType typeTwo, Locale locale) {
         try {
-            return pokemonRepository.findVisibleFilteredAndPaged(pageable, search, genId, typeOne, typeTwo);
+            return pokemonRepository.findValidFilteredAndPaged(pageable, search, genId, typeOne, typeTwo);
         } catch (InvalidDataAccessApiUsageException e) {
             throw getCorrectSortingException(e, locale, messageSource);
         }

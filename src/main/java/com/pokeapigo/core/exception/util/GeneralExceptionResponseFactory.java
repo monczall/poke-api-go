@@ -1,4 +1,4 @@
-package com.pokeapigo.core.exception;
+package com.pokeapigo.core.exception.util;
 
 import com.pokeapigo.core.exception.dto.BasicErrorDto;
 import jakarta.servlet.http.HttpServletRequest;

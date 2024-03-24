@@ -31,18 +31,20 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.pokeapigo.core.common.utli.PokeApiUtils.*;
+import static com.pokeapigo.core.common.util.PokeApiUtils.*;
 
 @Service
 public class TrainerServiceImpl implements TrainerService {
 
     private final TrainerRepository trainerRepository;
+    private final TrainerUtils trainerUtils;
     private final Validator validator;
     private final MessageSource messageSource;
     Logger logger = LoggerFactory.getLogger(TrainerServiceImpl.class);
 
-    public TrainerServiceImpl(TrainerRepository trainerRepository, Validator validator, MessageSource messageSource) {
+    public TrainerServiceImpl(TrainerRepository trainerRepository, TrainerUtils trainerUtils, Validator validator, MessageSource messageSource) {
         this.trainerRepository = trainerRepository;
+        this.trainerUtils = trainerUtils;
         this.validator = validator;
         this.messageSource = messageSource;
     }
@@ -79,7 +81,7 @@ public class TrainerServiceImpl implements TrainerService {
         pageable = ensureMaxPageSize(pageable, TrainerConstants.TRAINER_PAGE_MAX);
         pageable = applyDefaultSortingIfNone(pageable, "name");
 
-        Page<TrainerEntity> trainerPage = returnPagedTrainers(pageable, search, locale);
+        final Page<TrainerEntity> trainerPage = returnPagedTrainers(pageable, search, locale);
 
         return TrainerMapper.toPagedLimitedTrainerResponse(trainerPage);
     }
@@ -89,17 +91,16 @@ public class TrainerServiceImpl implements TrainerService {
     public FullTrainerResponse updateTrainerData(UUID trainerUUID, TrainerRequest request, Locale locale) {
         validator.validate(request);
         locale = setEngLocaleIfNull(locale);
+
         logger.info("Started update of trainer with UUID: {}. Data: [Name: {}, Level: {}, Team: {}, avatarUrl: {}]",
                 trainerUUID, request.name(), request.level(), request.team(), request.avatarUrl());
-
         throwIfTrainerAlreadyExists(trainerUUID, request, locale);
-
         TrainerEntity trainer = getTrainerByUUID(trainerUUID, locale);
         final TrainerEntity result = trainerRepository.save(
-                TrainerUtils.updateTrainerEntityData(trainer, request)
+                trainerUtils.updateTrainerEntityData(trainer, request, locale)
         );
-
         logger.info("Finished update of trainer with UUID: {}", trainerUUID);
+
         return TrainerMapper.toFullTrainerResponse(result);
     }
 
@@ -108,29 +109,64 @@ public class TrainerServiceImpl implements TrainerService {
     public FullTrainerResponse updateTrainerRoles(UUID trainerUUID, List<TrainerRole> trainerRoles, Locale locale) {
         locale = setEngLocaleIfNull(locale);
         TrainerEntity trainer = getTrainerByUUID(trainerUUID, locale);
-        logger.info("Started update of trainer role with UUID: {}. New roles: {}", trainerUUID, trainerRoles);
 
+        logger.info("Started update of trainer role with UUID: {}. New roles: {}", trainerUUID, trainerRoles);
         Set<RoleEntity> roles = trainerRoles.stream()
                 .map(RoleEntity::new)
                 .collect(Collectors.toSet());
         trainer.setRoles(roles);
-
         logger.info("Finished update of trainer with UUID: {}", trainerUUID);
+
         return TrainerMapper.toFullTrainerResponse(null);
     }
 
     @Override
     @Transactional
-    public Boolean deleteTrainer(UUID trainerUUID, Locale locale) {
+    public void disableTrainer(UUID trainerUUID, Locale locale) {
         locale = setEngLocaleIfNull(locale);
         TrainerEntity trainer = getTrainerByUUID(trainerUUID, locale);
+        final String maskedEmail = maskEmail(trainer.getUsername());
+        final String name = trainer.getName();
 
-        logger.info("About to delete Trainer with UUID: {}, Email: {}, Name: {}",
-                trainerUUID, trainer.getUsername(), trainer.getName());
+        logger.info("About to disable Trainer with UUID: {}, Email: {}, Name: {}", trainerUUID, maskedEmail, name);
+        if (!trainer.isEnabled()) {
+            logger.info("Trainer with UUID: {}, Email: {}, Name: {} is already disabled. No action taken.",
+                    trainerUUID, maskedEmail, name);
+            return;
+        }
+        trainer.setValidIndicator(false);
+        logger.info("Trainer {} - {} disabled", maskedEmail, name);
+    }
+
+    @Override
+    @Transactional
+    public void enableTrainer(UUID trainerUUID, Locale locale) {
+        locale = setEngLocaleIfNull(locale);
+        TrainerEntity trainer = getTrainerByUUID(trainerUUID, locale);
+        final String maskedEmail = maskEmail(trainer.getUsername());
+        final String name = trainer.getName();
+
+        logger.info("About to enable Trainer with UUID: {}, Email: {}, Name: {}", trainerUUID, maskedEmail, name);
+        if (trainer.isEnabled()) {
+            logger.info("Trainer with UUID: {}, Email: {}, Name: {} is already enabled. No action taken.",
+                    trainerUUID, maskedEmail, name);
+            return;
+        }
+        trainer.setValidIndicator(true);
+        logger.info("Trainer {} - {} enabled", maskedEmail, name);
+    }
+
+    @Override
+    @Transactional
+    public void deleteTrainer(UUID trainerUUID, Locale locale) {
+        locale = setEngLocaleIfNull(locale);
+        TrainerEntity trainer = getTrainerByUUID(trainerUUID, locale);
+        final String maskedEmail = maskEmail(trainer.getUsername());
+        final String name = trainer.getName();
+
+        logger.info("About to delete Trainer with UUID: {}, Email: {}, Name: {}", trainerUUID, maskedEmail, name);
         trainerRepository.delete(trainer);
-        logger.info("Deletion of Trainer UUID: {} successful", trainerUUID);
-
-        return true;
+        logger.info("Trainer {} - {} - {} deleted", trainerUUID, maskedEmail, name);
     }
 
     private Page<TrainerEntity> returnPagedTrainers(Pageable pageable, String search, Locale locale) {
@@ -150,8 +186,8 @@ public class TrainerServiceImpl implements TrainerService {
 
         if (trainerAlreadyExists) {
             throw new TrainerAlreadyExistsException(messageSource.getMessage(
-                    "trainer.alreadyExists", new Object[]{trainerUUID, requestedName}, locale)
-            );
+                    "trainer.alreadyExists", new Object[]{trainerUUID, requestedName}, locale
+            ));
         }
     }
 

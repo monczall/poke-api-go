@@ -1,6 +1,6 @@
 package com.pokeapigo.core.module.pokemon.util;
 
-import static com.pokeapigo.core.common.utli.constants.Constants.PRIVATE_CONSTRUCTOR_EXCEPTION_MESSAGE;
+import static com.pokeapigo.core.common.util.constants.Constants.PRIVATE_CONSTRUCTOR_EXCEPTION_MESSAGE;
 
 public final class PokemonConstants {
 

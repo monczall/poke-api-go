@@ -18,6 +18,7 @@ public class TrainerEntityFactory {
                 .setFriendCode("useruseruseruser")
                 .setEmail("user@mail.com")
                 .setPassword("$2a$10$o7kRRoeNaSAVUQhuhi8kiuvPBJXk4viGE18wmnGwnvB7vBGg9z.p6")
+                .setValid(true)
                 .setRoles(Set.of(new RoleEntity(TrainerRole.USER))
                 ).build();
     }
@@ -31,6 +32,7 @@ public class TrainerEntityFactory {
                 .setFriendCode("adminadminadmina")
                 .setEmail("admin@mail.com")
                 .setPassword("$2a$10$o7kRRoeNaSAVUQhuhi8kiuvPBJXk4viGE18wmnGwnvB7vBGg9z.p6")
+                .setValid(true)
                 .setRoles(Set.of(new RoleEntity(TrainerRole.USER), new RoleEntity(TrainerRole.ADMIN))
                 ).build();
     }

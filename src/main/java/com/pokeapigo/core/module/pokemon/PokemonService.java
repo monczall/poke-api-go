@@ -1,7 +1,6 @@
 package com.pokeapigo.core.module.pokemon;
 
 import com.pokeapigo.core.module.pokemon.dto.request.PokemonRequest;
-import com.pokeapigo.core.module.pokemon.dto.request.PokemonVisibilityRequest;
 import com.pokeapigo.core.module.pokemon.dto.response.PokemonDeleteResponse;
 import com.pokeapigo.core.module.pokemon.dto.response.PokemonResponse;
 import com.pokeapigo.core.module.pokemon.util.enums.PokemonType;
@@ -24,7 +23,9 @@ public interface PokemonService {
 
     PokemonResponse updatePokemonData(UUID pokemonUUID, PokemonRequest request, Locale locale);
 
-    PokemonResponse changePokemonVisibility(UUID pokemonUUID, PokemonVisibilityRequest request, Locale locale);
+    void disablePokemon(UUID pokemonUUID, Locale locale);
+
+    void enablePokemon(UUID pokemonUUID, Locale locale);
 
     PokemonDeleteResponse deletePokemon(UUID pokemonUUID, Locale locale);
 

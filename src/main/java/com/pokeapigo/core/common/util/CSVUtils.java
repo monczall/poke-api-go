@@ -1,4 +1,4 @@
-package com.pokeapigo.core.common.utli;
+package com.pokeapigo.core.common.util;
 
 import com.pokeapigo.core.exception.CSVParserException;
 import com.pokeapigo.core.module.pokemon.PokemonEntity;
@@ -20,16 +20,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static com.pokeapigo.core.common.utli.constants.Constants.CSV_EXPORT_FILE_NAME;
+import static com.pokeapigo.core.common.util.constants.Constants.CSV_EXPORT_FILE_NAME;
 
 public class CSVUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(CSVUtils.class);
 
+    private static final String CSV_EXTENSION = "text/csv";
+
     public static boolean isFormatCSV(MultipartFile file) {
-        return "text/csv".equals(file.getContentType());
+        return CSV_EXTENSION.equals(file.getContentType());
     }
 
+    /**
+     * Takes CSV file containing Pokemons and saves it to the database
+     *
+     * @param inputStream   CSV with Pokemons in it
+     * @param messageSource configured for messages
+     * @param locale        used to return localized messages
+     * @return
+     */
     public static List<PokemonEntity> csvToPokemons(
             InputStream inputStream, MessageSource messageSource, Locale locale
     ) {
@@ -61,6 +71,14 @@ public class CSVUtils {
         }
     }
 
+    /**
+     * Takes list containing Pokemons and saved it into CSV file
+     *
+     * @param pokemons      list of Pokemons to be saved in CSV
+     * @param messageSource configured for messages
+     * @param locale        used to return localized messages
+     * @return
+     */
     public static ByteArrayInputStream pokemonsToCSV(
             List<PokemonEntity> pokemons, MessageSource messageSource, Locale locale
     ) {
@@ -91,6 +109,12 @@ public class CSVUtils {
 
     }
 
+    /**
+     * If provided name is null then generates it based on LocalDateTime. Otherwise, returns given name.
+     *
+     * @param fileName String with file name - can be null
+     * @return provided file name or generated name
+     */
     public static String createFileNameForCSV(String fileName) {
         if (fileName != null && !fileName.isBlank()) {
             return fileName;
@@ -103,13 +127,21 @@ public class CSVUtils {
         return CSV_EXPORT_FILE_NAME + "_" + dateTime.format(df);
     }
 
+    /**
+     * Sets configuration for the CSV file structure
+     *
+     * @return CSV file format
+     */
     private static CSVFormat getPokemonCSVFormat() {
         return CSVFormat.Builder.create()
                 .setHeader("pokedexId", "generationId", "name", "variant", "pokemonTypeOne", "pokemonTypeTwo",
                         "pokemonRarity", "available", "shiny", "mega", "megaFamily", "shadow", "tradeEvolve",
-                        "tradeEvolveFamily", "tradeable", "raidable", "alternateForm", "costumeForm")
+                        "tradeEvolveFamily", "tradeable", "raidable", "alternateForm", "costumeForm", "validIndicator")
                 .setSkipHeaderRecord(true)
                 .setDelimiter(';')
                 .build();
+    }
+
+    private CSVUtils() {
     }
 }

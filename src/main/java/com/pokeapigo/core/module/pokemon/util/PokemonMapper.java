@@ -17,6 +17,13 @@ import java.util.Optional;
 
 public final class PokemonMapper {
 
+    /**
+     * Creates PokemonEntity object from provided PokemonRequest object.
+     * In case of null returns null
+     *
+     * @param pokemonRequest source PokemonRequest object
+     * @return mapped PokemonEntity object
+     */
     public static PokemonEntity toEntity(PokemonRequest pokemonRequest) {
         return Optional.ofNullable(pokemonRequest).map(request -> new PokemonEntity(
                         request.pokedexId(),
@@ -25,11 +32,19 @@ public final class PokemonMapper {
                         request.variant(),
                         request.pokemonTypes(),
                         request.rarity(),
-                        request.availability()
+                        request.availability(),
+                        request.validIndicator()
                 )
         ).orElse(null);
     }
 
+    /**
+     * Creates PokemonResponse object from provided PokemonEntity object.
+     * In case of null returns null
+     *
+     * @param pokemonEntity source PokemonEntity object
+     * @return mapped PokemonResponse object
+     */
     public static PokemonResponse toPokemonResponse(PokemonEntity pokemonEntity) {
         return Optional.ofNullable(pokemonEntity).map(pokemon -> new PokemonResponse(
                         pokemon.getId(),
@@ -40,11 +55,18 @@ public final class PokemonMapper {
                         pokemon.getPokemonTypes(),
                         pokemon.getRarity(),
                         pokemon.getAvailability(),
-                        pokemon.getVisible()
+                        pokemon.getValidIndicator()
                 )
         ).orElse(null);
     }
 
+    /**
+     * Creates paged PokemonResponse objects from provided paged PokemonEntity objects.
+     * In case of null returns empty page
+     *
+     * @param pagedPokemons source paged PokemonEntity objects
+     * @return mapped page of PokemonResponse objects
+     */
     public static Page<PokemonResponse> toPagedPokemonResponse(Page<PokemonEntity> pagedPokemons) {
         return new PageImpl<>(
                 pagedPokemons.getContent().stream().map(pokemon ->
@@ -57,11 +79,18 @@ public final class PokemonMapper {
                                 pokemon.getPokemonTypes(),
                                 pokemon.getRarity(),
                                 pokemon.getAvailability(),
-                                pokemon.getVisible())
+                                pokemon.getValidIndicator())
                 ).toList()
         );
     }
 
+    /**
+     * Creates PokemonEntity object from provided CSVRecord object.
+     * In case of missing PokemonType fields method sets type as NONE.
+     *
+     * @param csvRecord CSV entry object
+     * @return mapped PokemonEntity object
+     */
     public static PokemonEntity toEntity(CSVRecord csvRecord) {
         PokemonType typeOne = PokemonType.NONE;
         if (!csvRecord.get("pokemonTypeOne").isBlank()) {
@@ -93,10 +122,18 @@ public final class PokemonMapper {
                 csvRecord.get("variant"),
                 new PokemonTypeDuo(typeOne, typeTwo),
                 PokemonRarity.valueOf(csvRecord.get("pokemonRarity")),
-                pokemonAvailability
+                pokemonAvailability,
+                Boolean.parseBoolean(csvRecord.get("validIndicator"))
         );
     }
 
+    /**
+     * Creates List of String objects from provided PokemonEntity object.
+     * Mainly used for CSV Pokemon export
+     *
+     * @param pokemon source Pokemon object
+     * @return mapped list of String objects
+     */
     public static List<String> toListOfStrings(PokemonEntity pokemon) {
         return Arrays.asList(
                 String.valueOf(pokemon.getPokedexId()),
@@ -116,7 +153,8 @@ public final class PokemonMapper {
                 String.valueOf(pokemon.getAvailability().isRaidable()),
                 String.valueOf(pokemon.getAvailability().isAlternateForm()),
                 String.valueOf(pokemon.getAvailability().isCostumeForm()),
-                String.valueOf(pokemon.getAvailability())
+                String.valueOf(pokemon.getAvailability()),
+                String.valueOf(pokemon.getValidIndicator())
         );
     }
 

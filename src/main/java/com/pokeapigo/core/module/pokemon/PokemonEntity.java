@@ -36,14 +36,14 @@ public class PokemonEntity {
     @Embedded
     private PokemonAvailability availability;
 
-    @Column(name = "VISIBLE")
-    private Boolean visible;
+    @Column(name = "VALIDINDICATOR")
+    private Boolean validIndicator;
 
     public PokemonEntity() {
     }
 
     public PokemonEntity(Integer pokedexId, Integer generationId, String name, String variant, PokemonTypeDuo pokemonTypes,
-                         PokemonRarity rarity, PokemonAvailability availability) {
+                         PokemonRarity rarity, PokemonAvailability availability, Boolean validIndicator) {
         this.pokedexId = pokedexId;
         this.generationId = generationId;
         this.name = name;
@@ -51,7 +51,7 @@ public class PokemonEntity {
         this.pokemonTypes = pokemonTypes;
         this.rarity = rarity;
         this.availability = availability;
-        this.visible = true;
+        this.validIndicator = validIndicator;
     }
 
     public UUID getId() {
@@ -86,8 +86,8 @@ public class PokemonEntity {
         return availability;
     }
 
-    public Boolean getVisible() {
-        return visible;
+    public Boolean getValidIndicator() {
+        return validIndicator;
     }
 
     public void setPokedexId(Integer pokedexId) {
@@ -118,13 +118,13 @@ public class PokemonEntity {
         this.availability = availability;
     }
 
-    public void setVisible(Boolean visible) {
-        this.visible = visible;
+    public void setValidIndicator(Boolean validIndicator) {
+        this.validIndicator = validIndicator;
     }
 
     @Override
     public String toString() {
-        return "Pokemon{" +
+        return "PokemonEntity{" +
                 "id=" + id +
                 ", pokedexId=" + pokedexId +
                 ", generationId=" + generationId +
@@ -133,6 +133,7 @@ public class PokemonEntity {
                 ", pokemonTypes=" + pokemonTypes +
                 ", rarity=" + rarity +
                 ", availability=" + availability +
+                ", validIndicator=" + validIndicator +
                 '}';
     }
 }

@@ -42,6 +42,9 @@ public class TrainerEntity implements UserDetails {
     @Column(name = "PASSWORD")
     private String password;
 
+    @Column(name = "VALIDINDICATOR")
+    private Boolean validIndicator;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "TRA_ROLE_MEMBERS",
             joinColumns = @JoinColumn(name = "TRAINERID"),
@@ -114,7 +117,7 @@ public class TrainerEntity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return validIndicator;
     }
 
     public void setName(String name) {
@@ -133,6 +136,10 @@ public class TrainerEntity implements UserDetails {
         this.avatarUrl = avatarUrl;
     }
 
+    public void setValidIndicator(Boolean validIndicator) {
+        this.validIndicator = validIndicator;
+    }
+
     public void setRoles(Set<RoleEntity> roles) {
         this.roles = roles;
     }
@@ -145,6 +152,7 @@ public class TrainerEntity implements UserDetails {
         this.friendCode = builder.friendCode;
         this.email = builder.email;
         this.password = builder.password;
+        this.validIndicator = builder.valid;
         this.roles = builder.roles;
     }
 
@@ -156,6 +164,7 @@ public class TrainerEntity implements UserDetails {
         private String friendCode;
         private String email;
         private String password;
+        private Boolean valid;
         private Set<RoleEntity> roles;
 
         public TrainerEntityBuilder setName(String name) {
@@ -190,6 +199,11 @@ public class TrainerEntity implements UserDetails {
 
         public TrainerEntityBuilder setPassword(String password) {
             this.password = password;
+            return this;
+        }
+
+        public TrainerEntityBuilder setValid(Boolean valid) {
+            this.valid = valid;
             return this;
         }
 

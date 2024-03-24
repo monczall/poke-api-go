@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Locale;
 
-import static com.pokeapigo.core.common.utli.constants.ApiConstants.*;
+import static com.pokeapigo.core.common.util.constants.ApiConstants.*;
 
 @RestController
 @RequestMapping(API_URI_V1 + URI_AUTH)

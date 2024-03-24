@@ -17,15 +17,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static com.pokeapigo.core.common.utli.constants.ApiConstants.*;
 import static com.pokeapigo.core.role.util.enums.TrainerRole.ADMIN;
 import static com.pokeapigo.core.role.util.enums.TrainerRole.USER;
 
 @Configuration
 public class SecurityConfiguration {
 
-    private static final String API_URI_AUTH = API_URI_V1 + URI_AUTH;
-    private static final String ROlE_ADMIN = ADMIN.name();
+    private static final String ROLE_ADMIN = ADMIN.name();
     public static final String ROLE_USER = USER.name();
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -43,7 +41,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(this::configureOpenEndpoints)
                 .authorizeHttpRequests(this::configurePokemonAuthorization)
                 .authorizeHttpRequests(this::configureTrainerAuthorization)
-                .authorizeHttpRequests(request -> request.anyRequest().permitAll())
+                .authorizeHttpRequests(request -> request.anyRequest().hasAuthority(ROLE_ADMIN))
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -55,70 +53,57 @@ public class SecurityConfiguration {
             AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry request
     ) {
         request
-                .requestMatchers(
-                        API_URI_AUTH + "/**",
-                        "/actuator/**"
-                ).permitAll();
+                .requestMatchers(HttpMethod.POST, "/api/v1/auth/register", "/api/v1/auth/login")
+                .permitAll()
+
+                .requestMatchers(HttpMethod.GET, "/actuator/**")
+                .permitAll();
     }
 
     private void configurePokemonAuthorization(
             AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry request
     ) {
         request
-                .requestMatchers(
-                        HttpMethod.POST,
-                        API_URI_V1 + URI_POKEMONS + "/**"
-                ).hasAuthority(ROlE_ADMIN)
-                .requestMatchers(
-                        HttpMethod.GET,
-                        API_URI_V1 + URI_POKEMONS + URI_SECURED
-                ).hasAuthority(ROlE_ADMIN)
-                .requestMatchers(
-                        HttpMethod.PUT,
-                        API_URI_V1 + URI_POKEMONS + "/**"
-                ).hasAuthority(ROlE_ADMIN)
-                .requestMatchers(
-                        HttpMethod.PATCH,
-                        API_URI_V1 + URI_POKEMONS + "/**"
-                ).hasAuthority(ROlE_ADMIN)
-                .requestMatchers(
-                        HttpMethod.DELETE,
-                        API_URI_V1 + URI_POKEMONS + "/**"
-                ).hasAuthority(ROlE_ADMIN)
-                .requestMatchers(
-                        HttpMethod.GET,
-                        API_URI_V1 + URI_POKEMONS + "/*"
-                ).hasAuthority(ROLE_USER);
+                .requestMatchers(HttpMethod.POST, "/api/v1/pokemons/**")
+                .hasAuthority(ROLE_ADMIN)
+
+                .requestMatchers(HttpMethod.GET, "/api/v1/pokemons/secured")
+                .hasAuthority(ROLE_ADMIN)
+
+                .requestMatchers(HttpMethod.GET, "/api/v1/pokemons/*")
+                .hasAuthority(ROLE_USER)
+
+                .requestMatchers(HttpMethod.PUT, "/api/v1/pokemons/**")
+                .hasAuthority(ROLE_ADMIN)
+
+                .requestMatchers(HttpMethod.PATCH, "/api/v1/pokemons/**")
+                .hasAuthority(ROLE_ADMIN)
+
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/pokemons/**")
+                .hasAuthority(ROLE_ADMIN);
     }
 
     private void configureTrainerAuthorization(
             AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry request
     ) {
         request
-                .requestMatchers(
-                        HttpMethod.POST,
-                        API_URI_V1 + URI_TRAINERS + "/**"
-                ).hasAuthority(ROlE_ADMIN)
-                .requestMatchers(
-                        HttpMethod.GET,
-                        API_URI_V1 + URI_TRAINERS + URI_SECURED
-                ).hasAuthority(ROlE_ADMIN)
-                .requestMatchers(
-                        HttpMethod.PUT,
-                        API_URI_V1 + URI_TRAINERS + "/**"
-                ).hasAuthority(ROlE_ADMIN)
-                .requestMatchers(
-                        HttpMethod.PATCH,
-                        API_URI_V1 + URI_TRAINERS + "/**"
-                ).hasAuthority(ROlE_ADMIN)
-                .requestMatchers(
-                        HttpMethod.DELETE,
-                        API_URI_V1 + URI_TRAINERS + "/**"
-                ).hasAuthority(ROlE_ADMIN)
-                .requestMatchers(
-                        HttpMethod.GET,
-                        API_URI_V1 + URI_TRAINERS + "/*"
-                ).hasAuthority(ROLE_USER);
+                .requestMatchers(HttpMethod.POST, "/api/v1/trainers/**")
+                .hasAuthority(ROLE_ADMIN)
+
+                .requestMatchers(HttpMethod.GET, "/api/v1/trainers/secured")
+                .hasAuthority(ROLE_ADMIN)
+
+                .requestMatchers(HttpMethod.GET, "/api/v1/trainers/**")
+                .hasAuthority(ROLE_USER)
+
+                .requestMatchers(HttpMethod.PUT, "/api/v1/trainers/**")
+                .hasAuthority(ROLE_ADMIN)
+
+                .requestMatchers(HttpMethod.PATCH, "/api/v1/trainers/**")
+                .hasAuthority(ROLE_ADMIN)
+
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/trainers/**")
+                .hasAuthority(ROLE_ADMIN);
     }
 
     @Bean

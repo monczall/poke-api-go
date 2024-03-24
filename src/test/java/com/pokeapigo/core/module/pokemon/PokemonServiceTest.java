@@ -118,7 +118,7 @@ class PokemonServiceTest {
         systemUnderTest.getAllPokemons();
 
         // then
-        verify(pokemonRepository).findAllVisibleByOrder();
+        verify(pokemonRepository).findAllValidByOrder();
     }
 
     @Test
@@ -127,7 +127,7 @@ class PokemonServiceTest {
         // given
         final PokemonEntity pokemon = PokemonEntityFactory.validPokemonEntityBulbasaur();
         final PageImpl<PokemonEntity> responseFromDb = new PageImpl<>(List.of(pokemon));
-        when(pokemonRepository.findVisibleFilteredAndPaged(
+        when(pokemonRepository.findValidFilteredAndPaged(
                 any(Pageable.class), anyString(), anyInt(), any(PokemonType.class), any(PokemonType.class)
         )).thenReturn(responseFromDb);
 
@@ -142,7 +142,7 @@ class PokemonServiceTest {
         );
 
         // then
-        verify(pokemonRepository).findVisibleFilteredAndPaged(
+        verify(pokemonRepository).findValidFilteredAndPaged(
                 any(Pageable.class), anyString(), anyInt(), any(PokemonType.class), any(PokemonType.class)
         );
     }

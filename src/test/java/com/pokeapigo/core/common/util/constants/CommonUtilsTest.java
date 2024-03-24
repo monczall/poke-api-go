@@ -1,4 +1,4 @@
-package com.pokeapigo.core.common.utli.constants;
+package com.pokeapigo.core.common.util.constants;
 
 import org.junit.jupiter.api.Test;
 

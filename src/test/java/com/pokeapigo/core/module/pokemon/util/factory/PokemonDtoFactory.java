@@ -32,7 +32,21 @@ public class PokemonDtoFactory {
                 variant,
                 PokemonTypeDuoFactory.validPokemonTypeDuoPoisonGrass(),
                 PokemonRarity.STANDARD,
-                PokemonAvailabilityFactory.validPokemonAvailabilityAllAvailable()
+                PokemonAvailabilityFactory.validPokemonAvailabilityAllAvailable(),
+                true
+        );
+    }
+
+    private static PokemonRequest createInvalidPokemonRequest(Integer pokedexId, String name, String variant) {
+        return new PokemonRequest(
+                pokedexId,
+                PokemonTestConstants.GENERATION_ID_ONE,
+                name,
+                variant,
+                PokemonTypeDuoFactory.validPokemonTypeDuoPoisonGrass(),
+                PokemonRarity.STANDARD,
+                PokemonAvailabilityFactory.validPokemonAvailabilityAllAvailable(),
+                false
         );
     }
 }

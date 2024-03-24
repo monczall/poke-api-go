@@ -28,7 +28,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Locale;
 import java.util.Set;
 
-import static com.pokeapigo.core.common.utli.PokeApiUtils.setEngLocaleIfNull;
+import static com.pokeapigo.core.common.util.PokeApiUtils.maskEmail;
+import static com.pokeapigo.core.common.util.PokeApiUtils.setEngLocaleIfNull;
+import static com.pokeapigo.core.module.trainer.util.TrainerConstants.TRAINER_MIN_LEVEL;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -61,22 +63,25 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     @Transactional
     public JwtAuthenticationResponse register(RegisterRequest request, Locale locale) {
-        logger.info("Received register request for user: {}", request.email());
+        logger.info("Received register request for user: {} - {}", maskEmail(request.email()), request.name());
         validator.validate(request);
         locale = setEngLocaleIfNull(locale);
 
         String email = request.email();
+        String maskedEmail = maskEmail(email);
         String name = request.name();
 
         boolean passwordsMatch = checkIfPasswordsMatch(request.password(), request.confirmPassword());
         if (!passwordsMatch) {
+            logger.info("Passwords do not match for user: {} - {}", maskedEmail, name);
             throw new PasswordsDoNotMatchException(messageSource.getMessage(
                     "auth.passwordsDoNotMatch", null, locale
             ));
         }
-        logger.info("Passwords matched. Proceeding with register request for user: {}", email);
+        logger.info("Passwords matched. Proceeding with register request for user: {} - {}", maskedEmail, name);
 
         if (trainerRepository.existsEmailOrName(email, name)) {
+            logger.info("Email or name already in use for user: {} - {}", maskedEmail, name);
             throw new EmailOrNameAlreadyInUseException(messageSource.getMessage(
                     "auth.emailOrNameAlreadyInUse", null, locale
             ));
@@ -84,14 +89,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         final TrainerEntity trainerEntity = new TrainerEntity.TrainerEntityBuilder()
                 .setName(name)
-                .setLevel(1)
+                .setLevel(TRAINER_MIN_LEVEL)
                 .setTeam(TrainerTeam.NONE)
                 .setFriendCode(trainerUtils.generateFriendCode(locale))
                 .setEmail(email)
                 .setPassword(passwordEncoder.encode(request.password()))
+                .setValid(true)
                 .setRoles(Set.of(new RoleEntity(TrainerRole.USER)))
                 .build();
         trainerRepository.save(trainerEntity);
+        logger.info("User: {} - {} registered", maskedEmail, name);
         final String jwt = jwtService.generateToken(trainerEntity);
 
         return new JwtAuthenticationResponse(jwt);

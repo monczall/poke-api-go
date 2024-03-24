@@ -32,7 +32,21 @@ public class PokemonEntityFactory {
                 variant,
                 PokemonTypeDuoFactory.validPokemonTypeDuoPoisonGrass(),
                 PokemonRarity.STANDARD,
-                PokemonAvailabilityFactory.validPokemonAvailabilityAllAvailable()
+                PokemonAvailabilityFactory.validPokemonAvailabilityAllAvailable(),
+                true
+        );
+    }
+
+    private static PokemonEntity createInvalidPokemonEntity(Integer pokedexId, String name, String variant) {
+        return new PokemonEntity(
+                pokedexId,
+                PokemonTestConstants.GENERATION_ID_ONE,
+                name,
+                variant,
+                PokemonTypeDuoFactory.validPokemonTypeDuoPoisonGrass(),
+                PokemonRarity.STANDARD,
+                PokemonAvailabilityFactory.validPokemonAvailabilityAllAvailable(),
+                false
         );
     }
 }

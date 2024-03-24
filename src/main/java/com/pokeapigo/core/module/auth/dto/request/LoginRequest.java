@@ -1,6 +1,6 @@
 package com.pokeapigo.core.module.auth.dto.request;
 
-import com.pokeapigo.core.common.utli.constants.Constants;
+import com.pokeapigo.core.common.util.constants.Constants;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

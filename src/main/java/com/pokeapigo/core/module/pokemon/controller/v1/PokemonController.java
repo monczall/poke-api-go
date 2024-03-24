@@ -2,7 +2,6 @@ package com.pokeapigo.core.module.pokemon.controller.v1;
 
 import com.pokeapigo.core.module.pokemon.PokemonService;
 import com.pokeapigo.core.module.pokemon.dto.request.PokemonRequest;
-import com.pokeapigo.core.module.pokemon.dto.request.PokemonVisibilityRequest;
 import com.pokeapigo.core.module.pokemon.dto.response.PokemonDeleteResponse;
 import com.pokeapigo.core.module.pokemon.dto.response.PokemonResponse;
 import com.pokeapigo.core.module.pokemon.util.enums.PokemonType;
@@ -20,7 +19,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-import static com.pokeapigo.core.common.utli.constants.ApiConstants.*;
+import static com.pokeapigo.core.common.util.constants.ApiConstants.*;
 
 @RestController
 @RequestMapping(API_URI_V1 + URI_POKEMONS)
@@ -96,17 +95,28 @@ class PokemonController {
                 .body(updatedPokemon);
     }
 
-    @PatchMapping("/{pokemonUUID}/visibility")
-    ResponseEntity<PokemonResponse> changePokemonVisibility(
+    @PatchMapping("/{pokemonUUID}/disable")
+    ResponseEntity<PokemonResponse> disablePokemon(
             @RequestHeader(value = HttpHeaders.ACCEPT_LANGUAGE, required = false) Locale locale,
-            @PathVariable UUID pokemonUUID,
-            @Valid @RequestBody PokemonVisibilityRequest request
+            @PathVariable UUID pokemonUUID
     ) {
-        final PokemonResponse updatedPokemon = pokemonService.changePokemonVisibility(pokemonUUID, request, locale);
+        pokemonService.disablePokemon(pokemonUUID, locale);
 
         return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(updatedPokemon);
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
+
+    @PatchMapping("/{pokemonUUID}/enable")
+    ResponseEntity<PokemonResponse> enablePokemon(
+            @RequestHeader(value = HttpHeaders.ACCEPT_LANGUAGE, required = false) Locale locale,
+            @PathVariable UUID pokemonUUID
+    ) {
+        pokemonService.enablePokemon(pokemonUUID, locale);
+
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
     }
 
     @DeleteMapping("/{pokemonUUID}")

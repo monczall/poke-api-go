@@ -25,23 +25,25 @@ The goal of this project was to create REST API for Pokémon GO bucket list apps
 - [x] Feature: Update Pokémon Visibility (Soft Delete)
 - [x] Feature: Get Single Pokémon Details
 - [x] Feature: Get All Pokemons
-- [x] Feature: Get All Pokémon Paged
+- [x] Feature: Get All Pokémon Paged (With filters)
 - [x] Feature: Add Filtering to Get All Pokémon Paged
 - [x] Feature: Remove Pokémon Data (Hard Delete)
 - [ ] Feature: Get Pokémon Statistics Data (Available, Released etc.)
-- [ ] Feature: Export All Pokémon Data
-- [ ] Feature: Import All Pokémon Data
+- [x] Feature: Export All Pokémon Data
+- [x] Feature: Import All Pokémon Data
    
   
 #### Trainers
 - [x] Create Trainers Table
-- [ ] Feature: Register (Create Trainer)
-- [ ] Feature: Modify Trainer Data
-- [ ] Feature: Modify Trainer Roles
+- [x] Feature: Register (Create Trainer)
+- [x] Feature: Modify Trainer Data
+- [x] Feature: Modify Trainer Roles
 - [ ] Feature: Send Registration Email Confirmation To Message Queue
+- [x] Feature: Get All Trainers
 - [ ] Feature: Get All Trainers Paged (With filters)
-- [ ] Feature: Get Single Trainer Data
-- [ ] Feature: Remove Trainer Data
+- [x] Feature: Get Single Trainer Data
+- [x] Feature: Activate-Deactivate Trainer
+- [x] Feature: Remove Trainer Data
      
 
 #### Trainers - Pokémon

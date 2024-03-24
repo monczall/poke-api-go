@@ -19,6 +19,7 @@ public record PokemonRequest(
 
         @NotBlank(message = "{pokemon.name.notBlank}")
         @Size(min = 3, message = "{pokemon.name.rangeMin}")
+        @Size(max = 255, message = "{pokemon.name.rangeMax}")
         String name,
 
         @Size(min = 1, message = "{pokemon.variant.rangeMin}")
@@ -32,11 +33,17 @@ public record PokemonRequest(
         @NotNull(message = "{pokemon.rarity.notNull}")
         PokemonRarity rarity,
 
-        PokemonAvailability availability
+        PokemonAvailability availability,
+
+        Boolean validIndicator
 ) {
     public PokemonRequest {
         if (availability == null) {
             availability = new PokemonAvailability();
+        }
+
+        if (validIndicator == null) {
+            validIndicator = true;
         }
     }
 }

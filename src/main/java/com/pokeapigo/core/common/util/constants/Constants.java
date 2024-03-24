@@ -1,4 +1,4 @@
-package com.pokeapigo.core.common.utli.constants;
+package com.pokeapigo.core.common.util.constants;
 
 public final class Constants {
 

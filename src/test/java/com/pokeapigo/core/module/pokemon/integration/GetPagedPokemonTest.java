@@ -14,8 +14,8 @@ import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 
-import static com.pokeapigo.core.common.utli.constants.ApiConstants.URI_POKEMONS;
-import static com.pokeapigo.core.common.utli.constants.ApiConstants.API_URI_V1;
+import static com.pokeapigo.core.common.util.constants.ApiConstants.API_URI_V1;
+import static com.pokeapigo.core.common.util.constants.ApiConstants.URI_POKEMONS;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;

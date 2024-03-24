@@ -6,6 +6,14 @@ import com.pokeapigo.core.module.pokemon.dto.request.PokemonRequest;
 
 public class PokemonUtils {
 
+    /**
+     * Applies data from PokemonRequest object onto PokemonEntity object and returns it.
+     * PokemonRequest data usually comes from PATCH or PUT requests.
+     *
+     * @param pokemon object to store new and old data
+     * @param request object with incoming changes
+     * @return PokemonEntity object with applied changes
+     */
     public static PokemonEntity updatePokemonEntityData(PokemonEntity pokemon, PokemonRequest request) {
         pokemon.setPokedexId(request.pokedexId());
         pokemon.setGenerationId(request.generationId());
@@ -18,6 +26,14 @@ public class PokemonUtils {
         return pokemon;
     }
 
+    /**
+     * Applies data from csv PokemonEntity object onto existing PokemonEntity object and returns it.
+     * This method was initially created for Pokemon CSV import.
+     *
+     * @param basePokemon    object already stored in database
+     * @param newPokemonData object with incoming changes ex. from CSV
+     * @return PokemonEntity object with applied changes
+     */
     public static PokemonEntity updatePokemonEntityData(PokemonEntity basePokemon, PokemonEntity newPokemonData) {
         basePokemon.setGenerationId(newPokemonData.getGenerationId());
         basePokemon.setPokemonTypes(new PokemonTypeDuo(

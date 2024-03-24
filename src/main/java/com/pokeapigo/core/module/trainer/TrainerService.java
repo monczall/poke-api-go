@@ -26,6 +26,10 @@ public interface TrainerService {
 
     FullTrainerResponse updateTrainerRoles(UUID trainerUUID, List<TrainerRole> trainerRoles, Locale locale);
 
-    Boolean deleteTrainer(UUID trainerUUID, Locale locale);
+    void disableTrainer(UUID trainerUUID, Locale locale);
+
+    void enableTrainer(UUID trainerUUID, Locale locale);
+
+    void deleteTrainer(UUID trainerUUID, Locale locale);
 
 }

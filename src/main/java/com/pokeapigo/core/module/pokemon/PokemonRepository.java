@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,12 +15,12 @@ public interface PokemonRepository extends JpaRepository<PokemonEntity, UUID> {
             SELECT p
             FROM PokemonEntity p
             WHERE
-                p.visible = true
+                p.validIndicator = true
             ORDER BY
                 pokedexId ASC,
                 name ASC
             """)
-    List<PokemonEntity> findAllVisibleByOrder();
+    List<PokemonEntity> findAllValidByOrder();
 
     @Query("""
             SELECT p
@@ -57,10 +56,10 @@ public interface PokemonRepository extends JpaRepository<PokemonEntity, UUID> {
                 p.pokemonTypes.typeTwo = :typeTwo
             )
             AND
-                p.visible = true
+                p.validIndicator = true
             """)
-    Page<PokemonEntity> findVisibleFilteredAndPaged(Pageable pageable, String search, Integer genId,
-                                                    PokemonType typeOne, PokemonType typeTwo);
+    Page<PokemonEntity> findValidFilteredAndPaged(Pageable pageable, String search, Integer genId,
+                                                  PokemonType typeOne, PokemonType typeTwo);
 
 
     Optional<PokemonEntity> findByPokedexIdAndNameAndVariant(Integer pokedexId, String name, String variant);

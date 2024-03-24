@@ -1,12 +1,11 @@
 package com.pokeapigo.core.module.pokemon.impl;
 
-import com.pokeapigo.core.common.utli.CSVUtils;
+import com.pokeapigo.core.common.util.CSVUtils;
 import com.pokeapigo.core.exception.CSVParserException;
 import com.pokeapigo.core.module.auth.dto.request.ExportCSVRequest;
 import com.pokeapigo.core.module.pokemon.PokemonCSVService;
 import com.pokeapigo.core.module.pokemon.PokemonEntity;
 import com.pokeapigo.core.module.pokemon.PokemonRepository;
-import com.pokeapigo.core.module.pokemon.util.PokemonMapper;
 import com.pokeapigo.core.module.pokemon.util.PokemonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,7 +80,7 @@ public class PokemonCSVServiceImpl implements PokemonCSVService {
         );
         logger.info("Started export of Pokemons to CSV file: {}", fileName);
 
-        final List<PokemonEntity> pokemons = pokemonRepository.findAllVisibleByOrder();
+        final List<PokemonEntity> pokemons = pokemonRepository.findAllValidByOrder();
         final ByteArrayInputStream in = CSVUtils.pokemonsToCSV(pokemons, messageSource, locale);
 
         logger.info("Export of Pokemons to CSV file finished!");
