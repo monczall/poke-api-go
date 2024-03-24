@@ -1,12 +1,12 @@
 package com.pokeapigo.core.module.auth.impl;
 
 import com.pokeapigo.core.module.auth.JwtService;
+import com.pokeapigo.core.module.auth.config.JwtPropertiesConfig;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +19,11 @@ import java.util.function.Function;
 @Service
 public class JwtServiceImpl implements JwtService {
 
-    @Value("${token.signing.key}")
-    private String jwtSigningKey;
+    private final JwtPropertiesConfig jwtPropertiesConfig;
+
+    public JwtServiceImpl(JwtPropertiesConfig jwtPropertiesConfig) {
+        this.jwtPropertiesConfig = jwtPropertiesConfig;
+    }
 
     @Override
     public String extractUserName(String token) {
@@ -44,11 +47,13 @@ public class JwtServiceImpl implements JwtService {
     }
 
     private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+        System.out.println(jwtPropertiesConfig.getExpireTimeHours() + jwtPropertiesConfig.getSecretKey());
         return Jwts.builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+                .setExpiration(new Date(System.currentTimeMillis()
+                        + (1000 * 60 * 60 * jwtPropertiesConfig.getExpireTimeHours())))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -71,7 +76,7 @@ public class JwtServiceImpl implements JwtService {
     }
 
     private Key getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(jwtSigningKey);
+        byte[] keyBytes = Decoders.BASE64.decode(jwtPropertiesConfig.getSecretKey());
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }

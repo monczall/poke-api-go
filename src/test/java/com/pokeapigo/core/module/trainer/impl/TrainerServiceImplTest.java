@@ -27,6 +27,4 @@ class TrainerServiceImplTest {
     void setup() {
         systemUnderTest = new TrainerServiceImpl(trainerRepository, trainerUtils, validator, messageSource);
     }
-
-
 }

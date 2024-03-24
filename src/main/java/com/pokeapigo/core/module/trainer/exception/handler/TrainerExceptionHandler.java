@@ -2,8 +2,9 @@ package com.pokeapigo.core.module.trainer.exception.handler;
 
 import com.pokeapigo.core.exception.dto.BasicErrorDto;
 import com.pokeapigo.core.module.trainer.exception.FailedToGenerateFriendCodeException;
-import com.pokeapigo.core.module.trainer.exception.InvalidTrainerLevelException;
 import com.pokeapigo.core.module.trainer.exception.TrainerAlreadyExistsException;
+import com.pokeapigo.core.module.trainer.exception.TrainerLevelHigherThanMaxException;
+import com.pokeapigo.core.module.trainer.exception.TrainerNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +25,9 @@ public class TrainerExceptionHandler {
     }
 
     @ExceptionHandler({
-            InvalidTrainerLevelException.class,
-            TrainerAlreadyExistsException.class
+            TrainerLevelHigherThanMaxException.class,
+            TrainerAlreadyExistsException.class,
+            TrainerNotFoundException.class
     })
     ResponseEntity<BasicErrorDto> trainerBadRequestException(RuntimeException ex,
                                                              HttpServletRequest request) {
