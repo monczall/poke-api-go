@@ -1,6 +1,5 @@
 package com.pokeapigo.core.exception.handler;
 
-import com.pokeapigo.core.exception.CSVParserException;
 import com.pokeapigo.core.exception.InvalidColumnNameException;
 import com.pokeapigo.core.exception.OtherDataAccessApiException;
 import com.pokeapigo.core.exception.dto.BasicErrorDto;
@@ -30,7 +29,6 @@ class GeneralExceptionHandler {
             InvalidColumnNameException.class,
             OtherDataAccessApiException.class,
             MethodArgumentTypeMismatchException.class,
-            CSVParserException.class,
             MaxUploadSizeExceededException.class
     })
     ResponseEntity<BasicErrorDto> generalBadRequestException(RuntimeException e, HttpServletRequest request) {

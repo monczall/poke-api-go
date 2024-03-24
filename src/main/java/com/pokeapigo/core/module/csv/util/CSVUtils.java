@@ -1,6 +1,6 @@
-package com.pokeapigo.core.common.util;
+package com.pokeapigo.core.module.csv.util;
 
-import com.pokeapigo.core.exception.CSVParserException;
+import com.pokeapigo.core.module.csv.exception.CSVParserException;
 import com.pokeapigo.core.module.pokemon.PokemonEntity;
 import com.pokeapigo.core.module.pokemon.util.PokemonMapper;
 import org.apache.commons.csv.CSVFormat;

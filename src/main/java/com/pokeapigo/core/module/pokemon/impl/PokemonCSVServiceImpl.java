@@ -1,9 +1,9 @@
 package com.pokeapigo.core.module.pokemon.impl;
 
-import com.pokeapigo.core.common.util.CSVUtils;
-import com.pokeapigo.core.exception.CSVParserException;
 import com.pokeapigo.core.module.auth.dto.request.ExportCSVRequest;
-import com.pokeapigo.core.module.pokemon.PokemonCSVService;
+import com.pokeapigo.core.module.csv.CSVService;
+import com.pokeapigo.core.module.csv.exception.CSVParserException;
+import com.pokeapigo.core.module.csv.util.CSVUtils;
 import com.pokeapigo.core.module.pokemon.PokemonEntity;
 import com.pokeapigo.core.module.pokemon.PokemonRepository;
 import com.pokeapigo.core.module.pokemon.util.PokemonUtils;
@@ -22,7 +22,7 @@ import java.util.Locale;
 import java.util.Optional;
 
 @Service
-public class PokemonCSVServiceImpl implements PokemonCSVService {
+public class PokemonCSVServiceImpl implements CSVService {
 
     private static final Logger logger = LoggerFactory.getLogger(PokemonCSVServiceImpl.class);
     private PokemonRepository pokemonRepository;
@@ -35,7 +35,7 @@ public class PokemonCSVServiceImpl implements PokemonCSVService {
 
     @Override
     @Transactional
-    public void importPokemonCSV(MultipartFile file, Locale locale) {
+    public void importCSV(MultipartFile file, Locale locale) {
         logger.info("Verifying type of file for import");
         if (!CSVUtils.isFormatCSV(file)) {
             throw new CSVParserException("Provided file is not a CSV");
@@ -73,7 +73,7 @@ public class PokemonCSVServiceImpl implements PokemonCSVService {
     }
 
     @Override
-    public InputStreamResource exportPokemonCSV(ExportCSVRequest request, Locale locale) {
+    public InputStreamResource exportCSV(ExportCSVRequest request, Locale locale) {
         logger.info("Checking requested Pokemon CSV filename");
         final String fileName = CSVUtils.createFileNameForCSV(
                 Optional.ofNullable(request).orElse(new ExportCSVRequest(null)).name()

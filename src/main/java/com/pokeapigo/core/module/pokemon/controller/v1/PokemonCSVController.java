@@ -1,7 +1,8 @@
 package com.pokeapigo.core.module.pokemon.controller.v1;
 
 import com.pokeapigo.core.module.auth.dto.request.ExportCSVRequest;
-import com.pokeapigo.core.module.pokemon.PokemonCSVService;
+import com.pokeapigo.core.module.csv.CSVService;
+import com.pokeapigo.core.module.pokemon.impl.PokemonCSVServiceImpl;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -19,10 +20,10 @@ import static com.pokeapigo.core.common.util.constants.ApiConstants.*;
 @RequestMapping(API_URI_V1 + URI_POKEMONS + URI_CSV)
 public class PokemonCSVController {
 
-    private PokemonCSVService pokemonCSVService;
+    private CSVService csvService;
 
-    public PokemonCSVController(PokemonCSVService pokemonCSVService) {
-        this.pokemonCSVService = pokemonCSVService;
+    public PokemonCSVController(PokemonCSVServiceImpl csvService) {
+        this.csvService = csvService;
     }
 
     @PostMapping
@@ -30,7 +31,7 @@ public class PokemonCSVController {
             @RequestHeader(value = HttpHeaders.ACCEPT_LANGUAGE, required = false) Locale locale,
             @RequestBody MultipartFile file
     ) {
-        pokemonCSVService.importPokemonCSV(file, locale);
+        csvService.importCSV(file, locale);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -42,7 +43,7 @@ public class PokemonCSVController {
             @RequestHeader(value = HttpHeaders.ACCEPT_LANGUAGE, required = false) Locale locale,
             @RequestBody(required = false) ExportCSVRequest request
     ) {
-        final InputStreamResource file = pokemonCSVService.exportPokemonCSV(request, locale);
+        final InputStreamResource file = csvService.exportCSV(request, locale);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
