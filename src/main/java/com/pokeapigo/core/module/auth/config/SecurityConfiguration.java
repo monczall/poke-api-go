@@ -56,7 +56,7 @@ public class SecurityConfiguration {
                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/register", "/api/v1/auth/login")
                 .permitAll()
 
-                .requestMatchers(HttpMethod.GET, "/actuator/**")
+                .requestMatchers(HttpMethod.GET, "/actuator", "/actuator/health")
                 .permitAll();
     }
 
@@ -64,13 +64,13 @@ public class SecurityConfiguration {
             AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry request
     ) {
         request
-                .requestMatchers(HttpMethod.POST, "/api/v1/pokemons/**")
+                .requestMatchers(HttpMethod.POST, "/api/v1/pokemons", "/api/v1/pokemons/csv")
                 .hasAuthority(ROLE_ADMIN)
 
                 .requestMatchers(HttpMethod.GET, "/api/v1/pokemons/secured")
                 .hasAuthority(ROLE_ADMIN)
 
-                .requestMatchers(HttpMethod.GET, "/api/v1/pokemons/*")
+                .requestMatchers(HttpMethod.GET, "/api/v1/pokemons", "/api/v1/pokemons/*")
                 .hasAuthority(ROLE_USER)
 
                 .requestMatchers(HttpMethod.PUT, "/api/v1/pokemons/**")
@@ -87,9 +87,6 @@ public class SecurityConfiguration {
             AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry request
     ) {
         request
-                .requestMatchers(HttpMethod.POST, "/api/v1/trainers/**")
-                .hasAuthority(ROLE_ADMIN)
-
                 .requestMatchers(HttpMethod.GET, "/api/v1/trainers/secured")
                 .hasAuthority(ROLE_ADMIN)
 
