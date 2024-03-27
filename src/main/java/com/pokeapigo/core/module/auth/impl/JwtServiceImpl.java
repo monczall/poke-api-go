@@ -47,7 +47,6 @@ public class JwtServiceImpl implements JwtService {
     }
 
     private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        System.out.println(jwtPropertiesConfig.getExpireTimeHours() + jwtPropertiesConfig.getSecretKey());
         return Jwts.builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())

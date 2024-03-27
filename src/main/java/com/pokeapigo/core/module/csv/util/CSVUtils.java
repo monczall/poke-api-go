@@ -33,9 +33,9 @@ public class CSVUtils {
     }
 
     /**
-     * Takes CSV file containing Pokemons and saves it to the database
+     * Takes CSV file containing Pokémon and saves it to the database
      *
-     * @param inputStream   CSV with Pokemons in it
+     * @param inputStream   CSV with Pokémon in it
      * @param messageSource configured for messages
      * @param locale        used to return localized messages
      * @return
@@ -72,9 +72,9 @@ public class CSVUtils {
     }
 
     /**
-     * Takes list containing Pokemons and saved it into CSV file
+     * Takes list containing Pokémon and saved it into CSV file
      *
-     * @param pokemons      list of Pokemons to be saved in CSV
+     * @param pokemons      list of Pokémon to be saved in CSV
      * @param messageSource configured for messages
      * @param locale        used to return localized messages
      * @return

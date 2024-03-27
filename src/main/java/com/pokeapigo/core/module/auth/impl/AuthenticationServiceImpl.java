@@ -6,10 +6,11 @@ import com.pokeapigo.core.module.auth.dto.request.LoginRequest;
 import com.pokeapigo.core.module.auth.dto.request.RegisterRequest;
 import com.pokeapigo.core.module.auth.dto.response.JwtAuthenticationResponse;
 import com.pokeapigo.core.module.auth.exception.EmailOrNameAlreadyInUseException;
-import com.pokeapigo.core.module.auth.exception.EmailOrPasswordMismatch;
+import com.pokeapigo.core.module.auth.exception.EmailOrPasswordMismatchException;
 import com.pokeapigo.core.module.auth.exception.PasswordsDoNotMatchException;
 import com.pokeapigo.core.module.trainer.TrainerEntity;
 import com.pokeapigo.core.module.trainer.TrainerRepository;
+import com.pokeapigo.core.module.trainer.exception.TrainerNotFoundException;
 import com.pokeapigo.core.module.trainer.util.TrainerUtils;
 import com.pokeapigo.core.module.trainer.util.enums.TrainerTeam;
 import com.pokeapigo.core.role.RoleEntity;
@@ -20,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -63,13 +65,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     @Transactional
     public JwtAuthenticationResponse register(RegisterRequest request, Locale locale) {
-        logger.info("Received register request for user: {} - {}", maskEmail(request.email()), request.name());
         validator.validate(request);
         locale = setEngLocaleIfNull(locale);
 
         String email = request.email();
         String maskedEmail = maskEmail(email);
         String name = request.name();
+        logger.info("Received register request for user: {} - {}", maskedEmail, request.name());
 
         boolean passwordsMatch = checkIfPasswordsMatch(request.password(), request.confirmPassword());
         if (!passwordsMatch) {
@@ -107,14 +109,20 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public JwtAuthenticationResponse login(LoginRequest request, Locale locale) {
         validator.validate(request);
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.email(), request.password())
-        );
         final Locale finalLocale = setEngLocaleIfNull(locale);
-
-        final TrainerEntity userDetails = trainerRepository.findByEmail(request.email())
-                .orElseThrow(() -> new EmailOrPasswordMismatch(messageSource.getMessage(
-                        "auth.emailOrPasswordMismatch", null, finalLocale
+        final String email = request.email();
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(email, request.password())
+            );
+        } catch (BadCredentialsException e) {
+            throw new EmailOrPasswordMismatchException(messageSource.getMessage(
+                    "auth.emailOrPasswordMismatch", null, finalLocale
+            ));
+        }
+        final TrainerEntity userDetails = trainerRepository.findByEmail(email)
+                .orElseThrow(() -> new TrainerNotFoundException(messageSource.getMessage(
+                        "trainer.notFoundEmail", new Object[]{email}, finalLocale
                 )));
         final String jwt = jwtService.generateToken(userDetails);
         return new JwtAuthenticationResponse(jwt);
