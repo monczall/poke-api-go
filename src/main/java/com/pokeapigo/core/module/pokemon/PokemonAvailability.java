@@ -1,5 +1,6 @@
 package com.pokeapigo.core.module.pokemon;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
@@ -7,36 +8,47 @@ import jakarta.persistence.Embeddable;
 public class PokemonAvailability {
 
     @Column(name = "AVAILABLE")
+    @Schema(description = "Flag describing if Pokemon is released")
     private boolean available;
 
     @Column(name = "SHINY")
+    @Schema(description = "Flag describing if Pokemon is available in shiny variant")
     private boolean shiny;
 
     @Column(name = "MEGA")
+    @Schema(description = "Flag describing if Pokemon is available in mega variant")
     private boolean mega;
 
     @Column(name = "MEGAFAMILY")
+    @Schema(description = "Flag describing if Pokemon is from mega family")
     private boolean megaFamily;
 
     @Column(name = "SHADOW")
+    @Schema(description = "Flag describing if Pokemon is available in shadow variant")
     private boolean shadow;
 
     @Column(name = "TRADEEVOLVE")
+    @Schema(description = "Flag describing if Pokemon is available in mega variant")
     private boolean tradeEvolve;
 
     @Column(name = "TRADEEVOLVEFAMILY")
+    @Schema(description = "Flag describing if Pokemon is from tradeevolve family")
     private boolean tradeEvolveFamily;
 
     @Column(name = "TRADEABLE")
+    @Schema(description = "Flag describing if Pokemon is available to trade")
     private boolean tradeable;
 
     @Column(name = "RAIDABLE")
+    @Schema(description = "Flag describing if Pokemon is available in raids")
     private boolean raidable;
 
     @Column(name = "ALTERNATEFORM")
+    @Schema(description = "Flag describing if Pokemon variant is it's alternate form")
     private boolean alternateForm;
 
     @Column(name = "COSTUMEFORM")
+    @Schema(description = "Flag describing if Pokemon variant is it's costume form")
     private boolean costumeForm;
 
     public PokemonAvailability() {
